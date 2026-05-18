@@ -1,0 +1,2493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>crypto.com Design System | Rachel Wong</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Linotte:wght@700&family=Fredoka:wght@600;700&family=Poppins:wght@500;600;700&family=Stack+Sans+Headline:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    /* crypto.com dark theme */
+    --bg:#0B1426;
+    --ink:#ffffff;
+    --ink-2:#E6EDF5;
+    --muted:rgba(255,255,255,.6);
+    --line:rgba(255,255,255,.15);
+    /* Brand */
+    --cdc-blue:#1199FA;
+    --cdc-blue-deep:#0577DA;
+    --cdc-navy:#001B3C;
+    --surface:#1F283C;
+    --surface-2:#151D32;
+    --highlight:#EEFF00;
+    --f-sans:'Inter',system-ui,sans-serif;
+    --f-display:'Stack Sans Headline','Inter Tight','Inter',system-ui,sans-serif;
+    --f-mono:'Inter','Inter Tight',system-ui,sans-serif;
+    --f-code:'Fira Code',ui-monospace,'SFMono-Regular','Menlo','Consolas',monospace;
+    --pad:max(24px,5vw);
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--f-sans);font-weight:400;font-size:14px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+::selection{background:#B1D3FA;color:#0e0d0c}
+
+  /* Cross-document view transition — smooth crossfade between pages */
+  @view-transition{navigation:auto}
+  ::view-transition-old(root),
+  ::view-transition-new(root){
+    animation-duration:.45s;
+    animation-timing-function:cubic-bezier(.2,.7,.2,1);
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 var(--pad);position:relative}
+  .wrap-wide{max-width:1260px;margin:0 auto;padding:0 var(--pad);position:relative}
+
+  /* ============================================================
+     TOP NAV
+  ============================================================ */
+  .top-nav{
+    position:fixed;top:16px;left:50%;transform:translateX(-50%);
+    z-index:55;
+    display:flex;align-items:center;gap:8px;
+    padding:7px 8px 7px 18px;
+    background:rgba(0,15,40,.55);
+    backdrop-filter:blur(18px) saturate(1.6);
+    -webkit-backdrop-filter:blur(18px) saturate(1.6);
+    border:1px solid rgba(255,255,255,.14);
+    border-radius:999px;
+    box-shadow:0 6px 20px rgba(0,0,0,.25), 0 1px 0 rgba(255,255,255,.08) inset;
+    max-width:calc(100vw - 24px);
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;
+  }
+  .nav-logo{
+    font-family:'Fredoka','Linotte','Inter Tight',system-ui,sans-serif;
+    font-weight:700;font-size:16px;letter-spacing:-.01em;color:#fff;
+    text-decoration:none;white-space:nowrap;
+  }
+  .nav-items{display:flex;gap:6px;align-items:center;font-size:13px}
+  .nav-items a{
+    color:#fff;text-decoration:none;font-weight:500;
+    padding:7px 12px;border-radius:999px;
+    transition:background .2s var(--ease),color .2s var(--ease);white-space:nowrap;
+  }
+  .nav-items a:hover{background:rgba(17,153,250,.18);color:var(--cdc-blue)}
+  .nav-cta{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:7px 14px !important;background:#fff !important;color:#0e0d0c !important;
+    font-weight:600;border-radius:999px;
+    transition:transform .2s var(--ease), background .2s var(--ease);
+  }
+  .nav-cta:hover{background:rgba(255,255,255,.85) !important;transform:translateY(-1px)}
+  button.nav-cta{
+    appearance:none;border:none;cursor:pointer;
+    font:inherit;font-size:13px;font-weight:600;font-family:inherit;
+    line-height:1.2;letter-spacing:inherit;
+  }
+  .nav-items a.nav-ext{display:inline-flex;align-items:center;gap:5px}
+  .nav-items a.nav-ext svg{width:11px;height:11px;opacity:.55;transition:transform .2s var(--ease),opacity .2s var(--ease)}
+  .nav-items a.nav-ext:hover svg{transform:translate(1px,-1px);opacity:1}
+  .nav-menu-toggle{
+    display:none;align-items:center;justify-content:center;
+    width:38px;height:38px;
+    appearance:none;border:none;background:transparent;cursor:pointer;
+    padding:0;border-radius:50%;
+    color:var(--ink);
+    transition:background .2s var(--ease);
+  }
+  .nav-menu-toggle:hover{background:rgba(255,255,255,.1)}
+  .nav-menu-toggle .burger{
+    position:relative;width:18px;height:14px;
+    display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .nav-menu-toggle .burger span{
+    display:block;width:100%;height:1.8px;
+    background:currentColor;border-radius:1px;
+    transition:transform .25s var(--ease), opacity .25s var(--ease);
+  }
+  .nav-menu-toggle[aria-expanded="true"] .burger span:nth-child(1){
+    transform:translateY(6px) rotate(45deg);
+  }
+  .nav-menu-toggle[aria-expanded="true"] .burger span:nth-child(2){
+    opacity:0;
+  }
+  .nav-menu-toggle[aria-expanded="true"] .burger span:nth-child(3){
+    transform:translateY(-6px) rotate(-45deg);
+  }
+  @media (max-width:720px){
+    /* Mobile nav: Rachel Wong centered, menu icon on the right */
+    .top-nav{
+      padding:6px 24px;gap:48px;
+      display:flex;align-items:center;
+    }
+    .nav-logo{
+      display:inline-flex;align-items:center;
+      height:38px;line-height:1;
+    }
+    .nav-menu-toggle{
+      display:inline-flex;
+      margin:0;
+    }
+    .top-nav .nav-items{
+      position:absolute;top:calc(100% + 8px);left:50%;
+      flex-direction:column;align-items:stretch;gap:2px;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px) saturate(1.5);-webkit-backdrop-filter:blur(14px) saturate(1.5);
+      border:1px solid rgba(14,13,12,.08);border-radius:14px;
+      box-shadow:0 12px 32px rgba(14,13,12,.12);
+      padding:6px;min-width:180px;
+      opacity:0;visibility:hidden;pointer-events:none;
+      transform:translateX(-50%) translateY(-4px);
+      transition:opacity .2s var(--ease), transform .2s var(--ease), visibility 0s linear .2s;
+    }
+    .top-nav .nav-items.is-open{
+      opacity:1;visibility:visible;pointer-events:auto;
+      transform:translateX(-50%) translateY(0);
+      transition:opacity .2s var(--ease), transform .2s var(--ease), visibility 0s;
+    }
+    .top-nav .nav-items a,
+    .top-nav .nav-items button.nav-cta{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:10px 14px !important;border-radius:10px;width:100%;
+      font-size:14px;font-weight:500;text-align:left;white-space:nowrap;
+      background:transparent !important;color:var(--ink) !important;
+    }
+    .top-nav .nav-items .nav-cta{
+      background:#fff !important;color:#0e0d0c !important;font-weight:600;
+      margin-top:2px;justify-content:center;
+    }
+    .top-nav .nav-items a:hover{background:rgba(14,13,12,.06) !important}
+    .top-nav .nav-items .nav-cta:hover{background:rgba(255,255,255,.85) !important;color:#0e0d0c !important}
+  }
+  .email-toast{
+    position:fixed;top:0;left:0;
+    pointer-events:none;z-index:9999;
+    padding:9px 16px;border-radius:999px;
+    background:#B1D3FA;color:#0e0d0c;
+    font-family:var(--f-display,'Stack Sans Headline','Inter Tight',system-ui,sans-serif);
+    font-size:13px;font-weight:500;
+    transform:translate(-50%, 8px) scale(.6);
+    opacity:0;
+    transition:opacity .2s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
+    white-space:nowrap;
+    box-shadow:0 8px 22px rgba(14,13,12,.18);
+    display:inline-flex;align-items:center;gap:8px;
+    transform-origin:top center;
+  }
+  .email-toast.is-on{opacity:1;transform:translate(-50%, 8px) scale(1)}
+  .email-toast .dots{display:inline-flex;gap:3px}
+  .email-toast .dots span{
+    width:3px;height:3px;border-radius:50%;background:#0e0d0c;
+    animation:email-toast-dots 1.2s ease-in-out infinite both;
+  }
+  .email-toast .dots span:nth-child(2){animation-delay:.18s}
+  .email-toast .dots span:nth-child(3){animation-delay:.36s}
+  @keyframes email-toast-dots{
+    0%,80%,100%{opacity:.18;transform:translateY(0)}
+    40%{opacity:1;transform:translateY(-1.5px)}
+  }
+
+  /* Hero */
+  .p-hero{padding:90px 0 40px}
+  .p-hero .tagline{
+    font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);
+    margin:0 0 24px;
+  }
+  .p-hero .p-hero-logo{
+    display:block;width:140px;height:auto;margin:0 0 24px;
+    filter:brightness(0) invert(1);
+  }
+  .p-hero h1{
+    font-family:var(--f-display);font-weight:500;
+    font-size:clamp(34px,6vw,48px);line-height:1.05;letter-spacing:-.025em;
+    margin:0 0 28px;text-wrap:balance;
+  }
+  .p-hero .lede{
+    font-size:14px;line-height:1.6;color:var(--ink-2);
+    max-width:58ch;margin:0;
+  }
+  .p-hero .lede b{font-weight:600;color:var(--ink)}
+  .p-hero .lede .lede-link{
+    color:#fff;font-weight:500;
+    text-decoration:underline;text-decoration-thickness:1px;
+    text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.45);
+    transition:text-decoration-color .2s var(--ease), color .2s var(--ease);
+  }
+  .p-hero .lede .lede-link:hover{
+    text-decoration-color:var(--cdc-blue);color:var(--cdc-blue);
+  }
+
+  /* Meta strip */
+  .meta-strip{
+    display:grid;grid-template-columns:1fr 1fr 2fr;gap:40px;
+    padding:40px 0 20px;margin-top:48px;border-top:1px solid var(--line);
+  }
+  @media (max-width:800px){.meta-strip{grid-template-columns:1fr;gap:24px}}
+  .meta-strip .m-lbl{font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin-bottom:8px}
+  .meta-strip .m-val{font-size:15px;color:var(--ink);line-height:1.4}
+
+  /* Section rhythm */
+  section{padding:80px 0}
+  section + section{padding-top:0}
+
+  h2.sec{
+    font-family:var(--f-display);font-weight:500;
+    font-size:clamp(20px,2.8vw,22px);line-height:1.1;letter-spacing:-.02em;
+    margin:0 0 28px;text-wrap:balance;
+  }
+  .sec-label{
+    font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);
+    margin:0 0 14px;
+  }
+
+  /* Two col text */
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:56px}
+  @media (max-width:800px){.two-col{grid-template-columns:1fr;gap:32px}}
+  .two-col .col p{font-size:14px;line-height:1.65;color:var(--ink-2);margin:0 0 16px}
+  .two-col .col p:last-child{margin-bottom:0}
+  .two-col .col p b{font-weight:600;color:var(--ink)}
+  .two-col .col .m-lbl{
+    font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;
+    text-transform:none;color:var(--muted);margin:0 0 10px;
+  }
+
+  /* Problem cards — Revolut-style dark surface cards with monoline icons */
+  .prob-cards{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:14px;
+    margin:24px 0 8px;
+  }
+  @media (max-width:800px){.prob-cards{grid-template-columns:1fr}}
+  .prob-card{
+    background:#15182A;border:none;border-radius:22px;
+    padding:36px 32px 36px;
+    display:flex;flex-direction:column;gap:0;
+    min-height:280px;
+  }
+  .prob-card .ico{
+    width:28px;height:28px;color:#fff;
+    margin:0 0 64px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .prob-card .ico svg{width:100%;height:100%;display:block}
+  .prob-card .ttl{
+    font-family:var(--f-display);font-weight:600;font-size:19px;
+    line-height:1.2;color:#fff;margin:0 0 14px;letter-spacing:-.012em;
+    text-wrap:balance;
+  }
+  .prob-card .desc{
+    font-size:14px;line-height:1.5;color:rgba(255,255,255,.55);margin:0;
+    max-width:30ch;
+  }
+  @media (max-width:800px){
+    .prob-card{min-height:0;padding:28px 24px}
+    .prob-card .ico{margin-bottom:32px}
+    .prob-card .ttl{font-size:18px}
+  }
+
+  /* Approach intro list — two numbered points */
+  .approach-list{
+    list-style:none;counter-reset:apoint;
+    margin:0 0 40px;padding:0;display:flex;flex-direction:column;gap:18px;
+    max-width:62ch;
+  }
+  .approach-list li{
+    counter-increment:apoint;position:relative;padding-left:42px;
+    font-size:14px;line-height:1.65;color:rgba(255,255,255,.85);
+  }
+  .approach-list li::before{
+    content:counter(apoint);
+    position:absolute;left:0;top:-2px;
+    width:28px;height:28px;border-radius:50%;
+    background:var(--cdc-blue);color:#fff;
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--f-mono);font-size:12px;font-weight:700;
+  }
+  .approach-list li b{font-weight:600;color:#fff}
+
+  /* Approach / strategy section */
+  .approach{
+    margin:24px 0 0;display:grid;grid-template-columns:1fr;gap:32px;
+  }
+  .approach h4{
+    font-family:var(--f-display);font-weight:500;font-size:22px;
+    line-height:1.25;letter-spacing:-.018em;margin:0 0 8px;color:var(--ink);
+  }
+  .approach p{font-size:14px;line-height:1.65;color:var(--ink-2);margin:0;max-width:60ch}
+  .approach p b{font-weight:600;color:var(--ink)}
+
+  /* Approach diagram — animated feedback loop, no surface bg */
+  .figure.approach-diagram{
+    aspect-ratio:auto;padding:24px 0;background:transparent;
+    border:none;
+    display:flex;align-items:center;justify-content:center;
+  }
+  @media (max-width:700px){
+    .figure.approach-diagram{padding:12px 0}
+  }
+  .loop-svg{
+    width:100%;max-width:1100px;margin:0 auto;display:block;
+    overflow:visible;
+  }
+
+  /* Centre label — enlarged to match problem-card heading prominence */
+  .loop-svg .center-label{
+    font-family:var(--f-display);font-size:28px;font-weight:600;
+    fill:#fff;text-anchor:middle;letter-spacing:-.018em;
+  }
+
+  /* Ring colour — light hairline on dark bg */
+  .loop-svg .ring{
+    stroke:rgba(255,255,255,.18);
+  }
+
+  /* Node text — white on dark, readable */
+  .loop-svg .node-label{
+    font-family:var(--f-display);font-size:18px;font-weight:500;
+    fill:#fff;text-anchor:middle;letter-spacing:-.008em;
+    transition:fill .35s var(--ease);
+  }
+  .loop-svg .node-sub{
+    font-family:var(--f-sans);font-size:14px;font-weight:400;
+    fill:rgba(255,255,255,.6);text-anchor:middle;letter-spacing:.005em;
+    transition:fill .35s var(--ease);
+  }
+
+  /* Each node briefly lights up when the orbit dot passes (10s loop) */
+  .loop-svg .node[data-step="1"] .node-label{animation:node-flash 10s ease-in-out infinite; animation-delay:0s}
+  .loop-svg .node[data-step="1"] .node-sub  {animation:node-flash-sub 10s ease-in-out infinite; animation-delay:0s}
+  .loop-svg .node[data-step="2"] .node-label{animation:node-flash 10s ease-in-out infinite; animation-delay:2.5s}
+  .loop-svg .node[data-step="2"] .node-sub  {animation:node-flash-sub 10s ease-in-out infinite; animation-delay:2.5s}
+  .loop-svg .node[data-step="3"] .node-label{animation:node-flash 10s ease-in-out infinite; animation-delay:5s}
+  .loop-svg .node[data-step="3"] .node-sub  {animation:node-flash-sub 10s ease-in-out infinite; animation-delay:5s}
+  .loop-svg .node[data-step="4"] .node-label{animation:node-flash 10s ease-in-out infinite; animation-delay:7.5s}
+  .loop-svg .node[data-step="4"] .node-sub  {animation:node-flash-sub 10s ease-in-out infinite; animation-delay:7.5s}
+
+  @keyframes node-flash{
+    0%,12%,100%{fill:#fff}
+    4%{fill:#1199FA}
+  }
+  @keyframes node-flash-sub{
+    0%,12%,100%{fill:rgba(255,255,255,.6)}
+    4%{fill:#1199FA}
+  }
+
+  /* Orbit dot — crypto.com blue with soft glow */
+  .loop-svg .orbit-dot{filter:url(#dotglow)}
+
+  @media (prefers-reduced-motion:reduce){
+    .loop-svg .node-label,
+    .loop-svg .node-sub,
+    .loop-svg .orbit-dot{
+      animation:none !important;
+    }
+  }
+
+  /* Chapter block */
+  .chap{padding:40px 0}
+  .chap-head{margin-bottom:36px}
+  @media (max-width:800px){.chap-head{margin-bottom:24px}}
+  .chap-no{display:none}
+  .chap h3{
+    font-family:var(--f-display);
+    font-weight:500;font-size:22px;
+    line-height:1.2;letter-spacing:-.012em;
+    margin:0;
+  }
+  .chap-body{max-width:none}
+  .chap-body p{font-size:14px;line-height:1.7;color:rgba(255,255,255,.85);margin:0 0 16px}
+  .chap-body p:last-child{margin-bottom:0}
+  .chap-body p b{font-weight:600;color:#fff}
+  .chap-body p em{font-style:italic;color:#fff}
+  .chap-body p code{
+    font-family:var(--f-code);font-size:12.5px;font-weight:500;color:#fff;
+    background:rgba(255,255,255,.1);padding:1px 6px;border-radius:3px;
+  }
+  .chap-body p .prose-link,
+  .prose-link{
+    color:#fff;text-decoration:underline;text-decoration-thickness:1px;
+    text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.45);
+    transition:color .2s var(--ease), text-decoration-color .2s var(--ease);
+  }
+  .chap-body p .prose-link:hover,
+  .prose-link:hover{
+    color:var(--cdc-blue);text-decoration-color:var(--cdc-blue);
+  }
+
+  /* Reflection */
+  .reflection{
+    margin:48px 0 8px;
+    display:grid;grid-template-columns:200px 1fr;gap:40px;
+  }
+  .reflection .lbl{
+    font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;
+    text-transform:none;color:var(--muted);padding-top:4px;
+  }
+  .reflection .body p{font-size:14px;line-height:1.7;color:rgba(255,255,255,.85);margin:0 0 16px}
+  .reflection .body p:last-child{margin-bottom:0}
+  .reflection .body p b{font-weight:600;color:#fff}
+  @media (max-width:800px){.reflection{grid-template-columns:1fr;gap:12px}}
+
+  /* Visual block */
+  .figure{
+    margin:40px 0 12px;border-radius:12px;overflow:hidden;
+    background:#F9F7F2;position:relative;
+  }
+  .fig-caption{font-family:'DM Sans',var(--f-sans);font-size:12px;line-height:1.55;color:rgba(255,255,255,.55);margin:14px 0 0}
+  .fig-caption code{
+    font-family:var(--f-mono);font-size:11.5px;color:#fff;
+    background:rgba(255,255,255,.1);padding:1px 6px;border-radius:3px;
+  }
+
+  /* Reference image figures (e.g. old palette + Able plugin) */
+  .figure.ref-image{
+    aspect-ratio:auto;background:#fff;
+    padding:0;border-radius:12px;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .figure.ref-image img{
+    width:100%;height:auto;max-width:none;display:block;
+  }
+
+  /* Full-bleed reference image — breaks out of the 920px column so wide
+     comparison shots (e.g. tokens before/after) read at a comfortable size */
+  .figure.ref-image.wide{
+    background:transparent;padding:0;border-radius:8px;overflow:hidden;
+  }
+  @media (min-width:1080px){
+    .figure.ref-image.wide{
+      margin-left:-160px;margin-right:-160px;
+      width:calc(100% + 320px);max-width:none;
+    }
+  }
+  @media (min-width:1280px){
+    .figure.ref-image.wide{
+      margin-left:-220px;margin-right:-220px;
+      width:calc(100% + 440px);
+    }
+  }
+
+  /* Light-bg figures showing UI artefacts — restore dark text inside */
+  .figure.palette, .figure.tokens, .figure.modes{color:#131313}
+  .figure.palette .palette-cell .lbl{color:#131313}
+  .figure.palette .palette-meta{border-top-color:rgba(19,19,19,.12)}
+  .figure.palette .palette-meta .pm{color:#7a7671}
+  .figure.palette .palette-meta .pm b{color:#131313}
+  .figure.tokens .tk-col h6{color:#7a7671}
+  .figure.tokens .tk-col h6 b{color:#131313}
+  .figure.tokens .tk-chip{color:#131313;border-color:rgba(19,19,19,.12)}
+  .figure.tokens .tk-arrow{color:#7a7671}
+  .figure.tokens .tk-sample{color:#7a7671;border-color:rgba(19,19,19,.12)}
+  .figure.modes .mode-cell .ml{color:#131313}
+  .figure.modes .modes-token{border-color:rgba(19,19,19,.12)}
+  .figure.modes .modes-token .tname{color:#131313}
+  .figure.modes .modes-token .tval{color:#7a7671}
+
+  /* === CHAPTER 1 — Color foundation viz === */
+  .figure.palette{
+    aspect-ratio:auto;padding:40px 36px;background:#F9F7F2;
+  }
+  .palette-stack{
+    display:flex;flex-direction:column;gap:18px;
+  }
+  .ramp-head{
+    display:flex;gap:6px;align-items:baseline;
+    font-family:var(--f-sans);line-height:1.4;
+    margin-bottom:6px;
+  }
+  .ramp-head .cat{
+    font-family:var(--f-sans);font-weight:500;color:#7a7671;font-size:10.5px;
+    letter-spacing:.04em;text-transform:uppercase;
+  }
+  .ramp-head .name{color:#7a7671;font-size:10.5px}
+  .ramp-row{
+    display:grid;grid-template-columns:repeat(10,1fr);gap:6px;
+  }
+  .ramp-row.bw{grid-template-columns:repeat(10,1fr)}
+  .palette-cell{
+    aspect-ratio:1/1;border-radius:6px;position:relative;
+    display:flex;align-items:flex-end;padding:6px;cursor:default;
+  }
+  .palette-cell .lbl{
+    font-family:var(--f-mono);font-size:8px;color:#131313;opacity:.55;
+  }
+  .palette-cell.dark .lbl{color:#fff;opacity:1;font-weight:600}
+  /* Hover tooltip — shows hex code */
+  .palette-cell::after{
+    content:attr(data-hex);
+    position:absolute;top:50%;left:50%;
+    transform:translate(-50%,-50%) scale(.92);
+    background:rgba(0,0,0,.88);color:#fff;
+    font-family:var(--f-mono);font-size:10px;font-weight:600;
+    padding:5px 8px;border-radius:5px;letter-spacing:.04em;
+    pointer-events:none;white-space:nowrap;
+    opacity:0;transition:opacity .15s var(--ease), transform .15s var(--ease);
+    z-index:5;
+  }
+  .palette-cell:hover::after{opacity:1;transform:translate(-50%,-50%) scale(1)}
+
+  /* === CHAPTER 2 — Tokens before/after viz === */
+  .figure.tokens{
+    aspect-ratio:auto;padding:48px 40px;background:#fff;
+    display:grid;grid-template-columns:1fr 1fr;gap:32px;
+  }
+  @media (max-width:800px){.figure.tokens{grid-template-columns:1fr;padding:32px 24px}}
+  .tk-col h6{
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted);margin:0 0 18px;font-weight:500;
+  }
+  .tk-col h6 b{color:var(--ink);font-weight:600}
+  .tk-row{
+    display:flex;align-items:center;gap:10px;margin:0 0 12px;
+  }
+  .tk-chip{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:5px 10px;border-radius:6px;
+    font-family:var(--f-mono);font-size:11px;font-weight:500;
+    background:#fff;border:1px solid var(--line);color:var(--ink);
+  }
+  .tk-chip .dot{
+    width:10px;height:10px;border-radius:50%;background:var(--cdc-blue);
+  }
+  .tk-chip.dark{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+  .tk-chip.dark .dot{display:none}
+  .tk-arrow{flex:0 0 16px;color:var(--muted);font-size:12px}
+  .tk-sample{
+    flex:1;height:32px;border-radius:6px;
+    display:flex;align-items:center;padding:0 12px;
+    font-size:12px;color:var(--muted);
+    background:#fff;border:1px solid var(--line);
+  }
+  .tk-sample.btn{background:var(--cdc-blue);color:#fff;border-color:var(--cdc-blue);font-weight:600;justify-content:center}
+
+  /* === CHAPTER 2b — Modes tree (semantic → base → UI) === */
+  .figure.modes-tree{
+    aspect-ratio:auto;padding:48px 40px 56px;border:none;
+    background:transparent;
+    display:flex;flex-direction:column;align-items:center;gap:0;
+  }
+  .mt-eyebrow{
+    font-family:var(--f-sans);font-size:10.5px;font-weight:500;
+    letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.5);
+    margin-bottom:10px;display:block;text-align:center;
+  }
+  .mt-top{display:flex;flex-direction:column;align-items:center}
+  /* Semantic pill — dark navy with mono code text (SVG reference) */
+  .mt-pill{
+    display:inline-flex;align-items:center;gap:14px;
+    height:44px;padding:0 22px 0 10px;border-radius:22px;
+    background:#001B3C;color:#fff;
+    font-family:var(--f-code);font-size:14px;font-weight:500;
+    line-height:1;white-space:nowrap;letter-spacing:0;
+  }
+  /* Base token pill — white with dark text (matches Fig.05 Before-state) */
+  .mt-pill.mt-base{
+    height:40px;padding:0 18px 0 8px;border-radius:20px;
+    font-size:13px;
+    background:#fff;color:#131313;
+    font-family:var(--f-sans);font-weight:600;
+    box-shadow:0 1px 2px rgba(14,13,12,.08), inset 0 0 0 1px rgba(19,19,19,.08);
+  }
+  .mt-dot{
+    display:inline-block;width:24px;height:24px;border-radius:50%;
+    flex-shrink:0;
+  }
+
+  /* SVG tree connector between semantic pill and the 3 base pills */
+  .mt-tree{
+    width:100%;max-width:600px;height:60px;display:block;
+  }
+
+  /* Three columns: each shows base token + arrow + rendered button */
+  .mt-cols{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+    width:100%;max-width:680px;
+  }
+  @media (max-width:700px){
+    .mt-cols{grid-template-columns:1fr;gap:32px}
+    .mt-tree{display:none}
+  }
+  .mt-col{
+    display:flex;flex-direction:column;align-items:center;gap:14px;
+  }
+  .mt-arrow{
+    color:rgba(255,255,255,.4);font-size:18px;line-height:1;
+    margin:2px 0;
+  }
+  /* Button container — no surface tile background, just centred */
+  .mt-surface{
+    padding:18px 0;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .mt-btn{
+    border:none;cursor:default;color:#fff;
+    height:48px;padding:0 28px;border-radius:8px;
+    font-family:var(--f-sans);font-size:14px;font-weight:600;
+    min-width:130px;
+    display:inline-flex;align-items:center;justify-content:center;
+    box-sizing:border-box;
+  }
+  .mt-label{
+    font-family:var(--f-sans);font-size:12px;font-weight:500;
+    color:rgba(255,255,255,.6);letter-spacing:.01em;
+  }
+
+  /* === CHAPTER 3 — Token naming structure === */
+  .figure.token-naming{
+    aspect-ratio:auto;padding:64px 40px;background:#F9F7F2;
+    border:none;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .tn-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);
+    gap:32px;align-items:start;
+    max-width:760px;width:100%;
+  }
+  .tn-col{display:flex;flex-direction:column;gap:14px;align-items:flex-start}
+  .tn-head{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#1F283C;color:var(--c,#fff);
+    padding:9px 16px;border-radius:8px;
+    font-family:var(--f-code);font-size:13px;font-weight:500;
+    letter-spacing:0;white-space:nowrap;
+  }
+  .tn-num{opacity:.85}
+  .tn-opt{opacity:.7;font-weight:400}
+  .tn-chips{display:flex;flex-direction:column;gap:10px;align-items:flex-start;width:100%}
+  .tn-chip{
+    background:#1F283C;color:var(--c,#fff);
+    padding:7px 14px;border-radius:7px;
+    font-family:var(--f-code);font-size:12.5px;font-weight:400;
+    letter-spacing:0;
+  }
+  .tn-ellipsis{
+    color:rgba(255,255,255,.4);font-family:var(--f-code);font-size:13px;
+    padding:0 14px;letter-spacing:.05em;
+  }
+  .tn-sep{
+    color:rgba(255,255,255,.4);font-family:var(--f-code);font-size:18px;
+    align-self:flex-start;padding-top:10px;
+  }
+  @media (max-width:700px){
+    .tn-grid{grid-template-columns:1fr;gap:24px}
+    .tn-sep{display:none}
+    .tn-col{width:100%}
+  }
+
+  /* === Interactive token-naming diagram (v2) — hover for examples === */
+  .figure.token-naming-v2{
+    aspect-ratio:auto;padding:clamp(28px,5vw,64px) clamp(16px,3vw,40px);
+    background:transparent;border:none;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    position:relative;overflow:visible;min-height:200px;
+  }
+  .figure.token-naming-v2 .tn2-formula{
+    display:flex;align-items:center;
+    gap:clamp(4px,.8vw,14px);
+    flex-wrap:nowrap;justify-content:center;
+    position:relative;width:100%;
+  }
+  .figure.token-naming-v2 .tn2-pill{
+    position:relative;
+    display:inline-flex;align-items:center;
+    gap:clamp(5px,.7vw,10px);
+    background:#0F1A2C;color:var(--c-text,#fff);
+    padding:clamp(8px,1vw,14px) clamp(10px,1.6vw,22px);
+    border-radius:999px;
+    border:1.5px solid var(--c-text,#fff);
+    box-shadow:
+      0 0 18px var(--c-glow, rgba(255,255,255,.25)),
+      inset 0 0 0 1px rgba(255,255,255,.04);
+    font-family:var(--f-code);
+    font-size:clamp(10px,1.4vw,15px);
+    font-weight:600;letter-spacing:0;
+    white-space:nowrap;
+    cursor:default;
+    text-shadow:0 0 8px var(--c-glow, transparent);
+    transition:transform .25s var(--ease), box-shadow .25s var(--ease);
+  }
+  /* Vibrant neon palette per category (text + matching glow) */
+  .figure.token-naming-v2 .tn2-pill[data-c="purple"]{
+    --c-text:#D896FF;
+    --c-glow:rgba(216,150,255,.45);
+  }
+  .figure.token-naming-v2 .tn2-pill[data-c="green"]{
+    --c-text:#9BFF7C;
+    --c-glow:rgba(155,255,124,.4);
+  }
+  .figure.token-naming-v2 .tn2-pill[data-c="orange"]{
+    --c-text:#FFB871;
+    --c-glow:rgba(255,184,113,.45);
+  }
+  .figure.token-naming-v2 .tn2-pill:hover{
+    transform:translateY(-2px);
+    box-shadow:
+      0 0 28px var(--c-glow, rgba(255,255,255,.4)),
+      0 0 64px var(--c-glow, rgba(255,255,255,.2)),
+      inset 0 0 0 1px rgba(255,255,255,.08);
+  }
+  .figure.token-naming-v2 .tn2-pill .tn2-num{
+    opacity:.65;font-size:clamp(8px,1vw,11px);letter-spacing:.04em;
+  }
+  .figure.token-naming-v2 .tn2-pill em{
+    font-style:normal;opacity:.55;font-weight:400;margin-left:4px;
+    font-size:clamp(9px,1.1vw,13px);
+  }
+  .figure.token-naming-v2 .tn2-sep{
+    font-family:var(--f-code);font-size:clamp(14px,1.8vw,22px);font-weight:500;
+    color:rgba(255,255,255,.35);user-select:none;
+  }
+  /* Popover with example values, appears on hover */
+  .figure.token-naming-v2 .tn2-popover{
+    position:absolute;top:100%;left:50%;
+    transform:translateX(-50%) translateY(4px);
+    margin-top:14px;
+    background:#131313;color:#fff;
+    padding:14px 18px;border-radius:12px;
+    display:flex;flex-direction:column;gap:8px;
+    font-family:var(--f-code);font-size:13px;font-weight:500;
+    letter-spacing:0;line-height:1;
+    opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity .22s var(--ease), transform .22s var(--ease);
+    z-index:10;white-space:nowrap;
+    box-shadow:0 16px 36px rgba(19,19,19,.22);
+    min-width:140px;
+  }
+  .figure.token-naming-v2 .tn2-popover::before{
+    content:"";position:absolute;bottom:100%;left:50%;
+    transform:translateX(-50%);
+    border:6px solid transparent;border-bottom-color:#131313;
+  }
+  .figure.token-naming-v2 .tn2-popover span{color:var(--c-text,#fff)}
+  .figure.token-naming-v2 .tn2-popover .tn2-more{opacity:.45;color:#fff}
+  .figure.token-naming-v2 .tn2-pill:hover .tn2-popover{
+    opacity:1;visibility:visible;
+    transform:translateX(-50%) translateY(0);
+  }
+  /* Example token displayed below */
+  .figure.token-naming-v2 .tn2-example{
+    display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+    justify-content:center;
+  }
+  .figure.token-naming-v2 .tn2-token{
+    font-family:var(--f-code);font-size:24px;font-weight:600;letter-spacing:-.005em;
+    color:#131313;
+  }
+  .figure.token-naming-v2 .tn2-prefix,
+  .figure.token-naming-v2 .tn2-dash{color:rgba(19,19,19,.4);font-weight:500}
+  .figure.token-naming-v2 .tn2-seg[data-c="purple"]{color:#7B3CC9}
+  .figure.token-naming-v2 .tn2-seg[data-c="green"]{color:#0A6C39}
+  .figure.token-naming-v2 .tn2-seg[data-c="orange"]{color:#C24E1F}
+  .figure.token-naming-v2 .tn2-eg{
+    font-family:var(--f-sans);font-size:11px;font-weight:500;
+    letter-spacing:.1em;text-transform:uppercase;color:rgba(19,19,19,.5);
+  }
+
+  /* === Price page theme toggle (light/dark) — token system in production === */
+  .figure.theme-shot{
+    aspect-ratio:auto;padding:24px 24px 28px;border:none;
+    display:flex;flex-direction:column;gap:18px;
+    background:#FBFAFB;
+    transition:background .35s var(--ease);
+  }
+  .figure.theme-shot[data-theme="dark"]{background:#0a1424}
+  .figure.theme-shot .ts-head{
+    display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
+  }
+  .figure.theme-shot .ts-label{
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(19,19,19,.55);transition:color .35s var(--ease);
+  }
+  .figure.theme-shot[data-theme="dark"] .ts-label{color:rgba(255,255,255,.55)}
+  /* Reuse .tba-tabs / .tba-tab look but theme-aware */
+  .figure.theme-shot .tba-tabs{
+    background:rgba(19,19,19,.05);
+    transition:background .35s var(--ease);
+  }
+  .figure.theme-shot[data-theme="dark"] .tba-tabs{background:rgba(255,255,255,.06)}
+  .figure.theme-shot[data-theme="dark"] .tba-tab{color:rgba(255,255,255,.55)}
+  .figure.theme-shot[data-theme="dark"] .tba-tab:hover{color:#fff}
+  .figure.theme-shot[data-theme="dark"] .tba-tab.is-active{
+    background:#1199FA;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);
+  }
+  .figure.theme-shot .ts-stage{
+    position:relative;border-radius:14px;overflow:hidden;
+    box-shadow:0 24px 60px -28px rgba(14,13,12,.35), 0 1px 0 rgba(19,19,19,.06);
+    background:#fff;
+  }
+  .figure.theme-shot[data-theme="dark"] .ts-stage{
+    background:#0d1726;box-shadow:0 24px 60px -28px rgba(0,0,0,.6), 0 1px 0 rgba(255,255,255,.04);
+  }
+  .figure.theme-shot .ts-img{
+    display:block;width:100%;height:auto;
+    transition:opacity .4s var(--ease);
+  }
+  /* Default: hide both, show one based on data-theme */
+  .figure.theme-shot .ts-img[data-img="light"]{display:none}
+  .figure.theme-shot .ts-img[data-img="dark"]{display:none}
+  .figure.theme-shot[data-theme="light"] .ts-img[data-img="light"]{display:block}
+  .figure.theme-shot[data-theme="dark"]  .ts-img[data-img="dark"]{display:block}
+
+  /* === Tokens before/after — interactive comparison === */
+  .figure.tokens-ba{
+    aspect-ratio:auto;padding:36px 32px 44px;border:none;
+    display:flex;flex-direction:column;gap:32px;
+    /* Subtle dotted grid background — Material Design reference style */
+    background-color:#FBFAFB;
+    background-image:radial-gradient(circle, rgba(19,19,19,.12) 1px, transparent 1.5px);
+    background-size:16px 16px;
+    background-position:0 0;
+  }
+  .tba-tabs{
+    display:inline-flex;gap:0;align-self:flex-start;
+    background:rgba(19,19,19,.05);border-radius:999px;padding:4px;
+  }
+  .tba-tab{
+    background:transparent;border:none;cursor:pointer;
+    padding:10px 18px;border-radius:999px;
+    font-family:var(--f-sans);font-size:13px;font-weight:500;
+    color:rgba(19,19,19,.55);
+    display:inline-flex;align-items:baseline;gap:6px;
+    transition:background .25s var(--ease), color .25s var(--ease);
+  }
+  .tba-tab:hover{color:#131313}
+  .tba-tab.is-active{
+    background:#fff;color:#131313;font-weight:600;
+    box-shadow:0 1px 3px rgba(14,13,12,.08);
+  }
+  .tba-tab .tba-tab-sub{
+    font-size:11px;font-weight:500;opacity:.7;
+  }
+  .tba-stage{
+    display:flex;flex-direction:column;gap:28px;
+    padding-left:8px;
+  }
+  .tba-row{
+    display:grid;grid-template-columns:minmax(280px,320px) 48px 1fr;
+    align-items:center;gap:0;
+  }
+  @media (max-width:900px){
+    .tba-row{grid-template-columns:minmax(240px,280px) 36px 1fr}
+  }
+  @media (max-width:700px){
+    .tba-row{grid-template-columns:1fr;gap:8px}
+    .tba-line{display:none}
+  }
+  /* Annotation pill — match Token pill SVG (navy bg, big colored circle, light text) */
+  .tba-anno{
+    display:inline-flex;align-items:center;gap:14px;
+    height:40px;padding:0 18px 0 8px;border-radius:20px;
+    font-size:13px;font-weight:500;letter-spacing:0;
+    line-height:1;white-space:nowrap;
+    transition:background .35s var(--ease), color .35s var(--ease), box-shadow .35s var(--ease);
+    justify-self:end;
+  }
+  .tba-anno::before{
+    content:"";display:inline-block;
+    width:24px;height:24px;border-radius:50%;
+    background:#1199FA;flex-shrink:0;
+    transition:background .35s var(--ease);
+  }
+  /* Before — white pill, dark text, blue circle */
+  .figure.tokens-ba[data-state="before"] .tba-anno{
+    background:#fff;color:#131313;
+    box-shadow:0 1px 2px rgba(14,13,12,.08), inset 0 0 0 1px rgba(19,19,19,.08);
+    font-family:var(--f-sans);font-weight:600;
+  }
+  .figure.tokens-ba[data-state="before"] .tba-anno::after{
+    content:attr(data-before);
+  }
+  /* After — dark navy pill, white mono text, blue circle */
+  .figure.tokens-ba[data-state="after"] .tba-anno{
+    background:#001B3C;color:#fff;
+    box-shadow:none;
+    font-family:var(--f-code);font-weight:500;font-size:13px;
+  }
+  .figure.tokens-ba[data-state="after"] .tba-anno::after{
+    content:attr(data-after);
+  }
+  /* Connector line */
+  .tba-line{
+    height:1px;
+    background:repeating-linear-gradient(90deg,rgba(19,19,19,.25) 0 4px,transparent 4px 8px);
+    align-self:center;
+  }
+
+  /* Components themselves don't change between states */
+  .tba-component{justify-self:start}
+
+  /* Input field — 48px height to match button */
+  .tba-input{
+    display:inline-flex;align-items:center;gap:10px;
+    background:#fff;color:#7B849B;
+    height:48px;padding:0 16px;border-radius:8px;min-width:240px;
+    border:1.5px solid #1199FA;
+    font-family:var(--f-sans);font-size:14px;
+    box-sizing:border-box;
+  }
+  .tba-input svg{width:14px;height:14px;color:#7B849B;flex-shrink:0}
+  .tba-input-text{color:#131313}
+
+  /* Primary button — 48px height */
+  .tba-btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    background:#1199FA;color:#fff;
+    height:48px;padding:0 32px;border-radius:8px;border:none;
+    font-family:var(--f-sans);font-size:14px;font-weight:600;
+    cursor:default;min-width:120px;
+    box-sizing:border-box;
+  }
+
+  /* Title card */
+  .tba-card{
+    background:#fff;border-radius:12px;padding:14px 16px;
+    box-shadow:0 4px 12px rgba(14,13,12,.06), inset 0 0 0 1px rgba(19,19,19,.06);
+    max-width:340px;width:100%;
+  }
+  .tba-card-head{
+    display:flex;align-items:center;gap:8px;
+    margin-bottom:6px;
+  }
+  .tba-card-icon{display:inline-flex;color:#1199FA}
+  .tba-card-icon svg{width:16px;height:16px;display:block}
+  .tba-card-title{
+    font-family:var(--f-sans);font-weight:600;font-size:14px;color:#131313;
+  }
+  .tba-card-body{
+    margin:0;font-family:var(--f-sans);font-size:12.5px;line-height:1.5;
+    color:#565F76;
+  }
+
+  /* Slider */
+  .tba-slider{
+    position:relative;height:18px;width:100%;max-width:280px;
+  }
+  .tba-slider-rail{
+    position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);
+    height:3px;border-radius:2px;background:rgba(19,19,19,.12);
+  }
+  .tba-slider-fill{
+    position:absolute;left:0;width:60%;top:50%;transform:translateY(-50%);
+    height:3px;border-radius:2px;background:#1199FA;
+  }
+  .tba-slider-thumb{
+    position:absolute;left:60%;top:50%;
+    transform:translate(-50%,-50%);
+    width:16px;height:16px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);
+    border:1.5px solid #1199FA;
+  }
+
+  /* === Token table — scrollable, theme-toggleable === */
+  .token-table-wrap{
+    margin:32px 0 12px;border-radius:14px;overflow:hidden;
+    background:#fff;color:#131313;border:1px solid var(--line);
+    transition:background .35s var(--ease), color .35s var(--ease), border-color .35s var(--ease);
+  }
+  .token-table-wrap.is-dark{
+    background:var(--surface-2);color:#fff;border-color:rgba(255,255,255,.08);
+  }
+  /* Single bar — category tabs on the left, Light/Dark pill on the right */
+  .tt-bar{
+    display:flex;align-items:center;justify-content:space-between;gap:24px;
+    padding:14px 22px 0;
+    border-bottom:1px solid rgba(19,19,19,.08);
+    transition:border-color .35s var(--ease);
+  }
+  .token-table-wrap.is-dark .tt-bar{border-bottom-color:rgba(255,255,255,.1)}
+
+  /* Light/Dark pill in token table — same UI as Fig. 08 toggle, dark-mode aware */
+  .tt-theme-pill{flex-shrink:0;margin-bottom:8px}
+  .token-table-wrap.is-dark .tt-theme-pill{background:rgba(255,255,255,.06)}
+  .token-table-wrap.is-dark .tt-theme-pill .tba-tab{color:rgba(255,255,255,.55)}
+  .token-table-wrap.is-dark .tt-theme-pill .tba-tab:hover{color:#fff}
+  .token-table-wrap.is-dark .tt-theme-pill .tba-tab.is-active{
+    background:#1199FA;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);
+  }
+
+  /* Carbon-style category tabs — now nested inside .tt-bar */
+  .tt-tabs{
+    display:flex;gap:0;
+    overflow-x:auto;scrollbar-width:none;
+  }
+  .tt-tabs::-webkit-scrollbar{display:none}
+  .tt-tab{
+    background:transparent;border:none;cursor:pointer;
+    padding:14px 18px 12px;
+    font-family:var(--f-sans);font-size:13px;font-weight:500;
+    color:rgba(19,19,19,.55);
+    position:relative;
+    white-space:nowrap;
+    transition:color .2s var(--ease);
+    margin-bottom:-1px;
+  }
+  .token-table-wrap.is-dark .tt-tab{color:rgba(255,255,255,.55)}
+  .tt-tab:hover{color:#131313}
+  .token-table-wrap.is-dark .tt-tab:hover{color:#fff}
+  .tt-tab.is-active{color:#131313;font-weight:600}
+  .token-table-wrap.is-dark .tt-tab.is-active{color:#fff}
+  .tt-tab.is-active::after{
+    content:"";position:absolute;left:12px;right:12px;bottom:-1px;
+    height:2px;background:var(--cdc-blue);border-radius:2px;
+  }
+  /* Scrollable container */
+  .tt-scroll{
+    max-height:560px;overflow-y:auto;overflow-x:hidden;
+    padding:24px 22px 28px;
+    scrollbar-width:thin;scrollbar-color:rgba(19,19,19,.25) transparent;
+  }
+  .token-table-wrap.is-dark .tt-scroll{scrollbar-color:rgba(255,255,255,.25) transparent}
+  .tt-scroll::-webkit-scrollbar{width:8px}
+  .tt-scroll::-webkit-scrollbar-track{background:transparent}
+  .tt-scroll::-webkit-scrollbar-thumb{background:rgba(19,19,19,.2);border-radius:4px}
+  .token-table-wrap.is-dark .tt-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,.2)}
+
+  /* Theme panes — only one visible at a time */
+  .tt-theme{display:none}
+  .tt-theme.is-active{display:block}
+
+  /* Section / sub-section headings */
+  .tt-section{
+    font-family:var(--f-display);font-weight:600;font-size:24px;letter-spacing:-.015em;
+    margin:8px 0 16px;color:inherit;
+  }
+  .tt-section:first-child{margin-top:0}
+  .tt-subsection{
+    font-family:var(--f-sans);font-weight:600;font-size:14px;letter-spacing:0;
+    margin:24px 0 10px;color:inherit;opacity:.95;
+  }
+
+  /* Token rows — render as a CSS grid table */
+  .tt-table{
+    width:100%;border-collapse:separate;border-spacing:0;
+    font-size:11.5px;
+  }
+  .tt-table thead th{
+    text-align:left;font-family:var(--f-sans);font-weight:500;font-size:10.5px;
+    letter-spacing:.04em;text-transform:uppercase;color:inherit;opacity:.55;
+    padding:6px 10px 8px;border-bottom:1px solid rgba(19,19,19,.08);
+  }
+  .token-table-wrap.is-dark .tt-table thead th{border-bottom-color:rgba(255,255,255,.08)}
+  .tt-table tbody td{
+    padding:10px;vertical-align:middle;border-bottom:1px solid rgba(19,19,19,.05);
+    font-family:var(--f-sans);
+  }
+  .token-table-wrap.is-dark .tt-table tbody td{border-bottom-color:rgba(255,255,255,.05)}
+  .tt-table tbody tr:last-child td{border-bottom:none}
+  .tt-table .tt-sw{
+    display:block;width:18px;height:18px;border-radius:4px;flex-shrink:0;
+  }
+  .tt-table .tt-sw.outlined{box-shadow:inset 0 0 0 1px rgba(19,19,19,.15)}
+  .tt-table .tt-token{
+    font-family:var(--f-code);font-size:11px;font-weight:500;letter-spacing:0;
+  }
+  .tt-table .tt-pal{
+    font-family:var(--f-sans);font-size:11px;color:inherit;opacity:.7;white-space:nowrap;
+  }
+  .tt-table .tt-hex{
+    font-family:var(--f-code);font-size:11px;color:inherit;opacity:.7;
+  }
+  .tt-table .tt-use{
+    font-family:var(--f-sans);font-size:11.5px;color:inherit;opacity:.65;line-height:1.4;
+  }
+  /* Compact column widths */
+  .tt-table col.c-sw{width:32px}
+  .tt-table col.c-tok{width:33%}
+  .tt-table col.c-pal{width:14%}
+  .tt-table col.c-hex{width:14%}
+  .tt-table col.c-use{width:auto}
+
+  @media (max-width:700px){
+    .tt-scroll{padding:20px 14px 24px;max-height:480px}
+    .tt-table .tt-pal{display:none}
+    .tt-table col.c-pal{width:0}
+  }
+
+  /* === CHAPTER 4 — Rollout timeline === */
+  .figure.rollout{
+    aspect-ratio:auto;padding:64px 48px;background:var(--surface-2);
+    border:1px solid rgba(255,255,255,.08);
+  }
+  .rollout-title{
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+    color:rgba(255,255,255,.6);margin:0 0 36px;
+  }
+  .rollout-track{
+    display:flex;align-items:center;gap:0;padding:0 8px;
+    margin-bottom:32px;position:relative;
+  }
+  .rt-dot{
+    flex:0 0 auto;width:18px;height:18px;border-radius:50%;
+    border:1.5px solid #fff;background:transparent;position:relative;
+  }
+  .rt-dot.done{background:#fff}
+  /* Tiny checkmark inside completed dots */
+  .rt-dot.done::after{
+    content:"";position:absolute;left:5px;top:7px;
+    width:5px;height:2.5px;border-left:1.5px solid var(--cdc-blue);
+    border-bottom:1.5px solid var(--cdc-blue);
+    transform:rotate(-45deg);transform-origin:left center;
+  }
+  .rt-line{flex:1;height:1px;background:rgba(255,255,255,.4)}
+  .rollout-labels{
+    display:grid;grid-template-columns:repeat(5,1fr);gap:8px;
+    color:#fff;font-family:var(--f-sans);
+  }
+  .rollout-labels .stage b{
+    display:block;font-size:13px;font-weight:600;margin-bottom:4px;
+  }
+  .rollout-labels .stage span{
+    display:block;font-size:11px;color:rgba(255,255,255,.65);line-height:1.4;
+  }
+  /* Right-align the last two stages so labels line up with their dots */
+  .rollout-labels .stage:nth-last-child(-n+2){text-align:right}
+
+  /* === CHAPTER 4 — Stats === */
+  .stats-block{margin:40px 0 12px}
+  .stats-block .stats-label{
+    font-family:var(--f-display);font-weight:400;font-size:12px;
+    letter-spacing:0;text-transform:none;color:var(--muted);
+    margin:0 0 14px;
+  }
+  .stats{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:40px;
+    padding:0 0 48px;border-bottom:1px solid rgba(255,255,255,.18);
+    margin:0;
+  }
+  @media (max-width:800px){.stats{grid-template-columns:1fr;gap:32px}}
+  .stat .num{
+    font-family:var(--f-display);font-weight:600;font-size:60px;line-height:1;
+    letter-spacing:-.02em;color:#fff;
+  }
+  .stat .num em{font-style:normal;color:#fff}
+  .stat .lbl{
+    font-family:var(--f-display);font-weight:400;font-size:12px;line-height:1.5;
+    letter-spacing:0;text-transform:none;color:var(--muted);margin-top:14px;max-width:32ch;
+  }
+
+  /* === Pull quote === */
+  .pull{padding:60px 0;text-align:left}
+  .pull q{
+    display:block;font-family:var(--f-display);font-weight:500;
+    font-size:clamp(24px,3vw,40px);line-height:1.2;letter-spacing:-.02em;
+    max-width:28ch;margin:0;color:#fff;quotes:"" "";
+  }
+  .pull q::before,.pull q::after{content:""}
+  .pull .attrib{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-top:20px}
+
+  /* === Next CTA — with thumbnail === */
+  .next-cta{padding:96px 0 100px}
+  .next-cta .eyebrow{font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin:0 0 28px;text-align:center}
+  .next-card{
+    display:flex;flex-direction:column;align-items:center;gap:28px;
+    max-width:960px;margin:0 auto;text-decoration:none;color:inherit;
+  }
+  .next-thumb{
+    display:block;border-radius:16px;overflow:hidden;
+    aspect-ratio:16/10;width:100%;max-width:456px;
+    transition:transform .35s var(--ease);
+  }
+  .next-card:hover .next-thumb{transform:translateY(-4px)}
+  .next-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .next-meta{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+  .next-meta h2{
+    font-family:var(--f-display);font-weight:500;color:#fff;
+    font-size:clamp(20px,2.2vw,26px);line-height:1.25;letter-spacing:-.012em;
+    margin:0;text-wrap:balance;
+  }
+  .next-arrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--f-display);font-weight:500;font-size:13px;color:#fff;
+    position:relative;
+  }
+  .next-arrow svg{width:13px;height:13px;transition:transform .25s var(--ease)}
+  .next-card:hover .next-arrow svg{transform:translate(3px,-3px)}
+  .next-arrow::after{
+    content:"";position:absolute;left:0;right:20px;bottom:-2px;
+    border-bottom:1px solid #fff;
+    transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease);
+  }
+  .next-card:hover .next-arrow::after{transform:scaleX(1)}
+
+  .foot{
+    padding:32px 0;border-top:1px solid rgba(255,255,255,.18);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.6);
+  }
+
+  /* === LHS scroll-spy nav === */
+  .page-nav{
+    position:fixed;left:32px;top:50%;transform:translateY(-50%);
+    z-index:40;
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;font-size:12px;
+    max-width:200px;
+  }
+  .page-nav ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+  .page-nav .grp{margin-top:2px}
+  .page-nav .grp > a{font-weight:600}
+  .page-nav .sub{
+    list-style:none;margin:6px 0 0 14px;padding:0;
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .page-nav a{
+    display:inline-flex;align-items:center;
+    padding:4px 0;
+    color:rgba(255,255,255,.55);text-decoration:none;line-height:1.3;
+    transition:color .25s var(--ease), opacity .25s var(--ease);
+    position:relative;
+  }
+  .page-nav a:hover{color:var(--cdc-blue)}
+  .page-nav a.is-active{color:#fff;font-weight:600}
+  .page-nav .sub a{font-size:11.5px;font-weight:400}
+  .page-nav .sub a.is-active{font-weight:600}
+  @media (max-width:1180px){.page-nav{display:none}}
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(12px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none}
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav" aria-label="Main navigation">
+  <a class="nav-logo" href="../index.html">Rachel Wong</a>
+  <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-controls="navMenu" aria-label="Toggle menu">
+    <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
+  <div class="nav-items" id="navMenu">
+    <a href="../work.html">Work</a>
+    <a class="nav-ext" href="https://www.linkedin.com/in/cheuk-yiu-rachel-wong/" target="_blank" rel="noopener noreferrer">LinkedIn<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></a>
+    <a class="nav-cta nav-resume" href="../resume.pdf" download="Rachel-Wong-Resume.pdf" aria-label="Download resume">Resume<svg viewBox="0 0 14 14" width="12" height="12" fill="none" aria-hidden="true" style="flex-shrink:0"><path d="M7 2v7.5M3.5 6.5L7 10l3.5-3.5M2.5 12h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</nav>
+
+<!-- Email-copied feedback pill -->
+<div id="email-toast" class="email-toast" aria-hidden="true">
+  <span class="lbl">email copied</span>
+  <span class="dots"><span></span><span></span><span></span></span>
+</div>
+
+<aside class="page-nav" id="pageNav" aria-label="On-page navigation">
+  <ol>
+    <li><a href="#background" data-spy>Background</a></li>
+    <li><a href="#approach" data-spy>Design approach</a></li>
+    <li class="grp">
+      <a href="#step-01" data-spy>Design process</a>
+      <ol class="sub">
+        <li><a href="#step-01" data-spy>Step 1 · Foundation</a></li>
+        <li><a href="#step-02" data-spy>Step 2 · Tokens</a></li>
+        <li><a href="#step-03" data-spy>Step 3 · Rollout</a></li>
+      </ol>
+    </li>
+    <li><a href="#results" data-spy>Results</a></li>
+    <li><a href="#reflection" data-spy>Reflection</a></li>
+  </ol>
+</aside>
+
+<section class="p-hero">
+  <div class="wrap">
+    <img class="p-hero-logo reveal" src="../assets/cdc-logo.svg" alt="crypto.com" width="140">
+    <p class="tagline reveal">crypto.com · Nov 2020 — Jan 2023</p>
+    <h1 class="reveal">Scaling crypto.com design system with design tokens</h1>
+    <p class="lede reveal">
+      The crypto.com design system is a shared foundation across
+      <a href="https://accounts.crypto.com/en-US/login?from=mainapp-web&amp;redirect=%2Fhub%2Fmarket%3F_gl%3D1*4wk9iu*_gcl_au*MzE3NDIzMDQuMTc3NzAxMjU1Nw..*_ga*ODAzMDQyMDIyLjE3NzA3ODI2MzY.*_ga_PC0RNJG7RR*czE3Nzc4ODQzNTMkbzEkZzEkdDE3Nzc4ODQ2MDkkajM2JGwwJGgwJGRHaFhUMHZsR3BxdEVOSy1laHV4Vjd6elVrcThlMEQ0X0dn" target="_blank" rel="noopener noreferrer" class="lede-link">crypto.com app</a>,
+      <a href="https://crypto.com/exchange/" target="_blank" rel="noopener noreferrer" class="lede-link">Exchange</a>,
+      DeFi Wallet, NFT and
+      <a href="https://crypto.com/en/price" target="_blank" rel="noopener noreferrer" class="lede-link">Price Page</a>.
+      It was built to fix the things that slow a fast-moving org:
+      accessibility gaps, theme drift, and UI bugs from cross-stack handoffs.
+    </p>
+
+    <div class="meta-strip reveal">
+      <div><div class="m-lbl">Role</div><div class="m-val">Design system designer and advocate</div></div>
+      <div><div class="m-lbl">Timeline</div><div class="m-val">Nov 2020 — Jan 2023</div></div>
+      <div><div class="m-lbl">Team</div><div class="m-val">26 product designers, 3 brand designers, 12 engineers (representatives from Exchange, Price Page and Main App)</div></div>
+    </div>
+
+    <div class="stats-block reveal" aria-label="Outcome metrics">
+      <p class="stats-label">Result</p>
+      <div class="stats">
+      <div class="stat">
+        <div class="num"><em>50%</em></div>
+        <div class="lbl">Reduction in designer time spent preparing Figma screens for theme variants.</div>
+      </div>
+      <div class="stat">
+        <div class="num">300<em>+</em></div>
+        <div class="lbl">Components mapped with design tokens, covering 95%+ of existing component use cases.</div>
+      </div>
+      <div class="stat">
+        <div class="num"><em>−40%</em></div>
+        <div class="lbl">Average reduction in UI bug tickets on Jira, with less back-and-forth between frontend and design.</div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Background: 3 problems, then approach + feedback loop -->
+<section id="background">
+  <div class="wrap">
+    <p class="sec-label reveal">Problem</p>
+    <h2 class="sec reveal">3 problems kept surfacing across products</h2>
+    <p class="reveal" style="font-size:14px;line-height:1.65;color:var(--ink-2);max-width:60ch;margin:0 0 12px">
+      crypto.com was shipping fast across many products and stacks. Before
+      design tokens, the same friction showed up sprint after sprint:
+    </p>
+
+    <div class="prob-cards reveal">
+      <div class="prob-card">
+        <div class="ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/>
+          </svg>
+        </div>
+        <h4 class="ttl">A11Y accessibility</h4>
+        <p class="desc">Some colour pairs failed WCAG contrast in real component states, creating accessibility risk.</p>
+      </div>
+
+      <div class="prob-card">
+        <div class="ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M12 3v18" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M12 3a9 9 0 0 0 0 18z" fill="currentColor"/>
+          </svg>
+        </div>
+        <h4 class="ttl">Dark and light mode support</h4>
+        <p class="desc">Exchange products and Price Page needed reliable theme switching without duplicated design work.</p>
+      </div>
+
+      <div class="prob-card">
+        <div class="ico" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <rect x="3" y="4" width="18" height="12" rx="2" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M8 20h8M12 16v4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M7 8l-2 2 2 2M17 8l2 2-2 2M14 7l-4 6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h4 class="ttl">Different tech stacks across products</h4>
+        <p class="desc">Different stacks made UI alignment hard; every gap became a Jira bug ticket.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Design approach -->
+<section id="approach">
+  <div class="wrap">
+    <h2 class="sec reveal">Design approach</h2>
+    <ol class="approach-list reveal">
+      <li>
+        <b>Prioritise foundational design elements</b>
+        like type and colour first, so the system can scale across products.
+      </li>
+      <li>
+        <b>Create an active feedback loop between designers and engineers.</b>
+        Other designers and engineers do not just consume the system. We share
+        updates, raise requests, prioritise work and ship maintenance together.
+        The loop keeps the libraries current and trusted.
+      </li>
+    </ol>
+
+    <div class="figure approach-diagram reveal" aria-label="Animated feedback-loop diagram: share, collect, prioritise, maintain">
+      <svg class="loop-svg" viewBox="0 0 1100 620" role="img" aria-hidden="true">
+        <defs>
+          <!-- Soft glow for the orbiting dot -->
+          <filter id="dotglow" x="-100%" y="-100%" width="300%" height="300%">
+            <feGaussianBlur stdDeviation="4" result="b"/>
+            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Hairline dashed ring (radius 190 — enlarged for breathing room) -->
+        <circle class="ring" cx="540" cy="310" r="190" fill="none"
+                stroke="rgba(255,255,255,.18)" stroke-width="1"
+                stroke-dasharray="2 6"/>
+
+        <!-- Orbit path (invisible, used by animateMotion) -->
+        <path id="orbitPath" d="M 540 120 A 190 190 0 1 1 539.99 120" fill="none"/>
+
+        <!-- Orbiting dot -->
+        <circle class="orbit-dot" r="7" fill="#1199FA" filter="url(#dotglow)">
+          <animateMotion dur="11s" repeatCount="indefinite" rotate="auto">
+            <mpath href="#orbitPath"/>
+          </animateMotion>
+        </circle>
+
+        <!-- Centre — text only, no border, larger -->
+        <text class="center-label" x="540" y="302">Active design system</text>
+        <text class="center-label" x="540" y="334">contributors</text>
+
+        <!-- Four nodes around the ring (no numbering — it's a loop) -->
+        <!-- Top — above ring (ring top at y=120) -->
+        <g class="node" data-step="1">
+          <text class="node-label" x="540" y="32">💬 Share updates between</text>
+          <text class="node-label" x="540" y="56">design ⇄ engineering</text>
+          <text class="node-sub"   x="540" y="82">on Slack / weekly catchup</text>
+          <text class="node-sub"   x="540" y="100">(hosted by me)</text>
+        </g>
+
+        <!-- Right — 120px clear of new ring edge (x=730), x=850 -->
+        <g class="node" data-step="2">
+          <text class="node-label" x="850" y="300" text-anchor="start">📝 Collect feedback</text>
+          <text class="node-sub"   x="850" y="326" text-anchor="start">implementation from engineers,</text>
+          <text class="node-sub"   x="850" y="344" text-anchor="start">usage / review from designers</text>
+        </g>
+
+        <!-- Bottom — below ring (ring bottom at y=500) -->
+        <g class="node" data-step="3">
+          <text class="node-label" x="540" y="546">📋 Prioritise / backlog</text>
+          <text class="node-sub"   x="540" y="572">feedback from team</text>
+        </g>
+
+        <!-- Left — mirrored: 120px clear of new ring edge (x=350), x=230 -->
+        <g class="node" data-step="4">
+          <text class="node-label" x="230" y="300" text-anchor="end">🔨 Maintain &amp; upscale</text>
+          <text class="node-sub"   x="230" y="326" text-anchor="end">design system by</text>
+          <text class="node-sub"   x="230" y="344" text-anchor="end">components / topics</text>
+        </g>
+      </svg>
+    </div>
+    <p class="fig-caption">Fig. 01: A continuous feedback loop between designers and engineers.</p>
+  </div>
+</section>
+
+<!-- Step 01 — Foundation -->
+<section id="step-01">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <h3>1. Consolidate design foundation</h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          The first audit was the colour palette. The old version was
+          product-specific: each platform kept its own ramp, and several tones
+          failed WCAG contrast when checked against real text and component
+          states. I tested every pair using the
+          <a href="https://www.figma.com/community/plugin/734693888346260052/able-friction-free-accessibility" target="_blank" rel="noopener noreferrer" class="prose-link">Able Figma plugin</a>,
+          mapping each one to a target accessibility level (A → AA → AAA).
+        </p>
+      </div>
+
+      <div class="figure ref-image reveal" aria-label="Old crypto.com colour palette audited with the Able Figma plugin">
+        <img src="../cdc-old-palette.png" alt="Old colour palette: green, red, yellow, blue and grey ramps with WCAG contrast scores; the Able Figma plugin showing green-50 (#20BCA4) failing contrast against white"/>
+      </div>
+      <p class="fig-caption">Fig. 02: old palette audited with the <em>Able</em> Figma plugin. For example, Green-50 (<code>#20BCA4</code>) failed WCAG contrast against white.</p>
+
+      <div class="chap-body" style="margin-top:32px">
+        <p>
+          Then I rebuilt the palette as a <b>global colour library</b>
+          shared across all crypto.com products. Darker shades were added
+          to support dark mode, and alternative hues were introduced so
+          product teams had room to differentiate without forking the
+          foundation.
+        </p>
+      </div>
+
+      <div class="figure palette reveal" aria-label="crypto.com global colour library: seven colour ramps × ten shades, plus Black and White">
+        <div class="palette-stack">
+
+          <!-- Brand · Primary blue -->
+          <div class="ramp">
+            <div class="ramp-head"><span class="cat">Brand blue</span></div>
+            <div class="ramp-row">
+              <div class="palette-cell" data-hex="#E7F5FF" style="background:#E7F5FF"><span class="lbl">50</span></div>
+              <div class="palette-cell" data-hex="#CDEAFE" style="background:#CDEAFE"><span class="lbl">100</span></div>
+              <div class="palette-cell" data-hex="#92D1FF" style="background:#92D1FF"><span class="lbl">200</span></div>
+              <div class="palette-cell" data-hex="#4DB5FF" style="background:#4DB5FF"><span class="lbl">300</span></div>
+              <div class="palette-cell" data-hex="#1199FA" style="background:#1199FA"><span class="lbl dark">400</span></div>
+              <div class="palette-cell dark" data-hex="#0577DA" style="background:#0577DA"><span class="lbl">500</span></div>
+              <div class="palette-cell dark" data-hex="#034481" style="background:#034481"><span class="lbl">600</span></div>
+              <div class="palette-cell dark" data-hex="#002F61" style="background:#002F61"><span class="lbl">700</span></div>
+              <div class="palette-cell dark" data-hex="#00254F" style="background:#00254F"><span class="lbl">800</span></div>
+              <div class="palette-cell dark" data-hex="#001B3C" style="background:#001B3C"><span class="lbl">900</span></div>
+            </div>
+          </div>
+
+          <!-- Functional · Status: success -->
+          <div class="ramp">
+            <div class="ramp-head"><span class="cat">Functional green</span></div>
+            <div class="ramp-row">
+              <div class="palette-cell" data-hex="#EFFBF8" style="background:#EFFBF8"><span class="lbl">50</span></div>
+              <div class="palette-cell" data-hex="#E6FAF6" style="background:#E6FAF6"><span class="lbl">100</span></div>
+              <div class="palette-cell" data-hex="#ACECE1" style="background:#ACECE1"><span class="lbl">200</span></div>
+              <div class="palette-cell" data-hex="#5DD1BF" style="background:#5DD1BF"><span class="lbl">300</span></div>
+              <div class="palette-cell" data-hex="#2BC2AB" style="background:#2BC2AB"><span class="lbl dark">400</span></div>
+              <div class="palette-cell dark" data-hex="#00A68C" style="background:#00A68C"><span class="lbl">500</span></div>
+              <div class="palette-cell dark" data-hex="#109A85" style="background:#109A85"><span class="lbl">600</span></div>
+              <div class="palette-cell dark" data-hex="#017361" style="background:#017361"><span class="lbl">700</span></div>
+              <div class="palette-cell dark" data-hex="#005747" style="background:#005747"><span class="lbl">800</span></div>
+              <div class="palette-cell dark" data-hex="#00392F" style="background:#00392F"><span class="lbl">900</span></div>
+            </div>
+          </div>
+
+          <!-- Functional · Status: danger -->
+          <div class="ramp">
+            <div class="ramp-head"><span class="cat">Functional red</span></div>
+            <div class="ramp-row">
+              <div class="palette-cell" data-hex="#FFF5F6" style="background:#FFF5F6"><span class="lbl">50</span></div>
+              <div class="palette-cell" data-hex="#FFE9EC" style="background:#FFE9EC"><span class="lbl">100</span></div>
+              <div class="palette-cell" data-hex="#FAACB6" style="background:#FAACB6"><span class="lbl">200</span></div>
+              <div class="palette-cell" data-hex="#ED7685" style="background:#ED7685"><span class="lbl">300</span></div>
+              <div class="palette-cell" data-hex="#E35F70" style="background:#E35F70"><span class="lbl dark">400</span></div>
+              <div class="palette-cell dark" data-hex="#E0485C" style="background:#E0485C"><span class="lbl">500</span></div>
+              <div class="palette-cell dark" data-hex="#BF3648" style="background:#BF3648"><span class="lbl">600</span></div>
+              <div class="palette-cell dark" data-hex="#A22636" style="background:#A22636"><span class="lbl">700</span></div>
+              <div class="palette-cell dark" data-hex="#801826" style="background:#801826"><span class="lbl">800</span></div>
+              <div class="palette-cell dark" data-hex="#4D0E17" style="background:#4D0E17"><span class="lbl">900</span></div>
+            </div>
+          </div>
+
+          <!-- Functional · Status: pending -->
+          <div class="ramp">
+            <div class="ramp-head"><span class="cat">Functional yellow</span></div>
+            <div class="ramp-row">
+              <div class="palette-cell" data-hex="#FEFAE7" style="background:#FEFAE7"><span class="lbl">50</span></div>
+              <div class="palette-cell" data-hex="#FFF9D9" style="background:#FFF9D9"><span class="lbl">100</span></div>
+              <div class="palette-cell" data-hex="#FFE591" style="background:#FFE591"><span class="lbl">200</span></div>
+              <div class="palette-cell" data-hex="#FFD348" style="background:#FFD348"><span class="lbl">300</span></div>
+              <div class="palette-cell" data-hex="#FFC70F" style="background:#FFC70F"><span class="lbl">400</span></div>
+              <div class="palette-cell dark" data-hex="#F5B700" style="background:#F5B700"><span class="lbl">500</span></div>
+              <div class="palette-cell dark" data-hex="#D9A200" style="background:#D9A200"><span class="lbl">600</span></div>
+              <div class="palette-cell dark" data-hex="#B38300" style="background:#B38300"><span class="lbl">700</span></div>
+              <div class="palette-cell dark" data-hex="#8C5900" style="background:#8C5900"><span class="lbl">800</span></div>
+              <div class="palette-cell dark" data-hex="#593900" style="background:#593900"><span class="lbl">900</span></div>
+            </div>
+          </div>
+
+          <!-- Decorative · Purple — alt accents -->
+          <div class="ramp">
+            <div class="ramp-head"><span class="cat">Decorative purple</span></div>
+            <div class="ramp-row">
+              <div class="palette-cell" data-hex="#FAF5FF" style="background:#FAF5FF"><span class="lbl">50</span></div>
+              <div class="palette-cell" data-hex="#F2EBFB" style="background:#F2EBFB"><span class="lbl">100</span></div>
+              <div class="palette-cell" data-hex="#DAC0FA" style="background:#DAC0FA"><span class="lbl">200</span></div>
+              <div class="palette-cell" data-hex="#CD9EFF" style="background:#CD9EFF"><span class="lbl">300</span></div>
+              <div class="palette-cell" data-hex="#C288F9" style="background:#C288F9"><span class="lbl dark">400</span></div>
+              <div class="palette-cell dark" data-hex="#A855F7" style="background:#A855F7"><span class="lbl">500</span></div>
+              <div class="palette-cell dark" data-hex="#8E3DDB" style="background:#8E3DDB"><span class="lbl">600</span></div>
+              <div class="palette-cell dark" data-hex="#743BAB" style="background:#743BAB"><span class="lbl">700</span></div>
+              <div class="palette-cell dark" data-hex="#60308C" style="background:#60308C"><span class="lbl">800</span></div>
+              <div class="palette-cell dark" data-hex="#441860" style="background:#441860"><span class="lbl">900</span></div>
+            </div>
+          </div>
+
+          <!-- Decorative · Orange — alt accents -->
+          <div class="ramp">
+            <div class="ramp-head"><span class="cat">Decorative orange</span></div>
+            <div class="ramp-row">
+              <div class="palette-cell" data-hex="#FFF7E6" style="background:#FFF7E6"><span class="lbl">50</span></div>
+              <div class="palette-cell" data-hex="#FFEED6" style="background:#FFEED6"><span class="lbl">100</span></div>
+              <div class="palette-cell" data-hex="#FFE1D1" style="background:#FFE1D1"><span class="lbl">200</span></div>
+              <div class="palette-cell" data-hex="#FFC09E" style="background:#FFC09E"><span class="lbl">300</span></div>
+              <div class="palette-cell" data-hex="#FF9D7B" style="background:#FF9D7B"><span class="lbl dark">400</span></div>
+              <div class="palette-cell dark" data-hex="#F76341" style="background:#F76341"><span class="lbl">500</span></div>
+              <div class="palette-cell dark" data-hex="#CA3E0A" style="background:#CA3E0A"><span class="lbl">600</span></div>
+              <div class="palette-cell dark" data-hex="#A83E00" style="background:#A83E00"><span class="lbl">700</span></div>
+              <div class="palette-cell dark" data-hex="#802F00" style="background:#802F00"><span class="lbl">800</span></div>
+              <div class="palette-cell dark" data-hex="#4D1C00" style="background:#4D1C00"><span class="lbl">900</span></div>
+            </div>
+          </div>
+
+          <!-- Content · Text & surfaces -->
+          <div class="ramp">
+            <div class="ramp-head"><span class="cat">Content</span></div>
+            <div class="ramp-row">
+              <div class="palette-cell" data-hex="#F7F9FA" style="background:#F7F9FA"><span class="lbl">50</span></div>
+              <div class="palette-cell" data-hex="#EAEEF4" style="background:#EAEEF4"><span class="lbl">100</span></div>
+              <div class="palette-cell" data-hex="#C9CFDD" style="background:#C9CFDD"><span class="lbl">200</span></div>
+              <div class="palette-cell" data-hex="#A0A9BE" style="background:#A0A9BE"><span class="lbl">300</span></div>
+              <div class="palette-cell" data-hex="#7B849B" style="background:#7B849B"><span class="lbl dark">400</span></div>
+              <div class="palette-cell dark" data-hex="#565F76" style="background:#565F76"><span class="lbl">500</span></div>
+              <div class="palette-cell dark" data-hex="#323C52" style="background:#323C52"><span class="lbl">600</span></div>
+              <div class="palette-cell dark" data-hex="#1F283C" style="background:#1F283C"><span class="lbl">700</span></div>
+              <div class="palette-cell dark" data-hex="#151D32" style="background:#151D32"><span class="lbl">800</span></div>
+              <div class="palette-cell dark" data-hex="#0B1426" style="background:#0B1426"><span class="lbl">900</span></div>
+            </div>
+          </div>
+
+          <!-- Static · Black & White -->
+          <div class="ramp">
+            <div class="ramp-head"><span class="cat">Black and white</span></div>
+            <div class="ramp-row bw">
+              <div class="palette-cell dark" data-hex="#000000" style="background:#000000;border:1px solid rgba(19,19,19,.12)"><span class="lbl">Black</span></div>
+              <div class="palette-cell" data-hex="#FFFFFF" style="background:#FFFFFF;border:1px solid rgba(19,19,19,.12)"><span class="lbl">White</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <p class="fig-caption">Fig. 03: global colour library with seven ramps × ten shades plus Black and White, audited for WCAG contrast and shared across all products.</p>
+    </article>
+  </div>
+</section>
+
+<!-- Step 02 — Test and introduce design tokens (merged with the old Structure naming step) -->
+<section id="step-02">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <h3>2. Test and introduce design tokens</h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          With a clean palette in hand, the next step was to give those
+          colours names that meant something. Design tokens are introduced
+          at this point as <b>a source of truth to name and store
+          repeatable design decisions</b>. They became the common language for
+          makers across different design tools and tech stacks.
+        </p>
+        <p>
+          Token names follow a three-part structure:
+          <code style="font-family:var(--f-code);font-size:12.5px;font-weight:500;background:rgba(255,255,255,.1);padding:1px 6px;border-radius:3px;color:#fff">colour usage · role · state</code>.
+          So a button background might be
+          <code style="font-family:var(--f-code);font-size:12.5px;font-weight:500;background:rgba(255,255,255,.1);padding:1px 6px;border-radius:3px;color:#fff">--background-button-primary</code>
+          rather than Blue 50. The same token resolves to a different
+          palette value for light, dark, or a special rainbow theme, so theming
+          becomes one swap instead of a hundred edits.
+        </p>
+      </div>
+
+      <div class="figure token-naming-v2 reveal" aria-label="Anatomy of a design token: three parts, hover to see examples">
+        <div class="tn2-formula">
+          <span class="tn2-pill" data-c="purple">
+            <span class="tn2-num">1.</span>colour usage
+            <div class="tn2-popover">
+              <span>background</span>
+              <span>content</span>
+              <span>border</span>
+              <span>gradient</span>
+              <span class="tn2-more">etc...</span>
+            </div>
+          </span>
+          <span class="tn2-sep">-</span>
+          <span class="tn2-pill" data-c="green">
+            <span class="tn2-num">2.</span>role <em>(optional)</em>
+            <div class="tn2-popover">
+              <span>button</span>
+              <span>input</span>
+              <span>layer</span>
+              <span>chart</span>
+              <span class="tn2-more">etc...</span>
+            </div>
+          </span>
+          <span class="tn2-sep">-</span>
+          <span class="tn2-pill" data-c="orange">
+            <span class="tn2-num">3.</span>state / variation
+            <div class="tn2-popover">
+              <span>primary</span>
+              <span>secondary</span>
+              <span>default</span>
+              <span>hover</span>
+              <span class="tn2-more">etc...</span>
+            </div>
+          </span>
+        </div>
+      </div>
+      <p class="fig-caption">Fig. 04: token names follow a three-part structure: colour usage, role (optional), and state or variation. Hover each pill to reveal possible values.</p>
+
+      <div class="figure tokens-ba reveal" data-state="after" aria-label="Before and after design tokens: base palette names vs semantic tokens">
+        <div class="tba-tabs" role="tablist" aria-label="Before and after view">
+          <button class="tba-tab" type="button" role="tab" data-state="before" aria-selected="false">Before <span class="tba-tab-sub">(base tokens on Figma)</span></button>
+          <button class="tba-tab is-active" type="button" role="tab" data-state="after" aria-selected="true">After <span class="tba-tab-sub">(design tokens)</span></button>
+        </div>
+        <div class="tba-stage">
+          <div class="tba-row">
+            <span class="tba-anno" data-before="Blue 50" data-after="--border-active"></span>
+            <span class="tba-line" aria-hidden="true"></span>
+            <div class="tba-component tba-input">
+              <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.6"/><path d="M11 11l3 3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <span class="tba-input-text">Input text</span>
+            </div>
+          </div>
+          <div class="tba-row">
+            <span class="tba-anno" data-before="Blue 50" data-after="--background-button-primary"></span>
+            <span class="tba-line" aria-hidden="true"></span>
+            <button class="tba-component tba-btn" type="button" tabindex="-1">Label</button>
+          </div>
+          <div class="tba-row">
+            <span class="tba-anno" data-before="Blue 50" data-after="--background-decorative-blue"></span>
+            <span class="tba-line" aria-hidden="true"></span>
+            <div class="tba-component tba-card">
+              <div class="tba-card-head">
+                <span class="tba-card-icon" aria-hidden="true">
+                  <svg viewBox="0 0 16 16" fill="currentColor"><circle cx="8" cy="8" r="7"/><text x="8" y="11" text-anchor="middle" font-size="10" font-weight="700" fill="#fff" font-family="Inter">i</text></svg>
+                </span>
+                <span class="tba-card-title">Title</span>
+              </div>
+              <p class="tba-card-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+            </div>
+          </div>
+          <div class="tba-row">
+            <span class="tba-anno" data-before="Blue 50" data-after="--status-active-bold"></span>
+            <span class="tba-line" aria-hidden="true"></span>
+            <div class="tba-component tba-slider">
+              <div class="tba-slider-rail"></div>
+              <div class="tba-slider-fill"></div>
+              <div class="tba-slider-thumb"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="fig-caption">Fig. 05: same colour, different intent. Toggle between <b>Before</b> (raw palette name) and <b>After</b> (semantic token) to see how naming changes across components.</p>
+
+      <div class="figure modes-tree reveal" aria-label="One semantic token resolves to a different base token per theme">
+        <!-- Top: semantic token pill -->
+        <div class="mt-top">
+          <span class="mt-eyebrow">Semantic token</span>
+          <div class="mt-pill mt-semantic">
+            <span class="mt-dot" style="background:#1199FA"></span>
+            --background-button-primary
+          </div>
+        </div>
+
+        <!-- Tree connector — branches from semantic down to 3 columns -->
+        <svg class="mt-tree" viewBox="0 0 600 60" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M 300 0 L 300 24 M 100 60 L 100 36 L 500 36 L 500 60 M 300 36 L 300 60" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-dasharray="3 4" fill="none"/>
+        </svg>
+
+        <!-- Bottom: 3 columns showing base token + rendered button + theme label -->
+        <div class="mt-cols">
+          <div class="mt-col">
+            <span class="mt-eyebrow">Base token</span>
+            <div class="mt-pill mt-base">
+              <span class="mt-dot" style="background:#1199FA"></span>
+              Blue 50
+            </div>
+            <div class="mt-arrow" aria-hidden="true">↓</div>
+            <div class="mt-surface mt-light">
+              <button class="mt-btn" style="background:#1199FA">Buy BTC</button>
+            </div>
+            <span class="mt-label">Light mode</span>
+          </div>
+
+          <div class="mt-col">
+            <span class="mt-eyebrow">Base token</span>
+            <div class="mt-pill mt-base">
+              <span class="mt-dot" style="background:#0577DA"></span>
+              Blue 60
+            </div>
+            <div class="mt-arrow" aria-hidden="true">↓</div>
+            <div class="mt-surface mt-dark">
+              <button class="mt-btn" style="background:#0577DA">Buy BTC</button>
+            </div>
+            <span class="mt-label">Dark mode</span>
+          </div>
+
+          <div class="mt-col">
+            <span class="mt-eyebrow">Base token</span>
+            <div class="mt-pill mt-base">
+              <span class="mt-dot" style="background:linear-gradient(120deg,#FFE9C5,#9FD2FF,#1199FA)"></span>
+              Rainbow
+            </div>
+            <div class="mt-arrow" aria-hidden="true">↓</div>
+            <div class="mt-surface mt-rainbow">
+              <button class="mt-btn" style="background:linear-gradient(120deg,#FFE9C5,#9FD2FF,#1199FA);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25)">Buy BTC</button>
+            </div>
+            <span class="mt-label">🌈 mode</span>
+          </div>
+        </div>
+      </div>
+      <p class="fig-caption">Fig. 06: one token, three themes. The <code style="font-family:var(--f-code);font-size:12px;font-weight:500;background:rgba(255,255,255,.1);padding:1px 6px;border-radius:3px;color:#fff">--background-button-primary</code> token resolves to a different palette value depending on theme.</p>
+
+      <div class="chap-body" style="margin-top:32px">
+        <p>The table below is a sample from the full token reference, showing how each token maps to palette values, themes and usage notes.</p>
+      </div>
+      <div class="token-table-wrap reveal" id="ttWrap" aria-label="Full token reference">
+        <div class="tt-bar">
+          <div class="tt-tabs" role="tablist" aria-label="Token categories">
+            <button class="tt-tab is-active" type="button" role="tab" data-cat="background" aria-selected="true">Background</button>
+            <button class="tt-tab" type="button" role="tab" data-cat="border" aria-selected="false">Border</button>
+            <button class="tt-tab" type="button" role="tab" data-cat="content" aria-selected="false">Content</button>
+            <button class="tt-tab" type="button" role="tab" data-cat="common" aria-selected="false">Common</button>
+          </div>
+          <div class="tba-tabs tt-theme-pill" role="tablist" aria-label="Toggle theme">
+            <button class="tba-tab is-active" type="button" role="tab" data-tt-theme="light" aria-selected="true">Light</button>
+            <button class="tba-tab" type="button" role="tab" data-tt-theme="dark" aria-selected="false">Dark</button>
+          </div>
+        </div>
+        <div class="tt-scroll" id="ttScroll" tabindex="0">
+          <div class="tt-theme is-active" data-theme="light">
+            <h4 class="tt-section">1. Background</h4>
+            <h5 class="tt-subsection">Background / Surface</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFF"></span></td><td class="tt-token">--background-surface-1</td><td class="tt-pal">White</td><td class="tt-hex">#FFFFFF</td><td class="tt-use">Primary surfaces (e.g. Main app sections)</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#F7F9FA"></span></td><td class="tt-token">--background-surface-1-hover</td><td class="tt-pal">Grey-50</td><td class="tt-hex">#F7F9FA</td><td class="tt-use">Hover color for -surface-1</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#F7F9FA"></span></td><td class="tt-token">--background-surface-2</td><td class="tt-pal">Grey-50</td><td class="tt-hex">#F7F9FA</td><td class="tt-use">Secondary surfaces (e.g. Side Nav)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA33"></span></td><td class="tt-token">--background-surface-2-hover</td><td class="tt-pal">Blue-400-a20</td><td class="tt-hex">#1199FA33</td><td class="tt-use">Hover color for -surface-2</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFF"></span></td><td class="tt-token">--background-surface-emphasis</td><td class="tt-pal">White</td><td class="tt-hex">#FFFFFF</td><td class="tt-use">Highlighted layouts e.g. tooltips, messages</td></tr>
+                <tr><td><span class="tt-sw" style="background:#002F61"></span></td><td class="tt-token">--background-surface-contrast</td><td class="tt-pal">Blue-700</td><td class="tt-hex">#002F61</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#034481"></span></td><td class="tt-token">--background-surface-contrast-hover</td><td class="tt-pal">Blue-600</td><td class="tt-hex">#034481</td><td class="tt-use">Hover state for --surface-contrast</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Background / Status</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#E0485C"></span></td><td class="tt-token">--background-status-danger-bold</td><td class="tt-pal">Red-500</td><td class="tt-hex">#E0485C</td><td class="tt-use">Highlighted background for failure, invalid state etc</td></tr>
+                <tr><td><span class="tt-sw" style="background:#FAACB6"></span></td><td class="tt-token">--background-status-danger</td><td class="tt-pal">Red-200</td><td class="tt-hex">#FAACB6</td><td class="tt-use">Default background for failure, invalid state</td></tr>
+                <tr><td><span class="tt-sw" style="background:#FFE9EC"></span></td><td class="tt-token">--background-status-danger-subtle</td><td class="tt-pal">Red-100</td><td class="tt-hex">#FFE9EC</td><td class="tt-use">Subtle background for failure, invalid state</td></tr>
+                <tr><td><span class="tt-sw" style="background:#F5B700"></span></td><td class="tt-token">--background-status-pending-bold</td><td class="tt-pal">Yellow-500</td><td class="tt-hex">#F5B700</td><td class="tt-use">Highlighted background for pending, warning or caution</td></tr>
+                <tr><td><span class="tt-sw" style="background:#FFE591"></span></td><td class="tt-token">--background-status-pending</td><td class="tt-pal">Yellow-200</td><td class="tt-hex">#FFE591</td><td class="tt-use">Default background for pending, warning or caution</td></tr>
+                <tr><td><span class="tt-sw" style="background:#FFF9D9"></span></td><td class="tt-token">--background-status-pending-subtle</td><td class="tt-pal">Yellow-100</td><td class="tt-hex">#FFF9D9</td><td class="tt-use">Subtle background for pending, warning or caution</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00A68C"></span></td><td class="tt-token">--background-status-success-bold</td><td class="tt-pal">Green-500</td><td class="tt-hex">#00A68C</td><td class="tt-use">Highlighted background for Success, On</td></tr>
+                <tr><td><span class="tt-sw" style="background:#ACECE1"></span></td><td class="tt-token">--background-status-success</td><td class="tt-pal">Green-200</td><td class="tt-hex">#ACECE1</td><td class="tt-use">Default background for Success, On</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E6FAF6"></span></td><td class="tt-token">--background-status-success-subtle</td><td class="tt-pal">Green-100</td><td class="tt-hex">#E6FAF6</td><td class="tt-use">Subtle background for success / "On" scenarios</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--background-status-active-bold</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Highlighted background for Information</td></tr>
+                <tr><td><span class="tt-sw" style="background:#92D1FF"></span></td><td class="tt-token">--background-status-active</td><td class="tt-pal">Blue-200</td><td class="tt-hex">#92D1FF</td><td class="tt-use">Default background for informational messages</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E7F5FF"></span></td><td class="tt-token">--background-status-active-subtle</td><td class="tt-pal">Blue-50</td><td class="tt-hex">#E7F5FF</td><td class="tt-use">Subtle background for informational messages</td></tr>
+                <tr><td><span class="tt-sw" style="background:#7B849B"></span></td><td class="tt-token">--background-status-neutral-bold</td><td class="tt-pal">Grey-400</td><td class="tt-hex">#7B849B</td><td class="tt-use">Highlighted background for disabled, cancel or ended</td></tr>
+                <tr><td><span class="tt-sw" style="background:#C9CFDD"></span></td><td class="tt-token">--background-status-neutral</td><td class="tt-pal">Grey-200</td><td class="tt-hex">#C9CFDD</td><td class="tt-use">Default background for disabled, cancel or ended scenarios</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#F7F9FA"></span></td><td class="tt-token">--background-status-neutral-subtle</td><td class="tt-pal">Grey-50</td><td class="tt-hex">#F7F9FA</td><td class="tt-use">Subtle background for disabled, cancel or ended scenarios</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Background / Decorative</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#9255C2"></span></td><td class="tt-token">--background-decorative-purple-bold</td><td class="tt-pal">Purple-500</td><td class="tt-hex">#9255C2</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#D9C0FA"></span></td><td class="tt-token">--background-decorative-purple</td><td class="tt-pal">Purple-200</td><td class="tt-hex">#D9C0FA</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#F2EBFB"></span></td><td class="tt-token">--background-decorative-purple-subtle</td><td class="tt-pal">Purple-100</td><td class="tt-hex">#F2EBFB</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#F76341"></span></td><td class="tt-token">--background-decorative-orange-bold</td><td class="tt-pal">Orange-500</td><td class="tt-hex">#F76341</td><td class="tt-use">—</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Background / Button</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--background-button-primary</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Primary button color</td></tr>
+                <tr><td><span class="tt-sw" style="background:#4DB5FF"></span></td><td class="tt-token">--background-button-primary-hover</td><td class="tt-pal">Blue-300</td><td class="tt-hex">#4DB5FF</td><td class="tt-use">Hover color for --button-primary</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#1199FA0D"></span></td><td class="tt-token">--background-button-text-hover</td><td class="tt-pal">Blue-400-a5</td><td class="tt-hex">#1199FA0D</td><td class="tt-use">Hover color for text button</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E0485C"></span></td><td class="tt-token">--background-button-danger</td><td class="tt-pal">Red-500</td><td class="tt-hex">#E0485C</td><td class="tt-use">Destructive action / sell</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E35F70"></span></td><td class="tt-token">--background-button-danger-hover</td><td class="tt-pal">Red-400</td><td class="tt-hex">#E35F70</td><td class="tt-use">Hover color for -button-red</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#E34F630D"></span></td><td class="tt-token">--background-button-text-danger-hover</td><td class="tt-pal">Red-500-a5</td><td class="tt-hex">#E34F630D</td><td class="tt-use">Hover color for -button-text-danger</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00A68C"></span></td><td class="tt-token">--background-button-success</td><td class="tt-pal">Green-500</td><td class="tt-hex">#00A68C</td><td class="tt-use">Buy</td></tr>
+                <tr><td><span class="tt-sw" style="background:#2BC2AB"></span></td><td class="tt-token">--background-button-success-hover</td><td class="tt-pal">Green-400</td><td class="tt-hex">#2BC2AB</td><td class="tt-use">Hover color for --button-green</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#00A68C0D"></span></td><td class="tt-token">--background-button-text-success-hover</td><td class="tt-pal">Green-500-a5</td><td class="tt-hex">#00A68C0D</td><td class="tt-use">Hover color for -button-text-success</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFFCC"></span></td><td class="tt-token">--background-button-oncolor</td><td class="tt-pal">White-800</td><td class="tt-hex">#FFFFFFCC</td><td class="tt-use">Buttons on background with status colors</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFFB2"></span></td><td class="tt-token">--background-button-oncolor-hover</td><td class="tt-pal">White-700</td><td class="tt-hex">#FFFFFFB2</td><td class="tt-use">Hover color for --button-oncolor</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Background / Overlay</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#00000080"></span></td><td class="tt-token">--background-overlay-modal</td><td class="tt-pal">Black-500</td><td class="tt-hex">#00000080</td><td class="tt-use">Overlay background for modals</td></tr>
+              </tbody>
+            </table>
+            <h4 class="tt-section">2. Border</h4>
+            <h5 class="tt-subsection">Border / Surface</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw outlined" style="background:#0000001A"></span></td><td class="tt-token">--border-surface</td><td class="tt-pal">Black-100</td><td class="tt-hex">#0000001A</td><td class="tt-use">Border on all surfaces</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#00000026"></span></td><td class="tt-token">--border-surface-emphasis</td><td class="tt-pal">Black-200</td><td class="tt-hex">#00000026</td><td class="tt-use">Border with emphasis, e.g. fields</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#0000001A"></span></td><td class="tt-token">--border-surface-contrast</td><td class="tt-pal">Black-100</td><td class="tt-hex">#0000001A</td><td class="tt-use">Border on -surface-contrast</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Border / Status</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--border-status-active</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Active border (e.g. Tab, focused field)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E0485C"></span></td><td class="tt-token">--border-status-danger</td><td class="tt-pal">Red-500</td><td class="tt-hex">#E0485C</td><td class="tt-use">Invalid state border (e.g. Error field)</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Border / Button</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--border-button-primary</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Outline buttons (i.e. secondary button)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E0485C"></span></td><td class="tt-token">--border-button-danger</td><td class="tt-pal">Red-500</td><td class="tt-hex">#E0485C</td><td class="tt-use">Outlined button with danger status</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00A68C"></span></td><td class="tt-token">--border-button-success</td><td class="tt-pal">Green-500</td><td class="tt-hex">#00A68C</td><td class="tt-use">Outlined button with success status</td></tr>
+                <tr><td><span class="tt-sw" style="background:#7B849B"></span></td><td class="tt-token">--border-button-secondary</td><td class="tt-pal">Grey-400</td><td class="tt-hex">#7B849B</td><td class="tt-use">Checkboxes</td></tr>
+              </tbody>
+            </table>
+            <h4 class="tt-section">3. Content</h4>
+            <p style="font-size:11.5px;color:inherit;opacity:.6;margin:0 0 12px">For icons, texts, and charts</p>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#0B1426"></span></td><td class="tt-token">--content-primary</td><td class="tt-pal">Grey-900</td><td class="tt-hex">#0B1426</td><td class="tt-use">Headers and primary text</td></tr>
+                <tr><td><span class="tt-sw" style="background:#565F76"></span></td><td class="tt-token">--content-secondary</td><td class="tt-pal">Grey-500</td><td class="tt-hex">#565F76</td><td class="tt-use">Secondary text (e.g. captions, supplementary info, subhead)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#A0A9BE"></span></td><td class="tt-token">--content-tertiary</td><td class="tt-pal">Grey-300</td><td class="tt-hex">#A0A9BE</td><td class="tt-use">Tertiary text (e.g. placeholder text)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E0485C"></span></td><td class="tt-token">--content-danger</td><td class="tt-pal">Red-500</td><td class="tt-hex">#E0485C</td><td class="tt-use">Error text</td></tr>
+                <tr><td><span class="tt-sw" style="background:#801826"></span></td><td class="tt-token">--content-danger-bold</td><td class="tt-pal">Red-800</td><td class="tt-hex">#801826</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#017361"></span></td><td class="tt-token">--content-success-subtle</td><td class="tt-pal">Green-700</td><td class="tt-hex">#017361</td><td class="tt-use">Success text</td></tr>
+                <tr><td><span class="tt-sw" style="background:#017361"></span></td><td class="tt-token">--content-success</td><td class="tt-pal">Green-700</td><td class="tt-hex">#017361</td><td class="tt-use">Success text</td></tr>
+                <tr><td><span class="tt-sw" style="background:#005747"></span></td><td class="tt-token">--content-success-bold</td><td class="tt-pal">Green-800</td><td class="tt-hex">#005747</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--content-active</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Interactive text</td></tr>
+                <tr><td><span class="tt-sw" style="background:#002F61"></span></td><td class="tt-token">--content-active-bold</td><td class="tt-pal">Blue-700</td><td class="tt-hex">#002F61</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#B38300"></span></td><td class="tt-token">--content-pending</td><td class="tt-pal">Yellow-700</td><td class="tt-hex">#B38300</td><td class="tt-use">Text with pending status</td></tr>
+                <tr><td><span class="tt-sw" style="background:#8C5900"></span></td><td class="tt-token">--content-pending-bold</td><td class="tt-pal">Yellow-800</td><td class="tt-hex">#8C5900</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFF"></span></td><td class="tt-token">--content-contrast-primary</td><td class="tt-pal">White</td><td class="tt-hex">#FFFFFF</td><td class="tt-use">Primary text on -surface-contrast</td></tr>
+                <tr><td><span class="tt-sw" style="background:#A0A9BE"></span></td><td class="tt-token">--content-contrast-secondary</td><td class="tt-pal">Grey-300</td><td class="tt-hex">#A0A9BE</td><td class="tt-use">Secondary text on -surface-contrast</td></tr>
+                <tr><td><span class="tt-sw" style="background:#7B849B"></span></td><td class="tt-token">--content-forced-tertiary</td><td class="tt-pal">Grey-400</td><td class="tt-hex">#7B849B</td><td class="tt-use">Tertiary content with a forced-grey</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Content / Decorative</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#ED7685"></span></td><td class="tt-token">--content-decorative-red</td><td class="tt-pal">Red-300</td><td class="tt-hex">#ED7685</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#F5B700"></span></td><td class="tt-token">--content-decorative-yellow</td><td class="tt-pal">Yellow-500</td><td class="tt-hex">#F5B700</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#109A85"></span></td><td class="tt-token">--content-decorative-green</td><td class="tt-pal">Green-600</td><td class="tt-hex">#109A85</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--content-decorative-blue</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#8E3DDB"></span></td><td class="tt-token">--content-decorative-purple</td><td class="tt-pal">Purple-600</td><td class="tt-hex">#8E3DDB</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#60308C"></span></td><td class="tt-token">--content-decorative-purple-bold</td><td class="tt-pal">Purple-800</td><td class="tt-hex">#60308C</td><td class="tt-use">Text which needs decorative styling</td></tr>
+                <tr><td><span class="tt-sw" style="background:#C9CFDD"></span></td><td class="tt-token">--content-decorative-grey</td><td class="tt-pal">Grey-200</td><td class="tt-hex">#C9CFDD</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+              </tbody>
+            </table>
+            <h4 class="tt-section">4. Common</h4>
+            <p style="font-size:11.5px;color:inherit;opacity:.6;margin:0 0 12px">For generic use, same color in both light and dark mode</p>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFF"></span></td><td class="tt-token">--common-white</td><td class="tt-pal">White</td><td class="tt-hex">#FFFFFF</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#565F76"></span></td><td class="tt-token">--common-secondary</td><td class="tt-pal">Grey-500</td><td class="tt-hex">#565F76</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#7B849B"></span></td><td class="tt-token">--common-tertiary</td><td class="tt-pal">Grey-400</td><td class="tt-hex">#7B849B</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#0B1426"></span></td><td class="tt-token">--common-dark</td><td class="tt-pal">Grey-900</td><td class="tt-hex">#0B1426</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--common-primary</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">—</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Common / Gradient</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:linear-gradient(180deg,#1199FA33 0%,#1199FA00 100%)"></span></td><td class="tt-token">--common-gradient-line-chart</td><td class="tt-pal">Blue-400 → 0%</td><td class="tt-hex">#1199FA 20% → 0%</td><td class="tt-use">Gradient background for line charts</td></tr>
+                <tr><td><span class="tt-sw" style="background:linear-gradient(90deg,#E0485C 0%,#FFBF00 100%)"></span></td><td class="tt-token">--common-gradient-margin</td><td class="tt-pal">—</td><td class="tt-hex">#E0485C → #FFBF00</td><td class="tt-use">Gradient background for margin trading enabled</td></tr>
+                <tr><td><span class="tt-sw" style="background:linear-gradient(90deg,#005747,#00A68C,#FFBF00,#FFBF00,#E0485C)"></span></td><td class="tt-token">--common-gradient-health-rainbow</td><td class="tt-pal">—</td><td class="tt-hex">#005747 → #E0485C</td><td class="tt-use">Account health status</td></tr>
+                <tr><td><span class="tt-sw" style="background:linear-gradient(90deg,#26D1D3,#1199FA,#9F86C1)"></span></td><td class="tt-token">--common-gradient-promo-1</td><td class="tt-pal">—</td><td class="tt-hex">#26D1D3 → #9F86C1</td><td class="tt-use">Promotions on new features</td></tr>
+                <tr><td><span class="tt-sw" style="background:linear-gradient(90deg,#FFF73E,#6FDCFF)"></span></td><td class="tt-token">--common-gradient-stake-card</td><td class="tt-pal">—</td><td class="tt-hex">#FFF73E → #6FDCFF</td><td class="tt-use">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tt-theme" data-theme="dark">
+            <h4 class="tt-section">1. Background</h4>
+            <h5 class="tt-subsection">Background / Surface</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#151D32"></span></td><td class="tt-token">--background-surface-1</td><td class="tt-pal">Grey-800</td><td class="tt-hex">#151D32</td><td class="tt-use">Primary surfaces (e.g. Main app sections)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1F283C"></span></td><td class="tt-token">--background-surface-1-hover</td><td class="tt-pal">Grey-700</td><td class="tt-hex">#1F283C</td><td class="tt-use">Hover color for -surface-1</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1F283C"></span></td><td class="tt-token">--background-surface-2</td><td class="tt-pal">Grey-700</td><td class="tt-hex">#1F283C</td><td class="tt-use">Secondary surfaces (e.g. Side Nav)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA33"></span></td><td class="tt-token">--background-surface-2-hover</td><td class="tt-pal">Blue-400-a20</td><td class="tt-hex">#1199FA33</td><td class="tt-use">Hover color for -surface-2</td></tr>
+                <tr><td><span class="tt-sw" style="background:#323C52"></span></td><td class="tt-token">--background-surface-emphasis</td><td class="tt-pal">Grey-600</td><td class="tt-hex">#323C52</td><td class="tt-use">Highlighted layouts e.g. tooltips, messages</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFF"></span></td><td class="tt-token">--background-surface-contrast</td><td class="tt-pal">White</td><td class="tt-hex">#FFFFFF</td><td class="tt-use">Tooltip</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#EAEEF4"></span></td><td class="tt-token">--background-surface-contrast-hover</td><td class="tt-pal">Grey-100</td><td class="tt-hex">#EAEEF4</td><td class="tt-use">Hover state for --surface-contrast</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Background / Status</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#E0485C"></span></td><td class="tt-token">--background-status-danger-bold</td><td class="tt-pal">Red-500</td><td class="tt-hex">#E0485C</td><td class="tt-use">Highlighted background for failure, invalid state etc</td></tr>
+                <tr><td><span class="tt-sw" style="background:#801826"></span></td><td class="tt-token">--background-status-danger</td><td class="tt-pal">Red-800</td><td class="tt-hex">#801826</td><td class="tt-use">Default background for failure, invalid state</td></tr>
+                <tr><td><span class="tt-sw" style="background:#4D0E17"></span></td><td class="tt-token">--background-status-danger-subtle</td><td class="tt-pal">Red-900</td><td class="tt-hex">#4D0E17</td><td class="tt-use">Subtle background for failure, invalid state</td></tr>
+                <tr><td><span class="tt-sw" style="background:#F5B700"></span></td><td class="tt-token">--background-status-pending-bold</td><td class="tt-pal">Yellow-500</td><td class="tt-hex">#F5B700</td><td class="tt-use">Highlighted background for pending, warning or caution</td></tr>
+                <tr><td><span class="tt-sw" style="background:#8C5900"></span></td><td class="tt-token">--background-status-pending</td><td class="tt-pal">Yellow-800</td><td class="tt-hex">#8C5900</td><td class="tt-use">Default background for pending, warning or caution</td></tr>
+                <tr><td><span class="tt-sw" style="background:#593900"></span></td><td class="tt-token">--background-status-pending-subtle</td><td class="tt-pal">Yellow-900</td><td class="tt-hex">#593900</td><td class="tt-use">Subtle background for pending, warning or caution</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00A68C"></span></td><td class="tt-token">--background-status-success-bold</td><td class="tt-pal">Green-500</td><td class="tt-hex">#00A68C</td><td class="tt-use">Highlighted background for Success, On</td></tr>
+                <tr><td><span class="tt-sw" style="background:#005747"></span></td><td class="tt-token">--background-status-success</td><td class="tt-pal">Green-800</td><td class="tt-hex">#005747</td><td class="tt-use">Default background for Success, On</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00392F"></span></td><td class="tt-token">--background-status-success-subtle</td><td class="tt-pal">Green-900</td><td class="tt-hex">#00392F</td><td class="tt-use">Subtle background for success / "On" scenarios</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--background-status-active-bold</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Highlighted background for Information</td></tr>
+                <tr><td><span class="tt-sw" style="background:#034481"></span></td><td class="tt-token">--background-status-active</td><td class="tt-pal">Blue-600</td><td class="tt-hex">#034481</td><td class="tt-use">Default background for informational messages</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00254F"></span></td><td class="tt-token">--background-status-active-subtle</td><td class="tt-pal">Blue-800</td><td class="tt-hex">#00254F</td><td class="tt-use">Subtle background for informational messages</td></tr>
+                <tr><td><span class="tt-sw" style="background:#7B849B"></span></td><td class="tt-token">--background-status-neutral-bold</td><td class="tt-pal">Grey-400</td><td class="tt-hex">#7B849B</td><td class="tt-use">Highlighted background for disabled, cancel or ended</td></tr>
+                <tr><td><span class="tt-sw" style="background:#323C52"></span></td><td class="tt-token">--background-status-neutral</td><td class="tt-pal">Grey-600</td><td class="tt-hex">#323C52</td><td class="tt-use">Default background for disabled, cancel or ended scenarios</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1F283C"></span></td><td class="tt-token">--background-status-neutral-subtle</td><td class="tt-pal">Grey-700</td><td class="tt-hex">#1F283C</td><td class="tt-use">Subtle background for disabled, cancel or ended scenarios</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Background / Decorative</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#A855F7"></span></td><td class="tt-token">--background-decorative-purple-bold</td><td class="tt-pal">Purple-500</td><td class="tt-hex">#A855F7</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#60308C"></span></td><td class="tt-token">--background-decorative-purple</td><td class="tt-pal">Purple-800</td><td class="tt-hex">#60308C</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#441860"></span></td><td class="tt-token">--background-decorative-purple-subtle</td><td class="tt-pal">Purple-900</td><td class="tt-hex">#441860</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#F76341"></span></td><td class="tt-token">--background-decorative-orange-bold</td><td class="tt-pal">Orange-500</td><td class="tt-hex">#F76341</td><td class="tt-use">—</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Background / Button</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--background-button-primary</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Primary button color</td></tr>
+                <tr><td><span class="tt-sw" style="background:#4DB5FF"></span></td><td class="tt-token">--background-button-primary-hover</td><td class="tt-pal">Blue-300</td><td class="tt-hex">#4DB5FF</td><td class="tt-use">Hover color for --button-primary</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA1A"></span></td><td class="tt-token">--background-button-text-hover</td><td class="tt-pal">Blue-400-a10</td><td class="tt-hex">#1199FA1A</td><td class="tt-use">Hover color for text button</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E0485C"></span></td><td class="tt-token">--background-button-danger</td><td class="tt-pal">Red-500</td><td class="tt-hex">#E0485C</td><td class="tt-use">Destructive action / sell</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E35F70"></span></td><td class="tt-token">--background-button-danger-hover</td><td class="tt-pal">Red-400</td><td class="tt-hex">#E35F70</td><td class="tt-use">Hover color for -button-red</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E34F631A"></span></td><td class="tt-token">--background-button-text-danger-hover</td><td class="tt-pal">Red-500-a10</td><td class="tt-hex">#E34F631A</td><td class="tt-use">Hover color for -button-text-danger</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00A68C"></span></td><td class="tt-token">--background-button-success</td><td class="tt-pal">Green-500</td><td class="tt-hex">#00A68C</td><td class="tt-use">Buy</td></tr>
+                <tr><td><span class="tt-sw" style="background:#2BC2AB"></span></td><td class="tt-token">--background-button-success-hover</td><td class="tt-pal">Green-400</td><td class="tt-hex">#2BC2AB</td><td class="tt-use">Hover color for --button-green</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00A68C0D"></span></td><td class="tt-token">--background-button-text-success-hover</td><td class="tt-pal">Green-500-a10</td><td class="tt-hex">#00A68C0D</td><td class="tt-use">Hover color for -button-text-success</td></tr>
+                <tr><td><span class="tt-sw" style="background:#0000004D"></span></td><td class="tt-token">--background-button-oncolor</td><td class="tt-pal">Black-300</td><td class="tt-hex">#0000004D</td><td class="tt-use">Buttons on background with status colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00000033"></span></td><td class="tt-token">--background-button-oncolor-hover</td><td class="tt-pal">Black-200</td><td class="tt-hex">#00000033</td><td class="tt-use">Hover color for --button-oncolor</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Background / Overlay</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#00000080"></span></td><td class="tt-token">--background-overlay-modal</td><td class="tt-pal">Black-500</td><td class="tt-hex">#00000080</td><td class="tt-use">Overlay background for modals</td></tr>
+              </tbody>
+            </table>
+            <h4 class="tt-section">2. Border</h4>
+            <h5 class="tt-subsection">Border / Surface</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFF1A"></span></td><td class="tt-token">--border-surface</td><td class="tt-pal">White-100</td><td class="tt-hex">#FFFFFF1A</td><td class="tt-use">Border on all surfaces</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFF33"></span></td><td class="tt-token">--border-surface-emphasis</td><td class="tt-pal">White-200</td><td class="tt-hex">#FFFFFF33</td><td class="tt-use">Border with emphasis, e.g. fields</td></tr>
+                <tr><td><span class="tt-sw outlined" style="background:#0000001A"></span></td><td class="tt-token">--border-surface-contrast</td><td class="tt-pal">Black-100</td><td class="tt-hex">#0000001A</td><td class="tt-use">Border on -surface-contrast</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Border / Status</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--border-status-active</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Active border (e.g. Tab, focused field)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E0485C"></span></td><td class="tt-token">--border-status-danger</td><td class="tt-pal">Red-500</td><td class="tt-hex">#E0485C</td><td class="tt-use">Invalid state border (e.g. Error field)</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Border / Button</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--border-button-primary</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Outline buttons (i.e. secondary button)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E0485C"></span></td><td class="tt-token">--border-button-danger</td><td class="tt-pal">Red-500</td><td class="tt-hex">#E0485C</td><td class="tt-use">Outlined button with danger status</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00A68C"></span></td><td class="tt-token">--border-button-success</td><td class="tt-pal">Green-500</td><td class="tt-hex">#00A68C</td><td class="tt-use">Outlined button with success status</td></tr>
+                <tr><td><span class="tt-sw" style="background:#7B849B"></span></td><td class="tt-token">--border-button-secondary</td><td class="tt-pal">Grey-400</td><td class="tt-hex">#7B849B</td><td class="tt-use">Checkboxes</td></tr>
+              </tbody>
+            </table>
+            <h4 class="tt-section">3. Content</h4>
+            <p style="font-size:11.5px;color:inherit;opacity:.6;margin:0 0 12px">For icons, texts, and charts</p>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFF"></span></td><td class="tt-token">--content-primary</td><td class="tt-pal">White</td><td class="tt-hex">#FFFFFF</td><td class="tt-use">Headers and primary text</td></tr>
+                <tr><td><span class="tt-sw" style="background:#A0A9BE"></span></td><td class="tt-token">--content-secondary</td><td class="tt-pal">Grey-300</td><td class="tt-hex">#A0A9BE</td><td class="tt-use">Secondary text (e.g. captions, supplementary info, subhead)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#7B849B"></span></td><td class="tt-token">--content-tertiary</td><td class="tt-pal">Grey-400</td><td class="tt-hex">#7B849B</td><td class="tt-use">Tertiary text (e.g. placeholder text)</td></tr>
+                <tr><td><span class="tt-sw" style="background:#E0485C"></span></td><td class="tt-token">--content-danger</td><td class="tt-pal">Red-500</td><td class="tt-hex">#E0485C</td><td class="tt-use">Error text</td></tr>
+                <tr><td><span class="tt-sw" style="background:#FAACB6"></span></td><td class="tt-token">--content-danger-bold</td><td class="tt-pal">Red-200</td><td class="tt-hex">#FAACB6</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#017361"></span></td><td class="tt-token">--content-success-subtle</td><td class="tt-pal">Green-700</td><td class="tt-hex">#017361</td><td class="tt-use">Success text</td></tr>
+                <tr><td><span class="tt-sw" style="background:#00A68C"></span></td><td class="tt-token">--content-success</td><td class="tt-pal">Green-500</td><td class="tt-hex">#00A68C</td><td class="tt-use">Success text</td></tr>
+                <tr><td><span class="tt-sw" style="background:#ACECE1"></span></td><td class="tt-token">--content-success-bold</td><td class="tt-pal">Green-200</td><td class="tt-hex">#ACECE1</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--content-active</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Interactive text</td></tr>
+                <tr><td><span class="tt-sw" style="background:#92D1FF"></span></td><td class="tt-token">--content-active-bold</td><td class="tt-pal">Blue-200</td><td class="tt-hex">#92D1FF</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#F5B700"></span></td><td class="tt-token">--content-pending</td><td class="tt-pal">Yellow-500</td><td class="tt-hex">#F5B700</td><td class="tt-use">Text with pending status</td></tr>
+                <tr><td><span class="tt-sw" style="background:#FFE591"></span></td><td class="tt-token">--content-pending-bold</td><td class="tt-pal">Yellow-200</td><td class="tt-hex">#FFE591</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#0B1426"></span></td><td class="tt-token">--content-contrast-primary</td><td class="tt-pal">Grey-900</td><td class="tt-hex">#0B1426</td><td class="tt-use">Primary text on -surface-contrast</td></tr>
+                <tr><td><span class="tt-sw" style="background:#565F76"></span></td><td class="tt-token">--content-contrast-secondary</td><td class="tt-pal">Grey-500</td><td class="tt-hex">#565F76</td><td class="tt-use">Secondary text on -surface-contrast</td></tr>
+                <tr><td><span class="tt-sw" style="background:#7B849B"></span></td><td class="tt-token">--content-forced-tertiary</td><td class="tt-pal">Grey-400</td><td class="tt-hex">#7B849B</td><td class="tt-use">Tertiary content with a forced-grey</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Content / Decorative</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:#ED7685"></span></td><td class="tt-token">--content-decorative-red</td><td class="tt-pal">Red-300</td><td class="tt-hex">#ED7685</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#F5B700"></span></td><td class="tt-token">--content-decorative-yellow</td><td class="tt-pal">Yellow-500</td><td class="tt-hex">#F5B700</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#109A85"></span></td><td class="tt-token">--content-decorative-green</td><td class="tt-pal">Green-600</td><td class="tt-hex">#109A85</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--content-decorative-blue</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#8E3DDB"></span></td><td class="tt-token">--content-decorative-purple</td><td class="tt-pal">Purple-600</td><td class="tt-hex">#8E3DDB</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+                <tr><td><span class="tt-sw" style="background:#CD9EFF"></span></td><td class="tt-token">--content-decorative-purple-bold</td><td class="tt-pal">Purple-300</td><td class="tt-hex">#CD9EFF</td><td class="tt-use">Text which needs decorative styling</td></tr>
+                <tr><td><span class="tt-sw" style="background:#C9CFDD"></span></td><td class="tt-token">--content-decorative-grey</td><td class="tt-pal">Grey-200</td><td class="tt-hex">#C9CFDD</td><td class="tt-use">Graphs and other decorative use of colors</td></tr>
+              </tbody>
+            </table>
+            <h4 class="tt-section">4. Common</h4>
+            <p style="font-size:11.5px;color:inherit;opacity:.6;margin:0 0 12px">For generic use, same color in both light and dark mode</p>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw outlined" style="background:#FFFFFF"></span></td><td class="tt-token">--common-white</td><td class="tt-pal">White</td><td class="tt-hex">#FFFFFF</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#565F76"></span></td><td class="tt-token">--common-secondary</td><td class="tt-pal">Grey-500</td><td class="tt-hex">#565F76</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#7B849B"></span></td><td class="tt-token">--common-tertiary</td><td class="tt-pal">Grey-400</td><td class="tt-hex">#7B849B</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#0B1426"></span></td><td class="tt-token">--common-dark</td><td class="tt-pal">Grey-900</td><td class="tt-hex">#0B1426</td><td class="tt-use">—</td></tr>
+                <tr><td><span class="tt-sw" style="background:#1199FA"></span></td><td class="tt-token">--common-primary</td><td class="tt-pal">Blue-400</td><td class="tt-hex">#1199FA</td><td class="tt-use">—</td></tr>
+              </tbody>
+            </table>
+            <h5 class="tt-subsection">Common / Gradient</h5>
+            <table class="tt-table"><colgroup><col class="c-sw"><col class="c-tok"><col class="c-pal"><col class="c-hex"><col class="c-use"></colgroup>
+              <thead><tr><th></th><th>Token</th><th>Palette</th><th>Hex</th><th>Usage</th></tr></thead>
+              <tbody>
+                <tr><td><span class="tt-sw" style="background:linear-gradient(180deg,#1199FA33 0%,#1199FA00 100%)"></span></td><td class="tt-token">--common-gradient-line-chart</td><td class="tt-pal">Blue-400 → 0%</td><td class="tt-hex">#1199FA 20% → 0%</td><td class="tt-use">Gradient background for line charts</td></tr>
+                <tr><td><span class="tt-sw" style="background:linear-gradient(90deg,#E0485C 0%,#FFBF00 100%)"></span></td><td class="tt-token">--common-gradient-margin</td><td class="tt-pal">—</td><td class="tt-hex">#E0485C → #FFBF00</td><td class="tt-use">Gradient background for margin trading enabled</td></tr>
+                <tr><td><span class="tt-sw" style="background:linear-gradient(90deg,#005747,#00A68C,#FFBF00,#FFBF00,#E0485C)"></span></td><td class="tt-token">--common-gradient-health-rainbow</td><td class="tt-pal">—</td><td class="tt-hex">#005747 → #E0485C</td><td class="tt-use">Account health status</td></tr>
+                <tr><td><span class="tt-sw" style="background:linear-gradient(90deg,#26D1D3,#1199FA,#9F86C1)"></span></td><td class="tt-token">--common-gradient-promo-1</td><td class="tt-pal">—</td><td class="tt-hex">#26D1D3 → #9F86C1</td><td class="tt-use">Promotions on new features</td></tr>
+                <tr><td><span class="tt-sw" style="background:linear-gradient(90deg,#FFF73E,#6FDCFF)"></span></td><td class="tt-token">--common-gradient-stake-card</td><td class="tt-pal">—</td><td class="tt-hex">#FFF73E → #6FDCFF</td><td class="tt-use">—</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Step 04 — Rollout -->
+<section id="step-03">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <h3>3. Roll out the system for testing</h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          Rollout was deliberately staged. We started with the
+          <b>token Price page</b>, which had a smaller scope, lighter design and
+          tech debt, and a low-risk place to prove the approach. From
+          there, we moved to <b>Exchange web</b>: the first mature
+          platform, ~15 sub-features and up to 100 components touched.
+        </p>
+        <p>
+          Each rollout produced a sticker sheet of UI components in both light
+          and dark mode. It gave designers and engineers a visible artefact to
+          align on. By the end of the staged rollout, design
+          tokens were applied to roughly 100 existing components on
+          Exchange alone.
+        </p>
+      </div>
+
+      <div class="figure rollout reveal" aria-label="Staged rollout: token price page to exchange web to all products">
+        <p class="rollout-title">Adopt design tokens · staged rollout</p>
+        <div class="rollout-track">
+          <span class="rt-dot done"></span>
+          <span class="rt-line"></span>
+          <span class="rt-dot done"></span>
+          <span class="rt-line"></span>
+          <span class="rt-dot"></span>
+          <span class="rt-line"></span>
+          <span class="rt-dot"></span>
+          <span class="rt-line"></span>
+          <span class="rt-dot"></span>
+        </div>
+        <div class="rollout-labels">
+          <div class="stage"><b>Token price page</b><span>First product · smaller scope, smaller design and tech debt</span></div>
+          <div class="stage"><b>Exchange web</b><span>1st mature platform · ~15 sub-features, up to 100 components</span></div>
+          <div class="stage"><b>crypto.com app</b><span>Phased release · biggest surface area</span></div>
+          <div class="stage"><b>DeFi Wallet · NFT</b></div>
+          <div class="stage"><b>All products</b></div>
+        </div>
+      </div>
+      <p class="fig-caption">Fig. 07: staged rollout. Each step lowered the risk of the next and produced a sticker sheet for the team to align on.</p>
+
+      <div class="figure theme-shot reveal" data-theme="dark" aria-label="Token Price page: light and dark mode powered by the design tokens">
+        <div class="ts-head">
+          <span class="ts-label">crypto.com / price · token system in production</span>
+          <div class="tba-tabs" role="tablist" aria-label="Toggle theme">
+            <button class="tba-tab" type="button" role="tab" data-theme="light" aria-selected="false">Light</button>
+            <button class="tba-tab is-active" type="button" role="tab" data-theme="dark" aria-selected="true">Dark</button>
+          </div>
+        </div>
+        <div class="ts-stage">
+          <img class="ts-img" data-img="light" src="../cdc-price-light.png" alt="crypto.com Price page: light mode rendering using design tokens. Top movers, today's cryptocurrency prices table." loading="lazy" />
+          <img class="ts-img" data-img="dark" src="../cdc-price-dark.png" alt="crypto.com Price page: dark mode rendering using the same design tokens. Identical layout, swapped semantic theme values." loading="lazy" />
+        </div>
+      </div>
+      <p class="fig-caption">Fig. 08: the token Price page in production. Click <b>Light</b> / <b>Dark</b> to see the same components re-theme through the semantic token layer, the core deliverable of the rollout.</p>
+
+      <div class="figure ref-image reveal" aria-label="crypto.com Exchange UI components: design system sticker sheet, light and dark theme">
+        <img src="../cdc-exchange-components.png" alt="crypto.com Exchange UI components sticker sheet showing roughly 100 components — calendars, input fields, dropdowns, status pills, sliders, OTP fields, gradient bars and side panels — rendered in both light (top half) and dark (bottom half) themes from the same design tokens." />
+      </div>
+      <p class="fig-caption">Fig. 09: Exchange UI components sticker sheet. ~100 components migrated to the design tokens, paired between design and engineering and shipped in both themes from a single source.</p>
+    </article>
+  </div>
+</section>
+
+<!-- Results -->
+<section id="results">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <h3>4. Results</h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          By the time the rollout reached steady state, the system was carrying
+          real weight across the org. The Swapper Figma plugin let designers
+          re-theme an entire screen with one click, cutting variant preparation
+          time in half. On the engineering side, UI alignment bugs and
+          back-and-forth dropped sharply.
+        </p>
+      </div>
+
+      <div class="reflection reveal" id="reflection">
+        <div class="lbl">Reflection</div>
+        <div class="body">
+          <p>
+            A design system isn't an assembly of guidelines. It's a
+            <b>shift in how a team works together</b>. The biggest lesson
+            from these two years was to <b>go for the "good enough"
+            option</b> rather than over-engineer. A token rollout that ships and
+            gets adopted beats a perfect token spec that nobody uses.
+            Foundations first, feedback loop second, and the rest follows.
+          </p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Next CTA -->
+<section class="next-cta">
+  <div class="wrap">
+    <p class="eyebrow reveal">Up next</p>
+    <a class="next-card reveal" href="air.html" aria-label="Read AIR case study">
+      <div class="next-thumb" style="background:#F7F7F7"><img src="../air-anim-2.png" alt="AIR design system file being grabbed by a cursor — agentic workflow preview" loading="lazy"></div>
+      <div class="next-meta">
+        <h2>Scaling AIR's product design with an agentic workflow</h2>
+        <span class="next-arrow">View project<svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<script>
+  const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // Reveal on scroll
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Counter animations on the result stats — count up from 0 to final value
+  (function(){
+    const stats = document.querySelectorAll('.stats .stat');
+    if(!stats.length) return;
+
+    const animateNumber = (numEl)=>{
+      const original = numEl.innerHTML;
+      const text = numEl.textContent.trim();
+      const m = text.match(/^([^\d-]*)(-?)(\d+(?:\.\d+)?)(.*)$/);
+      if(!m) return;
+      const [, prefix, sign, numStr, suffix] = m;
+      const finalVal = parseFloat(numStr);
+      const isInt = !numStr.includes('.');
+      const start = performance.now();
+      const dur = 1300;
+      const ease = (t)=>1 - Math.pow(1-t, 3);
+
+      const tick = (now)=>{
+        const t = Math.min(1, (now - start) / dur);
+        const v = ease(t) * finalVal;
+        const display = isInt ? Math.round(v) : v.toFixed(1);
+        numEl.textContent = `${prefix}${sign}${display}${suffix}`;
+        if(t < 1){ requestAnimationFrame(tick); }
+        else { numEl.innerHTML = original; }
+      };
+      requestAnimationFrame(tick);
+    };
+
+    const counterIO = new IntersectionObserver((es)=>{
+      es.forEach(e=>{
+        if(!e.isIntersecting) return;
+        const num = e.target.querySelector('.num');
+        if(!num || REDUCED) { counterIO.unobserve(e.target); return; }
+        animateNumber(num);
+        counterIO.unobserve(e.target);
+      });
+    },{threshold:.4});
+    stats.forEach(el=>counterIO.observe(el));
+  })();
+
+  // LHS scroll-spy nav
+  (function(){
+    const nav = document.getElementById('pageNav');
+    if(!nav) return;
+    const links = [...nav.querySelectorAll('a[data-spy]')];
+    const ids = links.map(a => a.getAttribute('href').slice(1));
+    const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+
+    const setActive = (id)=>{
+      links.forEach(a => {
+        a.classList.toggle('is-active', a.getAttribute('href') === '#' + id);
+      });
+    };
+
+    const spyIO = new IntersectionObserver((entries)=>{
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a,b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if(visible[0]) setActive(visible[0].target.id);
+    },{rootMargin:'-30% 0px -55% 0px', threshold:0});
+
+    sections.forEach(s => spyIO.observe(s));
+  })();
+
+  // Token table — light/dark theme toggle + category tabs
+  (function(){
+    const wrap = document.getElementById('ttWrap');
+    if(!wrap) return;
+    const themePill = wrap.querySelector('.tt-theme-pill');
+    const themeBtns = themePill ? themePill.querySelectorAll('.tba-tab') : [];
+    const scroll = document.getElementById('ttScroll');
+    const themes = wrap.querySelectorAll('.tt-theme');
+    const tabs = wrap.querySelectorAll('.tt-tab');
+
+    // Theme toggle (Light / Dark pill — same UI as Fig. 08)
+    const setTheme = (mode)=>{
+      const isDark = mode === 'dark';
+      wrap.classList.toggle('is-dark', isDark);
+      themes.forEach(t => t.classList.toggle('is-active', t.dataset.theme === mode));
+      themeBtns.forEach(btn => {
+        const active = btn.dataset.ttTheme === mode;
+        btn.classList.toggle('is-active', active);
+        btn.setAttribute('aria-selected', String(active));
+      });
+      if(scroll) scroll.scrollTop = 0;
+    };
+    themeBtns.forEach(btn => {
+      btn.addEventListener('click', ()=> setTheme(btn.dataset.ttTheme));
+    });
+
+    // Category tabs — derive each h4's category from its text, then
+    // hide/show that h4 + all following siblings until the next h4.
+    const catFromText = (txt)=>{
+      const t = txt.toLowerCase();
+      if(t.includes('background')) return 'background';
+      if(t.includes('border')) return 'border';
+      if(t.includes('content')) return 'content';
+      if(t.includes('common')) return 'common';
+      return null;
+    };
+
+    const showCategory = (cat)=>{
+      themes.forEach(theme => {
+        const h4s = theme.querySelectorAll('h4.tt-section');
+        h4s.forEach(h4 => {
+          const myCat = catFromText(h4.textContent);
+          const isActive = myCat === cat;
+          h4.style.display = isActive ? '' : 'none';
+          let el = h4.nextElementSibling;
+          while(el && !el.matches('h4.tt-section')){
+            el.style.display = isActive ? '' : 'none';
+            el = el.nextElementSibling;
+          }
+        });
+      });
+      tabs.forEach(t => {
+        const isActive = t.dataset.cat === cat;
+        t.classList.toggle('is-active', isActive);
+        t.setAttribute('aria-selected', String(isActive));
+      });
+      if(scroll) scroll.scrollTop = 0;
+    };
+
+    tabs.forEach(tab => {
+      tab.addEventListener('click', ()=> showCategory(tab.dataset.cat));
+    });
+    // Initial state — show Background by default
+    showCategory('background');
+  })();
+
+  // Tokens before/after — tab switch
+  (function(){
+    document.querySelectorAll('.figure.tokens-ba').forEach(fig => {
+      const tabs = fig.querySelectorAll('.tba-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const state = tab.dataset.state;
+          fig.dataset.state = state;
+          tabs.forEach(t => {
+            const active = t.dataset.state === state;
+            t.classList.toggle('is-active', active);
+            t.setAttribute('aria-selected', String(active));
+          });
+        });
+      });
+    });
+  })();
+
+  // Price page light/dark theme toggle
+  (function(){
+    document.querySelectorAll('.figure.theme-shot').forEach(fig => {
+      const tabs = fig.querySelectorAll('.tba-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const state = tab.dataset.theme;
+          fig.dataset.theme = state;
+          tabs.forEach(t => {
+            const active = t.dataset.theme === state;
+            t.classList.toggle('is-active', active);
+            t.setAttribute('aria-selected', String(active));
+          });
+        });
+      });
+    });
+  })();
+</script>
+
+<!-- Nav: mobile menu toggle + email copy-to-clipboard with toast feedback -->
+<script>
+  (function(){
+    const toggle = document.querySelector('.nav-menu-toggle');
+    const menu = document.getElementById('navMenu');
+    if(toggle && menu){
+      const setOpen = (open) => {
+        toggle.setAttribute('aria-expanded', String(open));
+        menu.classList.toggle('is-open', open);
+      };
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if(!toggle.contains(e.target) && !menu.contains(e.target)) setOpen(false);
+      });
+      menu.addEventListener('click', (e) => {
+        if(e.target.closest('a')) setOpen(false);
+      });
+      window.addEventListener('resize', () => { if(window.innerWidth > 720) setOpen(false); });
+    }
+
+    const toast = document.getElementById('email-toast');
+    const buttons = document.querySelectorAll('.nav-email');
+    if(!toast || !buttons.length) return;
+    let hideTimer = null;
+    async function copyText(text){
+      try { await navigator.clipboard.writeText(text); return true; }
+      catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly','');
+        ta.style.cssText = 'position:fixed;top:-1000px;left:-1000px;opacity:0';
+        document.body.appendChild(ta); ta.select();
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch(_){}
+        document.body.removeChild(ta);
+        return ok;
+      }
+    }
+    buttons.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const email = btn.dataset.email || 'wongcheukyiu328@gmail.com';
+        await copyText(email);
+        const r = btn.getBoundingClientRect();
+        toast.style.left = (r.left + r.width/2) + 'px';
+        toast.style.top = r.bottom + 'px';
+        toast.classList.add('is-on');
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => toast.classList.remove('is-on'), 1800);
+      });
+    });
+  })();
+</script>
+</body>
+</html>

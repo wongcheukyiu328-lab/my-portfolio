@@ -1,0 +1,1621 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AIR | Rachel Wong</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Linotte:wght@700&family=Fredoka:wght@600;700&family=Poppins:wght@500;600;700&family=Stack+Sans+Headline:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#F5F5F5;              /* shared page bg with air-kit */
+    --ink:#131313;
+    --ink-2:#2a2a2a;
+    --muted:#7a7671;
+    --line:rgba(19,19,19,.12);
+    --accent:#131313;
+    --f-sans:'Inter',system-ui,sans-serif;
+    --f-display:'Stack Sans Headline','Inter Tight','Inter',system-ui,sans-serif;
+    --f-mono:'Inter','Inter Tight',system-ui,sans-serif;
+    --pad:max(24px,5vw);
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--f-sans);font-weight:400;font-size:14px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+::selection{background:#B1D3FA;color:#0e0d0c}
+
+  /* Cross-document view transition — smooth crossfade between pages */
+  @view-transition{navigation:auto}
+  ::view-transition-old(root),
+  ::view-transition-new(root){
+    animation-duration:.45s;
+    animation-timing-function:cubic-bezier(.2,.7,.2,1);
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 var(--pad);position:relative}
+  .wrap-wide{max-width:1260px;margin:0 auto;padding:0 var(--pad);position:relative}
+
+  /* ============================================================
+     TOP NAV — floating pill, same as index.html
+  ============================================================ */
+  .top-nav{
+    position:fixed;top:16px;left:50%;transform:translateX(-50%);
+    z-index:55;
+    display:flex;align-items:center;gap:8px;
+    padding:7px 8px 7px 18px;
+    background:rgba(255,255,255,.62);
+    backdrop-filter:blur(18px) saturate(1.6);
+    -webkit-backdrop-filter:blur(18px) saturate(1.6);
+    border:1px solid rgba(14,13,12,.08);
+    border-radius:999px;
+    box-shadow:0 6px 20px rgba(14,13,12,.08), 0 1px 0 rgba(255,255,255,.5) inset;
+    max-width:calc(100vw - 24px);
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;
+  }
+  .nav-logo{
+    font-family:'Fredoka','Linotte','Inter Tight',system-ui,sans-serif;
+    font-weight:700;font-size:16px;letter-spacing:-.01em;color:var(--ink);
+    text-decoration:none;white-space:nowrap;
+  }
+  .nav-items{display:flex;gap:6px;align-items:center;font-size:13px}
+  .nav-items a{
+    color:var(--ink);text-decoration:none;font-weight:500;
+    padding:7px 12px;border-radius:999px;
+    transition:background .2s var(--ease),color .2s var(--ease);white-space:nowrap;
+  }
+  .nav-items a:hover{background:rgba(14,13,12,.06)}
+  .nav-cta{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:7px 14px !important;background:var(--ink);color:#fff !important;
+    font-weight:600;border-radius:999px;
+    transition:transform .2s var(--ease), background .2s var(--ease);
+  }
+  .nav-cta:hover{background:#2a2a2a !important;transform:translateY(-1px)}
+  button.nav-cta{
+    appearance:none;border:none;cursor:pointer;
+    font:inherit;font-size:13px;font-weight:600;font-family:inherit;
+    line-height:1.2;letter-spacing:inherit;
+  }
+  .nav-items a.nav-ext{display:inline-flex;align-items:center;gap:5px}
+  .nav-items a.nav-ext svg{width:11px;height:11px;opacity:.55;transition:transform .2s var(--ease),opacity .2s var(--ease)}
+  .nav-items a.nav-ext:hover svg{transform:translate(1px,-1px);opacity:1}
+  .nav-menu-toggle{
+    display:none;align-items:center;justify-content:center;
+    width:38px;height:38px;
+    appearance:none;border:none;background:transparent;cursor:pointer;
+    padding:0;border-radius:50%;
+    color:var(--ink);
+    transition:background .2s var(--ease);
+  }
+  .nav-menu-toggle:hover{background:rgba(14,13,12,.06)}
+  .nav-menu-toggle .burger{
+    position:relative;width:18px;height:14px;
+    display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .nav-menu-toggle .burger span{
+    display:block;width:100%;height:1.8px;
+    background:currentColor;border-radius:1px;
+    transition:transform .25s var(--ease), opacity .25s var(--ease);
+  }
+  .nav-menu-toggle[aria-expanded="true"] .burger span:nth-child(1){
+    transform:translateY(6px) rotate(45deg);
+  }
+  .nav-menu-toggle[aria-expanded="true"] .burger span:nth-child(2){
+    opacity:0;
+  }
+  .nav-menu-toggle[aria-expanded="true"] .burger span:nth-child(3){
+    transform:translateY(-6px) rotate(-45deg);
+  }
+  @media (max-width:720px){
+    /* Mobile nav: Rachel Wong centered, menu icon on the right */
+    .top-nav{
+      padding:6px 24px;gap:48px;
+      display:flex;align-items:center;
+    }
+    .nav-logo{
+      display:inline-flex;align-items:center;
+      height:38px;line-height:1;
+    }
+    .nav-menu-toggle{
+      display:inline-flex;
+      margin:0;
+    }
+    .top-nav .nav-items{
+      position:absolute;top:calc(100% + 8px);left:50%;
+      flex-direction:column;align-items:stretch;gap:2px;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px) saturate(1.5);-webkit-backdrop-filter:blur(14px) saturate(1.5);
+      border:1px solid rgba(14,13,12,.08);border-radius:14px;
+      box-shadow:0 12px 32px rgba(14,13,12,.12);
+      padding:6px;min-width:180px;
+      opacity:0;visibility:hidden;pointer-events:none;
+      transform:translateX(-50%) translateY(-4px);
+      transition:opacity .2s var(--ease), transform .2s var(--ease), visibility 0s linear .2s;
+    }
+    .top-nav .nav-items.is-open{
+      opacity:1;visibility:visible;pointer-events:auto;
+      transform:translateX(-50%) translateY(0);
+      transition:opacity .2s var(--ease), transform .2s var(--ease), visibility 0s;
+    }
+    .top-nav .nav-items a,
+    .top-nav .nav-items button.nav-cta{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:10px 14px !important;border-radius:10px;width:100%;
+      font-size:14px;font-weight:500;text-align:left;white-space:nowrap;
+      background:transparent !important;color:var(--ink) !important;
+    }
+    .top-nav .nav-items button.nav-cta{
+      background:var(--ink) !important;color:#fff !important;font-weight:600;
+      margin-top:2px;justify-content:center;
+    }
+    .top-nav .nav-items a:hover{background:rgba(14,13,12,.06) !important}
+    .top-nav .nav-items button.nav-cta:hover{background:#2a2a2a !important;color:#fff !important}
+  }
+  .email-toast{
+    position:fixed;top:0;left:0;
+    pointer-events:none;z-index:9999;
+    padding:9px 16px;border-radius:999px;
+    background:#B1D3FA;color:#0e0d0c;
+    font-family:var(--f-display,'Stack Sans Headline','Inter Tight',system-ui,sans-serif);
+    font-size:13px;font-weight:500;
+    transform:translate(-50%, 8px) scale(.6);
+    opacity:0;
+    transition:opacity .2s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
+    white-space:nowrap;
+    box-shadow:0 8px 22px rgba(14,13,12,.18);
+    display:inline-flex;align-items:center;gap:8px;
+    transform-origin:top center;
+  }
+  .email-toast.is-on{opacity:1;transform:translate(-50%, 8px) scale(1)}
+  .email-toast .dots{display:inline-flex;gap:3px}
+  .email-toast .dots span{
+    width:3px;height:3px;border-radius:50%;background:#0e0d0c;
+    animation:email-toast-dots 1.2s ease-in-out infinite both;
+  }
+  .email-toast .dots span:nth-child(2){animation-delay:.18s}
+  .email-toast .dots span:nth-child(3){animation-delay:.36s}
+  @keyframes email-toast-dots{
+    0%,80%,100%{opacity:.18;transform:translateY(0)}
+    40%{opacity:1;transform:translateY(-1.5px)}
+  }
+
+  /* Hero */
+  .p-hero{padding:90px 0 40px}
+  .p-hero .p-hero-logo{
+    display:block;width:56px;height:56px;margin:0 0 24px;
+    border-radius:14px;
+  }
+  .p-hero .tagline{
+    font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);
+    margin:0 0 24px;
+  }
+  .p-hero h1{
+    font-family:var(--f-display);font-weight:500;
+    font-size:clamp(34px,6vw,48px);line-height:1.05;letter-spacing:-.025em;
+    margin:0 0 28px;text-wrap:balance;
+  }
+  .p-hero .lede{
+    font-size:14px;line-height:1.6;color:var(--ink-2);
+    margin:0;
+  }
+
+  /* Meta strip */
+  .meta-strip{
+    display:grid;grid-template-columns:1fr 1fr 2fr;gap:40px;
+    padding:40px 0 20px;margin-top:56px;border-top:1px solid var(--line);
+  }
+  @media (max-width:800px){.meta-strip{grid-template-columns:1fr;gap:24px}}
+  .meta-strip .m-lbl{font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin-bottom:8px}
+  .meta-strip .m-val{font-size:15px;color:var(--ink);line-height:1.4}
+
+  .impact-strip{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+    margin-top:32px;padding:34px 36px;
+    background:#131313;color:#fff;border-radius:28px;
+    box-shadow:0 18px 42px rgba(14,13,12,.12);
+  }
+  .impact-strip .impact-k{
+    font-family:var(--f-display);font-weight:600;
+    font-size:clamp(42px,5vw,60px);line-height:1;letter-spacing:-.035em;
+    color:#fff;margin:0 0 14px;
+  }
+  .impact-strip .impact-k em{font-style:normal;color:#fff}
+  .impact-strip .impact-v{
+    font-family:'DM Sans',var(--f-sans);
+    font-size:13px;line-height:1.5;color:rgba(255,255,255,.7);
+    margin:0;max-width:32ch;
+  }
+  @media (max-width:800px){
+    .impact-strip{grid-template-columns:1fr;gap:28px;padding:30px 28px;border-radius:24px}
+  }
+
+  /* Hero image */
+  .hero-image{
+    margin-top:60px;
+    border-radius:12px;overflow:hidden;
+    aspect-ratio:16/9;
+    background:#0e0d0c;
+    position:relative;
+  }
+  .hero-image .lp-bar{
+    position:absolute;top:0;left:0;right:0;
+    height:32px;background:#1a1a1a;display:flex;align-items:center;gap:6px;padding:0 14px;z-index:2;
+  }
+  .hero-image .lp-bar .b{width:10px;height:10px;border-radius:50%;background:#444}
+  .hero-image .lp-bar .b:nth-child(1){background:#ff5b56}
+  .hero-image .lp-bar .b:nth-child(2){background:#ffbd2e}
+  .hero-image .lp-bar .b:nth-child(3){background:#27c93f}
+  .hero-image .lp-bar .url{margin-left:auto;font-family:var(--f-mono);font-size:10px;color:#aaa;letter-spacing:.05em}
+  .hero-image .lp-scroll{position:absolute;top:32px;left:0;right:0;bottom:0;overflow:hidden;background:#fff}
+  .hero-image .lp-scroll img{width:100%;display:block;animation:scroll-y 22s ease-in-out infinite alternate}
+  @keyframes scroll-y{0%{transform:translateY(0)}100%{transform:translateY(-61%)}}
+
+  /* Section rhythm */
+  section{padding:80px 0}
+  section + section{padding-top:0}
+
+  h2.sec{
+    font-family:var(--f-display);font-weight:500;
+    font-size:clamp(20px,2.8vw,22px);line-height:1.1;letter-spacing:-.02em;
+    margin:0 0 28px;text-wrap:balance;
+  }
+  .sec-label{
+    font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);
+    margin:0 0 14px;
+  }
+
+  /* Prose column */
+  .prose{max-width:64ch}
+  .prose p{
+    font-size:14px;line-height:1.7;color:var(--ink-2);
+    margin:0 0 20px;
+  }
+  .prose p:last-child{margin-bottom:0}
+  .prose p b, .prose p strong{font-weight:600;color:var(--ink)}
+
+  /* Two col text */
+  .two-col{
+    display:grid;grid-template-columns:1fr 1fr;gap:56px;
+  }
+  @media (max-width:800px){.two-col{grid-template-columns:1fr;gap:32px}}
+  .two-col .col p{font-size:14px;line-height:1.65;color:var(--ink-2);margin:0 0 16px}
+  .two-col .col p:last-child{margin-bottom:0}
+  .two-col .col p b{font-weight:600;color:var(--ink)}
+
+  /* Chapter block (numbered long-form) */
+  .chap{padding:40px 0}
+  .chap-head{margin-bottom:36px}
+  @media (max-width:800px){.chap-head{margin-bottom:24px}}
+  .chap-no{display:none}      /* "Step 0X / label" sidebar removed */
+  .chap h3{
+    font-family:var(--f-display);
+    font-weight:500;font-size:22px;
+    line-height:1.2;letter-spacing:-.018em;
+    margin:0;
+  }
+  .chap-body{max-width:none}
+  .chap-body p{font-size:14px;line-height:1.7;color:var(--ink-2);margin:0 0 16px}
+  .chap-body p:last-child{margin-bottom:0}
+  .chap-body p b{font-weight:600;color:var(--ink)}
+
+  /* Team + products snapshot (Step 05) */
+  .team-snapshot{
+    display:grid;grid-template-columns:repeat(4,auto) 1fr;gap:0 56px;
+    align-items:start;
+    padding:28px 0 36px;margin:28px 0 0;
+    border-top:1px solid var(--line);
+  }
+  .team-snapshot .ts-cell{display:flex;flex-direction:column;gap:8px;min-width:0}
+  .team-snapshot .ts-n{
+    font-family:var(--f-display);font-weight:500;
+    font-size:40px;line-height:1;letter-spacing:-.02em;color:var(--ink);
+  }
+  .team-snapshot .ts-l{
+    font-family:'DM Sans',var(--f-sans);font-size:13px;line-height:1.4;
+    color:var(--muted);
+  }
+  .team-snapshot .ts-ex{
+    display:block;margin-top:4px;font-size:12px;color:var(--muted);
+    line-height:1.5;
+  }
+  @media (max-width:800px){
+    .team-snapshot{grid-template-columns:repeat(2,1fr);gap:24px 24px;padding:24px 0 28px}
+  }
+
+  /* Audience list (Step 05) — eyebrow + paragraph, hairline dividers */
+  .audience-list{margin:40px 0 8px;display:flex;flex-direction:column}
+  .audience-list .row{
+    display:grid;grid-template-columns:200px 1fr;gap:40px;
+    padding:28px 0;border-top:1px solid var(--line);
+  }
+  .audience-list .row:last-child{border-bottom:1px solid var(--line)}
+  .audience-list .row .lbl{
+    font-family:var(--f-display);font-weight:400;
+    font-size:12px;line-height:1.5;color:var(--muted);
+    letter-spacing:0;text-transform:none;padding-top:4px;
+  }
+  .audience-list .row .body{font-size:14px;line-height:1.7;color:var(--ink-2);margin:0}
+  .audience-list .row .body p{margin:0 0 12px}
+  .audience-list .row .body p:last-child{margin-bottom:0}
+  .audience-list .row .body b{font-weight:600;color:var(--ink)}
+  .audience-list .row .body ol.findings{list-style:none;margin:0;padding:0;counter-reset:finding;display:flex;flex-direction:column;gap:14px}
+  .audience-list .row .body ol.findings li{font-size:14px;line-height:1.65;color:var(--ink-2);padding-left:34px;position:relative;counter-increment:finding}
+  .audience-list .row .body ol.findings li::before{
+    content:counter(finding) ".";
+    position:absolute;left:0;top:0;
+    font-family:'DM Sans',var(--f-sans);
+    font-size:14px;line-height:1.65;color:var(--muted);
+  }
+  .audience-list .row .body ol.findings li b{font-weight:600;color:var(--ink)}
+  .audience-list .row .body a{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
+  .audience-list .row .body code{
+    font-family:var(--f-mono);
+    font-size:.88em;color:var(--ink);
+    background:rgba(0,0,0,.05);
+    padding:1px 6px;border-radius:3px;
+    white-space:nowrap;
+  }
+  @media (max-width:800px){
+    .audience-list .row{grid-template-columns:1fr;gap:10px;padding:22px 0}
+  }
+
+  /* Reflection block */
+  .reflection{
+    margin:48px 0 8px;
+    display:grid;grid-template-columns:200px 1fr;gap:40px;
+  }
+  .reflection .lbl{
+    font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;
+    text-transform:none;color:var(--muted);padding-top:4px;
+  }
+  .reflection .body p{font-size:14px;line-height:1.7;color:var(--ink-2);margin:0 0 16px}
+  .reflection .body p:last-child{margin-bottom:0}
+  .reflection .body p b{font-weight:600;color:var(--ink)}
+  @media (max-width:800px){
+    .reflection{grid-template-columns:1fr;gap:12px}
+  }
+
+  /* Visual block */
+  .figure{
+    margin:40px 0 12px;border-radius:12px;overflow:hidden;
+    background:#0e0d0c;aspect-ratio:16/9;position:relative;
+  }
+  .figure .lp-bar{position:absolute;top:0;left:0;right:0;height:32px;background:#1a1a1a;display:flex;align-items:center;gap:6px;padding:0 14px;z-index:2}
+  .figure .lp-bar .b{width:10px;height:10px;border-radius:50%;background:#444}
+  .figure .lp-bar .b:nth-child(1){background:#ff5b56}
+  .figure .lp-bar .b:nth-child(2){background:#ffbd2e}
+  .figure .lp-bar .b:nth-child(3){background:#27c93f}
+  .figure .lp-bar .url{margin-left:auto;font-family:var(--f-mono);font-size:10px;color:#aaa;letter-spacing:.05em}
+  .figure .lp-scroll{position:absolute;top:32px;left:0;right:0;bottom:0;overflow:hidden;background:#fff}
+  .figure .lp-scroll img{width:100%;display:block;animation:scroll-y-loop 22s linear infinite}
+  @keyframes scroll-y-loop{
+    0%, 4%   {transform:translateY(0)}
+    100%     {transform:translateY(-61%)}
+  }
+  /* Full-height figure — natural aspect, no scroll */
+  .figure.full{aspect-ratio:auto;padding-top:32px;background:#fff}
+  .figure.full .lp-scroll{position:static;top:auto;left:auto;right:auto;bottom:auto}
+  .figure.full .lp-scroll img{animation:none}
+
+  /* Video figure (prototype demos) — looping mp4, no chrome, responsive */
+  .figure.video{
+    background:#fff;padding:0;overflow:hidden;
+    aspect-ratio:1440/1294;border-radius:32px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .figure.video video{display:block;width:100%;height:100%;object-fit:contain;background:#fff}
+  /* Fig.06 uses its own native aspect (1440x856 from source) */
+  .figure.video.wide{aspect-ratio:1440/856;background:#fff}
+  .figure.video.wide video{width:100%;height:100%;object-fit:cover;display:block;transform:scale(1.01);transform-origin:center center}
+  /* Desktop: Fig.06 breaks out of the audience-list body column and
+     spans the full .wrap content width (same as Fig.04). The 274px
+     offset = 200px label column + 40px grid gap + 34px li padding. */
+  @media (min-width:801px){
+    .audience-list .row .body ol.findings li .video-pair.wide-demo,
+    .audience-list .row .body ol.findings li .figure.demo-wide,
+    .audience-list .row .body ol.findings li .demo-wide-caption,
+    .audience-list .row .body ol.findings li .demo-wide-actions{
+      margin-left:-274px;
+      width:calc(100% + 274px);
+    }
+    .audience-list .row .body ol.findings li .figure.demo-wide{
+      margin-top:28px;margin-bottom:8px;
+    }
+  }
+  /* Prototype demos — stacked */
+  .video-pair{display:flex;flex-direction:column;gap:24px;margin:20px 0 4px}
+  .audience-list .row .body ol.findings li .video-pair{margin:20px 0 4px}
+  .video-pair .vcell{display:flex;flex-direction:column;min-width:0}
+  .video-pair .vcell .figure{margin:0}
+  .video-pair .vcell .fig-sub{
+    font-family:'DM Sans',var(--f-sans);
+    font-size:14px;line-height:1.6;letter-spacing:0;color:var(--ink-2);
+    margin:10px 0 0;max-width:720px;
+  }
+  .video-pair .vcell .fig-sub b{color:var(--ink);font-weight:600;margin-right:4px}
+  /* Align with the paragraph column (1fr body column of audience-list rows) */
+  .video-pair.fullbleed{
+    margin-left:240px;  /* 200px label col + 40px gap */
+    margin-top:8px;margin-bottom:8px;
+  }
+  @media (max-width:800px){
+    .video-pair.fullbleed{margin-left:0}
+  }
+  /* Figures sitting inside audience-list body need neutralised margin */
+  .audience-list .row .body .figure{margin:32px 0 0}
+  .audience-list .row .body .fig-caption{margin:14px 0 0}
+  .fig-caption{font-family:'DM Sans',var(--f-sans);font-size:12px;line-height:1.55;color:var(--muted);margin:14px 0 0}
+  .fig-actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 0}
+  .fig-btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:9px 16px;border:1px solid var(--ink);border-radius:999px;
+    font-size:13px;font-weight:500;color:var(--ink);background:transparent;
+    text-decoration:none;
+    transition:background .2s var(--ease),color .2s var(--ease);
+  }
+  .fig-btn:hover{background:var(--ink);color:#ffffff}
+  .fig-btn svg{width:12px;height:12px;flex-shrink:0}
+  /* Override the audience-list underline + ink color when .fig-btn lives inside it */
+  .audience-list .row .body a.fig-btn{text-decoration:none;color:var(--ink)}
+  .audience-list .row .body a.fig-btn:hover{color:#ffffff}
+  .audience-list .row .body a.fig-btn:hover svg path{stroke:#ffffff}
+
+  /* ============================================================
+     LEFT-SIDE SECTION NAV — sticky, with scroll-spy active state
+  ============================================================ */
+  .page-nav{
+    position:fixed;left:32px;top:50%;transform:translateY(-50%);
+    z-index:40;
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;font-size:12px;
+    max-width:200px;
+  }
+  .page-nav ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+  .page-nav .grp{margin-top:2px}
+  .page-nav .grp > a{font-weight:600}
+  .page-nav .sub{
+    list-style:none;margin:6px 0 0 14px;padding:0;
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .page-nav a{
+    display:inline-flex;align-items:center;
+    padding:4px 0;
+    color:var(--muted);text-decoration:none;line-height:1.3;
+    transition:color .25s var(--ease), opacity .25s var(--ease);
+    position:relative;
+  }
+  .page-nav a:hover{color:var(--ink)}
+  .page-nav a.is-active{color:var(--ink);font-weight:600}
+  .page-nav .sub a{font-size:11.5px;font-weight:400}
+  .page-nav .sub a.is-active{font-weight:600}
+  @media (max-width:1180px){
+    .page-nav{display:none}
+  }
+
+  /* Demo preview card — image thumbnail + url + CTA */
+  .demo-card{
+    display:flex;gap:14px;align-items:center;
+    margin:14px 0 6px;padding:8px;
+    background:var(--paper, #fff);
+    border:1px solid var(--line);border-radius:14px;
+    text-decoration:none;color:var(--ink);
+    transition:transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
+    max-width:480px;
+  }
+  .demo-card:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 24px rgba(14,13,12,.08);
+    border-color:rgba(14,13,12,.2);
+  }
+  .demo-card__shot{
+    flex-shrink:0;width:120px;aspect-ratio:16/10;
+    background:#f3efe6;border-radius:8px;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .demo-card__shot img{width:100%;height:100%;object-fit:cover;display:block}
+  .demo-card__shot.is-empty::after{
+    content:"demo · preview";
+    font-family:var(--f-mono);font-size:9px;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--muted);
+  }
+  .demo-card__meta{display:flex;flex-direction:column;gap:6px;min-width:0;flex:1}
+  .demo-card__url{
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.04em;
+    color:var(--muted);
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .demo-card__cta{
+    font-family:var(--f-display);font-weight:600;font-size:15px;
+    color:var(--ink);letter-spacing:-.005em;
+  }
+
+
+  /* Fig. 03 — Figma diagram export */
+  .figure.figma-shot{
+    aspect-ratio:auto;background:#F9F7F2;overflow:hidden;
+    border:none;border-radius:24px;padding:40px 40px 32px;margin-top:32px;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .figure.figma-shot img{
+    display:block;width:100%;height:auto;max-width:1100px;
+  }
+  /* Flush variant — image fills container edge-to-edge with no padding */
+  .figure.figma-shot.flush{
+    padding:0;background:transparent;
+  }
+  .figure.figma-shot.flush img{
+    max-width:none;width:100%;
+  }
+  @media (max-width:700px){
+    .figure.figma-shot{padding:20px 16px;border-radius:18px}
+    .figure.figma-shot.flush{padding:0}
+  }
+
+
+  /* Editor figure (code preview) — desaturated, refined */
+  .figure.editor{background:#0e0d0c;color:#e6e3dc;font-family:'Fira Code','JetBrains Mono',ui-monospace,SFMono-Regular,Menlo,monospace;font-feature-settings:'liga' 1,'calt' 1;aspect-ratio:16/10}
+  .figure.editor .tab{position:absolute;top:0;left:0;right:0;display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid #1c1b18;font-size:11px;color:#a8a59c;letter-spacing:.05em;z-index:2;background:#131313}
+  .figure.editor .tab .tri{width:0;height:0;border-left:5px solid #ffd34d;border-top:4px solid transparent;border-bottom:4px solid transparent}
+  .figure.editor .tab .fn{color:#fff;font-weight:600}
+  .figure.editor .tab .who{margin-left:auto;color:#9ec1ff;font-weight:500}
+  .figure.editor .tab .pip{width:7px;height:7px;border-radius:50%;background:#27c93f;box-shadow:0 0 0 3px rgba(39,201,63,.2);animation:pulse 1.6s ease-in-out infinite}
+  .figure.editor .code{position:absolute;top:46px;left:0;right:0;bottom:0;padding:18px 22px 56px;font-size:12.5px;line-height:1.85;overflow:hidden}
+  .figure.editor .row{display:flex;gap:12px}
+  .figure.editor .ln{color:#3f3d39;width:22px;text-align:right;flex-shrink:0}
+  .figure.editor .h{color:#ffd34d}
+  .figure.editor .c{color:#7b766c}
+  .figure.editor .k{color:#9ec1ff}
+  .figure.editor .n{color:#fff}
+  .figure.editor .g{color:#5ed383}
+  .figure.editor .code.typing .row{opacity:0;transform:translateX(-4px)}
+  .figure.editor .code.typing.go .row{animation:type-reveal .32s ease-out forwards}
+  @keyframes type-reveal{to{opacity:1;transform:none}}
+  .figure.editor .code.tree{white-space:pre;font-size:12px;line-height:1.9;padding:24px 28px 28px;tab-size:2}
+
+  /* Fig.01 — simple looping scroll: scroll to bottom, then restart from top (no reverse) */
+  .figure.editor .code.scroll{padding:0 22px 0;display:block}
+  .figure.editor .code.scroll .scroll-track{
+    padding:18px 0 56px;
+    animation:tokens-scroll 18s linear infinite;
+  }
+  @keyframes tokens-scroll{
+    0%, 6%   { transform:translateY(0); }
+    100%     { transform:translateY(-540px); }
+  }
+  @media (prefers-reduced-motion:reduce){
+    .figure.editor .code.scroll .scroll-track{animation:none}
+  }
+
+  /* Repo branching diagram (Step 04) — horizontal L→R hierarchy */
+  .figure.branch{
+    aspect-ratio:auto;background:#F9F7F2;overflow:hidden;
+    border:none;border-radius:32px;padding:56px 48px;
+    font-family:'Inter',system-ui,sans-serif;
+  }
+  .figure.branch svg.btree{
+    display:block;width:100%;height:auto;max-width:900px;margin:0 auto;
+  }
+  .figure.branch svg.btree text{
+    fill:#002536;font-size:16px;font-weight:500;letter-spacing:-.005em;
+    opacity:0;transition:opacity .45s linear;
+  }
+  .figure.branch svg.btree text.shown{opacity:1}
+  .figure.branch svg.btree text.dim{opacity:.35}
+  .figure.branch svg.btree path{
+    fill:none;stroke:#41A7D7;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+    visibility:hidden;
+    transition:stroke-dashoffset .5s cubic-bezier(.2,.7,.2,1),opacity .45s linear;
+  }
+  .figure.branch svg.btree path.measured{visibility:visible}
+  .figure.branch svg.btree path.drawn{stroke-dashoffset:0 !important}
+  .figure.branch svg.btree path.dim{opacity:.35}
+  .figure.branch svg.btree.no-anim text,
+  .figure.branch svg.btree.no-anim path{transition:none !important}
+  .figure.branch svg.btree .fade{transition:opacity .5s linear}
+  .figure.branch svg.btree.whiteout text,
+  .figure.branch svg.btree.whiteout path{opacity:0 !important}
+
+  /* Mobile: collapse to vertical stack, skip animation */
+  @media (max-width:700px){
+    .figure.branch{padding:32px 20px}
+    .figure.branch svg.btree{display:none}
+    .figure.branch .btree-stack{display:block}
+  }
+  .figure.branch .btree-stack{display:none;font-family:'Inter',system-ui,sans-serif;color:#002536}
+  .figure.branch .btree-stack .r0{font-size:15px;font-weight:500;margin:0 0 14px}
+  .figure.branch .btree-stack ul{list-style:none;margin:0;padding:0 0 0 18px;border-left:2px solid #41A7D7}
+  .figure.branch .btree-stack li{font-size:14px;font-weight:500;padding:6px 0}
+  .figure.branch .btree-stack li > ul{margin-top:4px;padding-left:16px}
+
+  @media (prefers-reduced-motion:reduce){
+    .figure.branch svg.btree text{opacity:1 !important;transition:none !important}
+    .figure.branch svg.btree path{visibility:visible !important;stroke-dashoffset:0 !important;transition:none !important}
+  }
+
+  /* legacy tree styles kept for backwards compat (unused) */
+  .figure.tree{
+    aspect-ratio:auto;background:#FFFFFF;overflow:visible;
+    border:none;border-radius:32px;padding:44px 48px;
+  }
+  .figure.tree pre{
+    margin:0;white-space:pre;
+    font-family:var(--f-mono);
+    font-size:13px;line-height:2.1;color:var(--ink);
+    tab-size:2;overflow-x:auto;
+  }
+  .figure.tree .root{font-weight:600}
+  .figure.tree .anchor{font-weight:600}
+  .figure.tree .br{color:#B8CAD4}
+  .figure.tree .cmt{color:var(--muted)}
+  @media (max-width:800px){
+    .figure.tree{padding:28px 22px;border-radius:24px}
+    .figure.tree pre{font-size:11px;line-height:2}
+  }
+  .figure.editor .sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:4px;border:1px solid rgba(255,255,255,.2);vertical-align:-1px}
+  .figure.editor .caret{display:inline-block;width:7px;height:14px;background:#9ec1ff;vertical-align:-3px;margin-left:2px;animation:blink 1s steps(2) infinite}
+  .figure.editor .agent{position:absolute;left:18px;bottom:18px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);padding:6px 12px;border-radius:999px;font-size:10px;color:#fff;letter-spacing:.08em;display:inline-flex;align-items:center;gap:8px;text-transform:uppercase}
+  .figure.editor .agent .pip{width:6px;height:6px;border-radius:50%;background:#9ec1ff;animation:pulse 1.5s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  @keyframes blink{50%{opacity:0}}
+
+  /* Pull quote */
+  .pull{
+    padding:60px 0;text-align:left;
+  }
+  .pull q{
+    display:block;font-family:var(--f-display);font-weight:500;
+    font-size:clamp(24px,3vw,40px);line-height:1.2;letter-spacing:-.02em;
+    max-width:24ch;margin:0;color:var(--ink);quotes:"" "";
+  }
+  .pull q::before,.pull q::after{content:""}
+  .pull .attrib{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:20px}
+
+  /* Stats */
+  .stats{
+    display:grid;grid-template-columns:repeat(4,1fr);gap:40px;
+    padding:48px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);
+  }
+  @media (max-width:800px){.stats{grid-template-columns:repeat(2,1fr);gap:32px 24px}}
+  .stat .num{font-family:var(--f-display);font-weight:500;font-size:44px;line-height:1;letter-spacing:-.02em;color:var(--ink)}
+  .stat .lbl{font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin-top:10px}
+
+  /* Next project — with thumbnail */
+  .next-cta{padding:96px 0 100px}
+  .next-cta .eyebrow{font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin:0 0 28px;text-align:center}
+  .next-card{
+    display:flex;flex-direction:column;align-items:center;gap:28px;
+    max-width:960px;margin:0 auto;text-decoration:none;color:inherit;
+  }
+  .next-thumb{
+    display:block;border-radius:16px;overflow:hidden;
+    aspect-ratio:16/10;width:100%;max-width:456px;
+    transition:transform .35s var(--ease);
+  }
+  .next-card:hover .next-thumb{transform:translateY(-4px)}
+  .next-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .next-meta{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+  .next-meta h2{
+    font-family:var(--f-display);font-weight:500;color:var(--ink);
+    font-size:clamp(20px,2.2vw,26px);line-height:1.25;letter-spacing:-.012em;
+    margin:0;text-wrap:balance;
+  }
+  .next-arrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:var(--f-display);font-weight:500;font-size:13px;color:var(--ink);
+    position:relative;
+  }
+  .next-arrow svg{width:13px;height:13px;transition:transform .25s var(--ease)}
+  .next-card:hover .next-arrow svg{transform:translate(3px,-3px)}
+  .next-arrow::after{
+    content:"";position:absolute;left:0;right:20px;bottom:-2px;
+    border-bottom:1px solid var(--ink);
+    transform:scaleX(0);transform-origin:left;transition:transform .35s var(--ease);
+  }
+  .next-card:hover .next-arrow::after{transform:scaleX(1)}
+
+  .foot{
+    padding:32px 0;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  }
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(12px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){
+    .reveal{opacity:1;transform:none}
+    .lp-scroll img{animation:none}
+  }
+</style>
+</head>
+<body>
+
+<nav class="top-nav" aria-label="Main navigation">
+  <a class="nav-logo" href="../index.html">Rachel Wong</a>
+  <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-controls="navMenu" aria-label="Toggle menu">
+    <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
+  <div class="nav-items" id="navMenu">
+    <a href="../work.html">Work</a>
+    <a class="nav-ext" href="https://www.linkedin.com/in/cheuk-yiu-rachel-wong/" target="_blank" rel="noopener noreferrer">LinkedIn<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></a>
+    <a class="nav-cta nav-resume" href="../resume.pdf" download="Rachel-Wong-Resume.pdf" aria-label="Download resume">Resume<svg viewBox="0 0 14 14" width="12" height="12" fill="none" aria-hidden="true" style="flex-shrink:0"><path d="M7 2v7.5M3.5 6.5L7 10l3.5-3.5M2.5 12h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</nav>
+
+<!-- Email-copied feedback pill -->
+<div id="email-toast" class="email-toast" aria-hidden="true">
+  <span class="lbl">email copied</span>
+  <span class="dots"><span></span><span></span><span></span></span>
+</div>
+
+<!-- LHS scroll-spy section nav -->
+<aside class="page-nav" id="pageNav" aria-label="On-page navigation">
+  <ol>
+    <li><a href="#background" data-spy>Background</a></li>
+    <li class="grp">
+      <a href="#step-01" data-spy>Design process</a>
+      <ol class="sub">
+        <li><a href="#step-01" data-spy>Step 1 · Foundations</a></li>
+        <li><a href="#step-02" data-spy>Step 2 · Principles</a></li>
+        <li><a href="#step-03" data-spy>Step 3 · Workflow</a></li>
+        <li><a href="#step-04" data-spy>Step 4 · Repo</a></li>
+      </ol>
+    </li>
+    <li><a href="#step-05" data-spy>Progress and impact</a></li>
+    <li><a href="#reflection" data-spy>Reflection</a></li>
+  </ol>
+</aside>
+
+<section class="p-hero">
+  <div class="wrap">
+    <img class="p-hero-logo reveal" src="../assets/air-icon.svg" alt="AIR" width="56" height="56">
+    <p class="tagline reveal">AIR @ Moca Network · Feb 2026 — Now</p>
+    <h1 class="reveal">Scaling AIR's product design with an agentic workflow</h1>
+    <p class="lede reveal">
+      AIR is Moca Network's identity and credential product, spanning account
+      access, credentials, finance, travel and loyalty experiences.
+      <br><br>
+      I lead and expand AIR's design system as shared product infrastructure
+      across design, code and agentic workflows. Embedded with internal POD
+      teams, I support rapid prototyping and shipping while keeping product
+      quality consistent as speed increases.
+    </p>
+
+    <div class="meta-strip reveal">
+      <div><div class="m-lbl">Role</div><div class="m-val">Product designer</div></div>
+      <div><div class="m-lbl">Timeline</div><div class="m-val">Feb 2026 — Now</div></div>
+      <div><div class="m-lbl">Team</div><div class="m-val">3 product managers, 9 engineers, members from business + marketing team</div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Overview: problem + bet -->
+<section id="background">
+  <div class="wrap">
+    <p class="sec-label reveal">Overview</p>
+    <h2 class="sec reveal">A system built as infrastructure, not documentation</h2>
+    <div class="two-col reveal">
+      <div class="col">
+        <p class="m-lbl" style="font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin:0 0 10px">The problem</p>
+        <p>
+          AIR now spans multiple product verticals and is touched by product,
+          engineering, marketing and business teams. Without a shared source of
+          truth, experience, design and implementation started to drift. The
+          challenge is to <b>stay consistent, align around shared product
+          principles, improve product quality and increase productivity</b> at
+          the same time.
+        </p>
+      </div>
+      <div class="col">
+        <p class="m-lbl" style="font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin:0 0 10px">The bet</p>
+        <p>
+          Build the system as <b>infrastructure</b>, not documentation. Codify
+          repeated decisions so teams can focus on product judgement, then pair
+          the system with agentic tools for critique, token sync, changelogs and
+          QA diffs. The goal is simple: make the right way to ship easier for
+          both people and agents.
+        </p>
+      </div>
+    </div>
+    <div class="impact-strip reveal" aria-label="Project impact">
+      <div>
+        <p class="impact-k">4</p>
+        <p class="impact-v">Teams adopted the system across design, PM, engineering and BD workflows.</p>
+      </div>
+      <div>
+        <p class="impact-k">&gt; 50<em>%</em></p>
+        <p class="impact-v">Reduction in UI review comments per Credential Dashboard flow.</p>
+      </div>
+      <div>
+        <p class="impact-k">0</p>
+        <p class="impact-v">Engineering lift needed for BD to spin up partner demo flows from the design repo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Step 01 — Learning by doing -->
+<section id="step-01">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <div class="chap-no">
+          Step<b>01</b>
+          Foundations
+        </div>
+        <h3>1. Foundations for people and agents</h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          I started by turning AIR's design foundations into a shared source of
+          truth: tokens, hierarchy, states, spacing, surfaces and usage
+          principles. The goal was not only to help designers and engineers
+          align, but also to give AI agents the same context before generating
+          or editing UI.
+        </p>
+        <p>
+          The first move was to have Cursor and Claude <b>read through the
+          entire token setup</b>, so the agents and I were working from the
+          same source of truth before any interface work began.
+        </p>
+      </div>
+
+      <div class="figure editor reveal" aria-label="AIR token file being documented">
+        <div class="tab">
+          <span class="tri"></span>
+          <span class="fn">tokens.md</span>
+          <span class="who">AIR / foundations</span>
+          <span class="pip"></span>
+        </div>
+        <div class="code scroll">
+          <div class="scroll-track">
+          <div class="row"><span class="ln">1</span><span class="h"># AIR · Colour tokens</span></div>
+          <div class="row"><span class="ln">2</span><span class="c">&nbsp;</span></div>
+          <div class="row"><span class="ln">3</span><span class="g">&gt; Source of truth for every surface, icon, button, and link across the system.</span></div>
+          <div class="row"><span class="ln">4</span><span class="c">&nbsp;</span></div>
+          <div class="row"><span class="ln">5</span><span class="h">## text</span></div>
+          <div class="row"><span class="ln">6</span><span class="k">text-primary</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#002536"></span><span class="n">#002536</span></div>
+          <div class="row"><span class="ln">7</span><span class="k">text-secondary</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#798b95"></span><span class="n">#798b95</span></div>
+          <div class="row"><span class="ln">8</span><span class="k">text-disabled</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#a8b4bb"></span><span class="n">#a8b4bb</span></div>
+          <div class="row"><span class="ln">9</span><span class="k">text-on-colour</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#ffffff"></span><span class="n">#ffffff</span></div>
+          <div class="row"><span class="ln">10</span><span class="k">text-placeholder</span><span class="n">&nbsp;&nbsp;</span><span class="sw" style="background:#B8CAD4"></span><span class="n">#B8CAD4</span></div>
+          <div class="row"><span class="ln">11</span><span class="c">&nbsp;</span></div>
+          <div class="row"><span class="ln">12</span><span class="h">## icon</span></div>
+          <div class="row"><span class="ln">13</span><span class="k">icon-primary</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#002536"></span><span class="n">#002536</span></div>
+          <div class="row"><span class="ln">14</span><span class="k">icon-secondary</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#798b95"></span><span class="n">#798b95</span></div>
+          <div class="row"><span class="ln">15</span><span class="k">icon-disabled</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#a8b4bb"></span><span class="n">#a8b4bb</span></div>
+          <div class="row"><span class="ln">16</span><span class="k">icon-on-colour</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#ffffff"></span><span class="n">#ffffff</span></div>
+          <div class="row"><span class="ln">17</span><span class="c">&nbsp;</span></div>
+          <div class="row"><span class="ln">18</span><span class="h">## button</span></div>
+          <div class="row"><span class="ln">19</span><span class="k">button-primary</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#000000"></span><span class="n">#000000</span></div>
+          <div class="row"><span class="ln">20</span><span class="k">button-primary-hover</span><span class="n">&nbsp;&nbsp;</span><span class="sw" style="background:#464646"></span><span class="n">#464646</span></div>
+          <div class="row"><span class="ln">21</span><span class="k">button-secondary</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#41A7D7"></span><span class="n">#41A7D7</span></div>
+          <div class="row"><span class="ln">22</span><span class="k">button-secondary-hover</span><span class="n">&nbsp;&nbsp;</span><span class="sw" style="background:#9BD5EA"></span><span class="n">#9BD5EA</span></div>
+          <div class="row"><span class="ln">23</span><span class="k">button-disabled</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#d6e0e5"></span><span class="n">#d6e0e5</span></div>
+          <div class="row"><span class="ln">24</span><span class="c">&nbsp;</span></div>
+          <div class="row"><span class="ln">25</span><span class="h">## container</span></div>
+          <div class="row"><span class="ln">26</span><span class="k">container-primary</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#f7f7f7"></span><span class="n">#f7f7f7</span></div>
+          <div class="row"><span class="ln">27</span><span class="k">container-secondary</span><span class="n">&nbsp;</span><span class="sw" style="background:#ffffff"></span><span class="n">#ffffff</span></div>
+          <div class="row"><span class="ln">28</span><span class="k">container-inverse</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#000000"></span><span class="n">#000000</span></div>
+          <div class="row"><span class="ln">29</span><span class="c">&nbsp;</span></div>
+          <div class="row"><span class="ln">30</span><span class="h">## surface</span></div>
+          <div class="row"><span class="ln">31</span><span class="k">surface</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#FAFAFA"></span><span class="n">#FAFAFA</span></div>
+          <div class="row"><span class="ln">32</span><span class="k">surface-dim</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#E3E9EA"></span><span class="n">#E3E9EA</span></div>
+          <div class="row"><span class="ln">33</span><span class="c">&nbsp;</span></div>
+          <div class="row"><span class="ln">34</span><span class="h">## link</span></div>
+          <div class="row"><span class="ln">35</span><span class="k">link-default</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#002536"></span><span class="n">#002536</span></div>
+          <div class="row"><span class="ln">36</span><span class="k">link-hover</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#464646"></span><span class="n">#464646</span><span class="caret"></span></div>
+          </div>
+        </div>
+      </div>
+      <p class="fig-caption">Fig. 01: the AIR token file, read line-by-line by the agents.</p>
+    </article>
+  </div>
+</section>
+
+<!-- Step 02 — Principles + alignment -->
+<section id="step-02">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <div class="chap-no">
+          Step<b>02</b>
+          Principles
+        </div>
+        <h3>2. Shared principles for people and agents</h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          The most useful mental model for AI tools was to <b>treat them like a
+          design intern</b>: capable, fast and new to the product. Before they
+          can decide or do, they need to understand how AIR handles hierarchy,
+          state, spacing and surfaces.
+        </p>
+        <p>
+          So I pulled those decisions into a <b>design foundations page</b>,
+          read by the team and loaded by agents at the start of every session.
+          Same principles, two audiences.
+        </p>
+        <p>
+          The strategy was deliberately simple: document the basics in a form
+          engineers could sanity-check and agents could read. Foundations first,
+          so speed later would not create inconsistency.
+        </p>
+      </div>
+
+      <div class="figure reveal" aria-label="AIR design system foundations site, full-page scroll">
+        <div class="lp-bar">
+          <span class="b"></span><span class="b"></span><span class="b"></span>
+          <span class="url">air-design.com / foundations</span>
+        </div>
+        <div class="lp-scroll">
+          <img src="../air-site.png" alt="AIR design system foundations: bento grid, tokens, principles" style="animation-duration:30s"/>
+        </div>
+      </div>
+      <p class="fig-caption">Fig. 02: the foundations site, with principles, tokens and examples, written to read well for both the team and the agents.</p>
+      <div class="fig-actions reveal">
+        <a class="fig-btn" href="https://air3-design.figma.site" target="_blank" rel="noopener">
+          Visit the site
+          <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="fig-btn" href="https://github.com/mocaverse/air-design-system" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 .2a8 8 0 0 0-2.5 15.6c.4.1.5-.2.5-.4v-1.4c-2.2.5-2.7-1.1-2.7-1.1-.4-.9-.9-1.2-.9-1.2-.7-.5.1-.5.1-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.4.7.1-.5.3-.9.5-1.1-1.8-.2-3.6-.9-3.6-4 0-.9.3-1.6.8-2.2 0-.2-.3-1 .1-2.1 0 0 .7-.2 2.2.8a7.6 7.6 0 0 1 4 0c1.5-1 2.2-.8 2.2-.8.4 1.1.2 1.9.1 2.1.5.6.8 1.3.8 2.2 0 3.1-1.8 3.8-3.6 4 .3.3.6.7.6 1.5v2.2c0 .2.1.5.5.4A8 8 0 0 0 8 .2z"/></svg>
+          GitHub repo
+        </a>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- Step 03 — Workflow with engineering -->
+<section id="step-03">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <div class="chap-no">
+          Step<b>03</b>
+          Workflow
+        </div>
+        <h3>3. A single source of truth for collaboration</h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          Jonas, our lead engineer, and I aligned on where each decision should
+          live so Figma and code would stop drifting.
+        </p>
+        <p>
+          We defined <b>four surfaces</b>: Figma, the repo, Storybook and a
+          showcase site. Storybook and the showcase render from the repo, so
+          documentation, previews and implementation stay connected.
+        </p>
+        <p>
+          For simple changes, I describe the update in Cursor and the agent
+          updates the component and Storybook preview. For larger behaviour or
+          API decisions, Jonas and I align first; he implements with AI, I
+          verify in Storybook, and the PR becomes the review gate.
+        </p>
+      </div>
+
+      <!-- Fig. 03 — Figma export: design repo as single source of truth -->
+      <div class="figure figma-shot reveal" aria-label="Design repo as single source of truth: Figma, Repo, Storybook, Showcase">
+        <img src="../fig-03.png" alt="Diagram: AI tools + Figma flow into the Repo via Code Connect + MCP; the Repo renders into Storybook and the Showcase site." />
+      </div>
+      <p class="fig-caption">Fig. 03: Design repo as the single source of truth. Figma reads and writes through Code Connect; Storybook and the showcase site render from code so nothing drifts.</p>
+
+    </article>
+  </div>
+</section>
+
+<!-- Step 04 — Repo architecture -->
+<section id="step-04">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <div class="chap-no">
+          Step<b>04</b>
+          Repo
+        </div>
+        <h3>4. Structuring the design repo</h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          Once the workflow was clear, the repo needed a shape. I structured it
+          like a product: <b>packages for what engineers ship, docs for what the
+          team and agents read</b>.
+        </p>
+        <p>
+          The goal was <b>one home per decision</b>, so designers, engineers,
+          AI agents and new teammates could understand where an edit belongs
+          before opening a file.
+        </p>
+      </div>
+
+      <div class="figure branch reveal" aria-label="Repo structure: a branching diagram of folders and files">
+        <svg class="btree" id="btree" viewBox="0 0 760 640" role="img" aria-hidden="true">
+
+          <!-- ROOT -->
+          <text class="t-root" x="20" y="320" dominant-baseline="middle">air-design-system/</text>
+
+          <!-- ROOT → TRUNK (stub from root + vertical trunk) -->
+          <path class="p-root" d="M 210 320 L 240 320"/>
+          <path class="p-root-trunk" d="M 240 100 L 240 560"/>
+
+          <!-- ROOT → COL2 STUBS -->
+          <path class="p-to-packages" d="M 240 100 L 260 100"/>
+          <path class="p-to-docs"     d="M 240 280 L 260 280"/>
+          <path class="p-to-stories"  d="M 240 480 L 260 480"/>
+          <path class="p-to-agents"   d="M 240 560 L 260 560"/>
+
+          <!-- COL2 LABELS (level 2, backbone) -->
+          <text class="t-l2" data-branch="packages" x="268" y="100" dominant-baseline="middle">packages/</text>
+          <text class="t-l2" data-branch="docs"     x="268" y="280" dominant-baseline="middle">docs/</text>
+          <text class="t-l2"                         x="268" y="480" dominant-baseline="middle">stories/</text>
+          <text class="t-l2"                         x="268" y="560" dominant-baseline="middle">AGENTS.md</text>
+
+          <!-- PACKAGES SUB-TREE -->
+          <!-- stub from packages label + vertical sub-trunk -->
+          <path class="p-pk-out"   d="M 370 100 L 400 100"/>
+          <path class="p-pk-trunk" d="M 400 80  L 400 120"/>
+          <!-- stubs to children -->
+          <path class="p-pk-c1" d="M 400 80  L 420 80"/>
+          <path class="p-pk-c2" d="M 400 120 L 420 120"/>
+          <!-- child labels (level 3) -->
+          <text class="t-l3" data-parent="packages" x="428" y="80"  dominant-baseline="middle">tokens/</text>
+          <text class="t-l3" data-parent="packages" x="428" y="120" dominant-baseline="middle">components/</text>
+
+          <!-- DOCS SUB-TREE -->
+          <path class="p-dc-out"   d="M 330 280 L 400 280"/>
+          <path class="p-dc-trunk" d="M 400 180 L 400 380"/>
+          <path class="p-dc-c1" d="M 400 180 L 420 180"/>
+          <path class="p-dc-c2" d="M 400 220 L 420 220"/>
+          <path class="p-dc-c3" d="M 400 260 L 420 260"/>
+          <path class="p-dc-c4" d="M 400 300 L 420 300"/>
+          <path class="p-dc-c5" d="M 400 340 L 420 340"/>
+          <path class="p-dc-c6" d="M 400 380 L 420 380"/>
+          <text class="t-l3" data-parent="docs" x="428" y="180" dominant-baseline="middle">system/</text>
+          <text class="t-l3" data-parent="docs" x="428" y="220" dominant-baseline="middle">ui/</text>
+          <text class="t-l3" data-parent="docs" x="428" y="260" dominant-baseline="middle">ux/</text>
+          <text class="t-l3" data-parent="docs" x="428" y="300" dominant-baseline="middle">components/</text>
+          <text class="t-l3" data-parent="docs" x="428" y="340" dominant-baseline="middle">patterns/</text>
+          <text class="t-l3" data-parent="docs" x="428" y="380" dominant-baseline="middle">contexts/</text>
+        </svg>
+
+        <!-- Mobile fallback: simple indented stack -->
+        <div class="btree-stack" aria-hidden="true">
+          <p class="r0">air-design-system/</p>
+          <ul>
+            <li>packages/
+              <ul>
+                <li>tokens/</li>
+                <li>components/</li>
+              </ul>
+            </li>
+            <li>docs/
+              <ul>
+                <li>system/</li>
+                <li>ui/</li>
+                <li>ux/</li>
+                <li>components/</li>
+                <li>patterns/</li>
+                <li>contexts/</li>
+              </ul>
+            </li>
+            <li>stories/</li>
+            <li>AGENTS.md</li>
+          </ul>
+        </div>
+      </div>
+      <p class="fig-caption">Fig. 04: the repo as a branching diagram. Code on one side, docs on the other; every folder has one job.</p>
+    </article>
+  </div>
+</section>
+
+<!-- Step 05 — Adoption & reflection -->
+<section id="step-05">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <div class="chap-no">
+          Step<b>05</b>
+          Adoption
+        </div>
+        <h3>5. Adoption is the real test</h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          Once the system shipped, the clearest signal came from adoption.
+          Designers, PMs, engineers and BD each picked it up in a different
+          way, showing where the system was working and what needed to improve
+          next.
+        </p>
+      </div>
+
+
+      <div class="audience-list reveal">
+        <div class="row">
+          <div class="lbl">For me, as a designer</div>
+          <div class="body">
+            <p>
+              Hectic, but exciting. The system has reshaped what my design work
+              looks like day to day:
+            </p>
+            <ol class="findings">
+              <li>
+                <b>Build higher-craft prototypes faster.</b> Layout,
+                interaction and motion are easier to explore on tight timelines,
+                while the repo gives prototypes a consistent product baseline.
+                For larger flows, I use the repo where it helps most: turning
+                ideas into reviewable product directions while holding the line
+                on UX quality.
+                <div class="video-pair reveal">
+                  <div class="vcell">
+                    <figure class="figure video">
+                      <video autoplay muted loop playsinline preload="metadata">
+                        <source src="../fig-05-context-change.mp4" type="video/mp4">
+                      </video>
+                    </figure>
+                    <p class="fig-caption">Fig. 05a: Context change for the whole page.</p>
+                  </div>
+                  <div class="vcell">
+                    <figure class="figure video">
+                      <video autoplay muted loop playsinline preload="metadata">
+                        <source src="../fig-05-page-slide.mp4" type="video/mp4">
+                      </video>
+                    </figure>
+                    <p class="fig-caption">Fig. 05b: Page slide. UI components that appear in the same position across pages are treated as a static overlay and are not affected by the slide transition.</p>
+                  </div>
+                </div>
+                <div class="video-pair wide-demo reveal">
+                  <div class="vcell">
+                    <figure class="figure video wide">
+                      <video autoplay muted loop playsinline preload="metadata">
+                        <source src="../fig-06-verify-credentials.mp4" type="video/mp4">
+                      </video>
+                    </figure>
+                    <p class="fig-caption">Fig. 06: A prototype of the "verify credentials on behalf" flow, shared with stakeholders for review.</p>
+                  </div>
+                </div>
+              </li>
+              <li>
+                <b>Reviewing is a bigger part of my week now.</b> I audit my
+                own AI experiments and designs other teammates generate with AI,
+                then document the prompts, patterns and
+                <a href="https://www.notion.so/animocabrands-888/POD-design-review-Avir-Rachel-on-verifier-access-33d28e0db3f8800c845bfc15eef8f39e" target="_blank" rel="noopener">review process</a>
+                that help the team raise the bar.
+              </li>
+              <li>
+                <b>Write specs that work for humans and agents.</b> Design
+                guidelines now describe not just what a component looks like,
+                but how it should render and behave: rules, edge cases and
+                transitions. Being explicit gives agents the same context a
+                designer would have.
+                <div class="figure figma-shot flush reveal" aria-label="AIR Modals (desktop): design specifications page">
+                  <img src="../air-modals-spec.png" alt="AIR design system spec page for modals (desktop): two modal mockups (account recovery menu, recover my account flow) on the left and rule cards (desktop rules, general spacing, transition scope) on the right." />
+                </div>
+                <p class="fig-caption">Fig. 07: Design spec for modals, with explicit rules on width, height, motion behaviour…. written for both designers and agents to render the component identically.</p>
+              </li>
+            </ol>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="lbl">For product managers</div>
+          <div class="body">
+            <ol class="findings">
+              <li>
+                <b>Prototypes are becoming the new PRD.</b> The output is
+                on-brand by default, but on-brand is not the same as coherent.
+                Design now reviews whether the proposed flow makes sense,
+                whether an interaction feels right and whether the whole thing
+                holds together. We now ship more prototypes in a month than we
+                used to in a quarter.
+              </li>
+              <li>
+                <b>The repo is becoming the source of truth for product
+                decisions.</b> What used to live only in a PRD now lives
+                alongside the design as a <code>pattern.md</code>, embedding
+                rules directly into the work being built.
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="row">
+          <div class="lbl">For developers</div>
+          <div class="body">
+            <ol class="findings">
+              <li>
+                <b>Specs show up as working code, not pictures.</b> Tokens,
+                components and patterns land in the repo the same way they
+                ship, so handoff becomes a pull rather than a translation.
+                Fewer "what did the designer mean?" threads; more time on the
+                real engineering problems.
+              </li>
+              <li>
+                <b>UI bugs drop sharply by the time a PR lands.</b> On the
+                Credential Dashboard, UI-related comments dropped from 20+ per
+                flow to under 10, and several handoffs went spec → working PR
+                without a single round of back-and-forth.
+              </li>
+            </ol>
+          </div>
+        </div>
+        <div class="row">
+          <div class="lbl">For the business team</div>
+          <div class="body">
+            <ol class="findings">
+              <li>
+                <b>BD is building tailor-made flows for partner demos.</b>
+                Pulled from the repo and deployed to Netlify, BD can review and
+                add new use cases when pitching to partners, without a design
+                ask or an engineering lift.
+                <div class="figure full reveal demo-wide" aria-label="Quick walkthrough of the AIR demo site">
+                  <div class="lp-bar">
+                    <span class="b"></span><span class="b"></span><span class="b"></span>
+                    <span class="url">demo.air3.com / quick-walkthrough</span>
+                  </div>
+                  <div class="lp-scroll" style="background:#000;overflow:hidden">
+                    <video autoplay muted loop playsinline preload="metadata"
+                           src="../demo-air3.mov"
+                           style="width:100%;height:auto;display:block;animation:none;transform:scale(1.01);transform-origin:center center">
+                    </video>
+                  </div>
+                </div>
+                <p class="fig-caption demo-wide-caption">Fig. 08: a quick walkthrough of the BD demo site. Pulled from the design repo, deployable end-to-end without engineering lift.</p>
+                <div class="fig-actions demo-wide-actions">
+                  <a class="fig-btn" href="https://demo.air3.com/quick-walkthrough" target="_blank" rel="noopener noreferrer">
+                    View demo
+                    <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </a>
+                </div>
+                <p style="margin:12px 0 0">
+                  Small UI bugs still need a designer to annotate and debug,
+                  but the communication loop is much simpler now: just
+                  <b>BD ↔ design</b>, no engineering middleman.
+                </p>
+              </li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      <div class="reflection reveal" id="reflection">
+        <div class="lbl">Reflection</div>
+        <div class="body">
+          <p>
+            I don't think AI will replace product designers. The tools give us
+            more ways to explore ideas, test workflows and move between first
+            instinct and final pixel.
+          </p>
+          <p>
+            What changed most was the shape of my role: some weeks I was making
+            components, other weeks I was reviewing prompts, writing specs or
+            pairing with BD on partner demos.
+          </p>
+          <p>
+            The takeaway I'm holding onto: <b>don't let the noise decide for
+            us.</b> Try the tools ourselves, stay curious and use them to become
+            better builders.
+          </p>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<section class="next-cta">
+  <div class="wrap">
+    <p class="eyebrow reveal">Up next</p>
+    <a class="next-card reveal" href="air-kit.html" aria-label="Read AIR Kit case study">
+      <div class="next-thumb" style="background:#F2F2F2"><img src="../air-kit-screens.png" alt="AIR Kit identity and wallet UI screens" loading="lazy"></div>
+      <div class="next-meta">
+        <h2>Building AIR Kit: a reusable SDK for onboarding, credentials, and identity checks</h2>
+        <span class="next-arrow">View project<svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </div>
+    </a>
+  </div>
+</section>
+
+<script>
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  },{threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // Typing reveal for the tokens.md editor figure
+  document.querySelectorAll('.figure.editor .code.typing').forEach(code=>{
+    const rows = code.querySelectorAll('.row');
+    rows.forEach((r,i)=>{ r.style.animationDelay = (0.15 + i*0.11) + 's'; });
+    const typeIO = new IntersectionObserver((es,obs)=>{
+      es.forEach(e=>{
+        if(e.isIntersecting){
+          code.classList.add('go');
+          obs.unobserve(e.target);
+        }
+      });
+    },{threshold:.35});
+    typeIO.observe(code);
+  });
+
+  // Branching diagram — horizontal L→R tree with looping timeline
+  (function(){
+    const svg = document.getElementById('btree');
+    if(!svg) return;
+
+    const reduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    const isMobile = window.matchMedia('(max-width:700px)').matches;
+
+    const allPaths = [...svg.querySelectorAll('path')];
+    const allTexts = [...svg.querySelectorAll('text')];
+
+    // Measure each path and set dash offsets so lines start hidden
+    allPaths.forEach(el=>{
+      try{
+        const len = Math.ceil(el.getTotalLength());
+        el.style.strokeDasharray = len;
+        el.style.strokeDashoffset = len;
+        el.classList.add('measured');
+      }catch(e){}
+    });
+
+    // Reduced motion / mobile: show final state, no animation
+    if(reduced || isMobile){
+      allPaths.forEach(el=>{ el.style.strokeDashoffset=0; el.classList.add('drawn'); });
+      allTexts.forEach(el=>el.classList.add('shown'));
+      return;
+    }
+
+    const $ = (sel)=> svg.querySelector(sel);
+    const $$ = (sel)=> [...svg.querySelectorAll(sel)];
+
+    const showPath = (el)=>{ el.style.strokeDashoffset = 0; el.classList.add('drawn'); };
+    const hidePath = (el)=>{
+      const len = el.style.strokeDasharray || el.getTotalLength();
+      el.style.strokeDashoffset = len;
+      el.classList.remove('drawn');
+    };
+    const showText = (el)=> el.classList.add('shown');
+    const hideText = (el)=> el.classList.remove('shown');
+
+    const wait = (ms)=> new Promise(r=> setTimeout(r,ms));
+
+    // Children of packages (level-3)
+    const pkChildren = [
+      {path:'.p-pk-c1', text:'t-l3[data-parent="packages"]:nth-of-type(1)'},
+    ];
+
+    const reset = ()=>{
+      // Freeze transitions so paths snap back to hidden without animating (shrinking).
+      svg.classList.add('no-anim');
+      svg.classList.remove('whiteout');
+      allTexts.forEach(hideText);
+      allTexts.forEach(t=> t.classList.remove('dim'));
+      allPaths.forEach(hidePath);
+      allPaths.forEach(p=> p.classList.remove('dim'));
+      // Force reflow so the snapped state is committed before transitions re-enable.
+      void svg.getBoundingClientRect();
+      svg.classList.remove('no-anim');
+    };
+
+    async function runOnce(){
+      reset();
+      // 0.0s — root label
+      await wait(50);
+      showText($('.t-root'));
+
+      // 0.4s — root stub + vertical trunk stroke downward
+      await wait(400);
+      showPath($('.p-root'));
+      await wait(60);
+      showPath($('.p-root-trunk'));
+
+      // 0.8s — col2 children reveal one by one (packages, docs, stories, AGENTS.md)
+      await wait(500); // trunk draw finishes
+      const col2 = [
+        ['.p-to-packages', '.t-l2[data-branch="packages"]'],
+        ['.p-to-docs',     '.t-l2[data-branch="docs"]'],
+        ['.p-to-stories',  '.t-l2:nth-of-type(7)'], // stories (7th text in document order)
+        ['.p-to-agents',   '.t-l2:nth-of-type(8)'], // AGENTS.md (8th)
+      ];
+      // simpler: collect level-2 texts in DOM order
+      const l2texts = $$('.t-l2');
+      const col2Stubs = ['.p-to-packages','.p-to-docs','.p-to-stories','.p-to-agents'];
+      for(let i=0;i<col2Stubs.length;i++){
+        showPath($(col2Stubs[i]));
+        await wait(90);
+        showText(l2texts[i]);
+        await wait(120 - 90);
+      }
+
+      // 1.6s — packages sub-trunk + children
+      await wait(200);
+      showPath($('.p-pk-out'));
+      await wait(80);
+      showPath($('.p-pk-trunk'));
+      await wait(420);
+      const pkTexts = $$('.t-l3[data-parent="packages"]');
+      const pkStubs = ['.p-pk-c1','.p-pk-c2'];
+      for(let i=0;i<pkStubs.length;i++){
+        showPath($(pkStubs[i]));
+        await wait(80);
+        showText(pkTexts[i]);
+        await wait(60);
+      }
+
+      // 2.4s — docs sub-trunk + children
+      await wait(200);
+      showPath($('.p-dc-out'));
+      await wait(80);
+      showPath($('.p-dc-trunk'));
+      await wait(500);
+      const dcTexts = $$('.t-l3[data-parent="docs"]');
+      const dcStubs = ['.p-dc-c1','.p-dc-c2','.p-dc-c3','.p-dc-c4','.p-dc-c5','.p-dc-c6'];
+      for(let i=0;i<dcStubs.length;i++){
+        showPath($(dcStubs[i]));
+        await wait(70);
+        showText(dcTexts[i]);
+        await wait(50);
+      }
+
+      // 4.8s — hold at full state
+      await wait(700);
+
+      // 5.4s — dim level-3 leaves + their connectors; backbone stays
+      const l3Texts = $$('.t-l3');
+      const l3Paths = [
+        '.p-pk-out','.p-pk-trunk','.p-pk-c1','.p-pk-c2',
+        '.p-dc-out','.p-dc-trunk','.p-dc-c1','.p-dc-c2','.p-dc-c3','.p-dc-c4','.p-dc-c5','.p-dc-c6'
+      ].map(s=> $(s));
+      l3Texts.forEach(t=> t.classList.add('dim'));
+      l3Paths.forEach(p=> p.classList.add('dim'));
+      await wait(900);
+
+      // 6.5s — whiteout everything, then restart
+      svg.classList.add('whiteout');
+      await wait(600);
+    }
+
+    async function loop(){
+      while(true){
+        await runOnce();
+      }
+    }
+
+    // Start animation on scroll (when figure becomes visible) OR on load if it's already in view
+    let started = false;
+    const tryStart = ()=>{
+      if(started) return;
+      const r = svg.parentElement.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      // Start when the top of the figure is within the viewport
+      if(r.top < vh * 0.9 && r.bottom > 0){
+        started = true;
+        loop();
+        window.removeEventListener('scroll', tryStart);
+      }
+    };
+    window.addEventListener('scroll', tryStart, {passive:true});
+    tryStart();
+  })();
+
+  /* ============================================================
+     LHS scroll-spy nav — highlights the active section
+  ============================================================ */
+  (function(){
+    const nav = document.getElementById('pageNav');
+    if(!nav) return;
+    const links = [...nav.querySelectorAll('a[data-spy]')];
+    // Map each href -> link element(s) (Step 01 appears twice — under "Design process" and as a sub-link)
+    const targets = [...new Set(links.map(a => a.getAttribute('href')))]
+      .map(href => ({ id: href.slice(1), el: document.getElementById(href.slice(1)) }))
+      .filter(t => t.el);
+
+    function setActive(id){
+      links.forEach(a => {
+        a.classList.toggle('is-active', a.getAttribute('href') === '#' + id);
+      });
+    }
+
+    // Use IntersectionObserver — the section closest to the top of viewport wins
+    const visible = new Map();
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e => {
+        if(e.isIntersecting){
+          visible.set(e.target.id, e.intersectionRatio);
+        } else {
+          visible.delete(e.target.id);
+        }
+      });
+      // Pick the entry whose top is nearest to (and above) viewport top — fall back
+      // to the first visible
+      let bestId = null, bestTop = Infinity;
+      visible.forEach((_, id)=>{
+        const r = document.getElementById(id).getBoundingClientRect();
+        const dist = Math.abs(r.top);
+        if(r.top < window.innerHeight * 0.4 && dist < bestTop){
+          bestTop = dist; bestId = id;
+        }
+      });
+      if(bestId) setActive(bestId);
+    }, { rootMargin: '-20% 0px -55% 0px', threshold: [0, .25, .5, 1] });
+    targets.forEach(t => io.observe(t.el));
+
+    // Smooth-scroll on click (offset for the floating top nav)
+    links.forEach(a => {
+      a.addEventListener('click', (e)=>{
+        const href = a.getAttribute('href');
+        const target = document.querySelector(href);
+        if(!target) return;
+        e.preventDefault();
+        const y = target.getBoundingClientRect().top + window.pageYOffset - 24;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      });
+    });
+  })();
+</script>
+
+<!-- Nav: mobile menu toggle + email copy-to-clipboard with toast feedback -->
+<script>
+  (function(){
+    const toggle = document.querySelector('.nav-menu-toggle');
+    const menu = document.getElementById('navMenu');
+    if(toggle && menu){
+      const setOpen = (open) => {
+        toggle.setAttribute('aria-expanded', String(open));
+        menu.classList.toggle('is-open', open);
+      };
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if(!toggle.contains(e.target) && !menu.contains(e.target)) setOpen(false);
+      });
+      menu.addEventListener('click', (e) => {
+        if(e.target.closest('a')) setOpen(false);
+      });
+      window.addEventListener('resize', () => { if(window.innerWidth > 720) setOpen(false); });
+    }
+
+    const toast = document.getElementById('email-toast');
+    const buttons = document.querySelectorAll('.nav-email');
+    if(!toast || !buttons.length) return;
+    let hideTimer = null;
+    async function copyText(text){
+      try { await navigator.clipboard.writeText(text); return true; }
+      catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly','');
+        ta.style.cssText = 'position:fixed;top:-1000px;left:-1000px;opacity:0';
+        document.body.appendChild(ta); ta.select();
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch(_){}
+        document.body.removeChild(ta);
+        return ok;
+      }
+    }
+    buttons.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const email = btn.dataset.email || 'wongcheukyiu328@gmail.com';
+        await copyText(email);
+        const r = btn.getBoundingClientRect();
+        toast.style.left = (r.left + r.width/2) + 'px';
+        toast.style.top = r.bottom + 'px';
+        toast.classList.add('is-on');
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => toast.classList.remove('is-on'), 1800);
+      });
+    });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Libra Savings · Ant Bank | Rachel Wong</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=Linotte:wght@700&family=Fredoka:wght@600;700&family=Poppins:wght@500;600;700&family=Stack+Sans+Headline:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --bg:#F2EFEA;              /* warm off-white, matches air.html */
+    --ink:#131313;
+    --ink-2:#2a2a2a;
+    --muted:#7a7671;
+    --line:rgba(19,19,19,.12);
+    --accent:#131313;
+    --ant-orange:#FF7A1A;
+    --ant-blue:#0080FF;
+    --f-sans:'Inter',system-ui,sans-serif;
+    --f-display:'Stack Sans Headline','Inter Tight','Inter',system-ui,sans-serif;
+    --f-mono:'Inter','Inter Tight',system-ui,sans-serif;
+    --pad:max(24px,5vw);
+    --ease:cubic-bezier(.2,.7,.2,1);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:var(--bg);color:var(--ink);
+    font-family:var(--f-sans);font-weight:400;font-size:14px;line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+::selection{background:#B1D3FA;color:#0e0d0c}
+
+  /* Cross-document view transition — smooth crossfade between pages */
+  @view-transition{navigation:auto}
+  ::view-transition-old(root),
+  ::view-transition-new(root){
+    animation-duration:.45s;
+    animation-timing-function:cubic-bezier(.2,.7,.2,1);
+  }
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+
+  .wrap{max-width:920px;margin:0 auto;padding:0 var(--pad);position:relative}
+
+  /* ===== Top nav (matches air.html / crypto-com.html) ===== */
+  .top-nav{
+    position:fixed;top:16px;left:50%;transform:translateX(-50%);
+    z-index:55;
+    display:flex;align-items:center;gap:8px;
+    padding:7px 8px 7px 18px;
+    background:rgba(255,255,255,.62);
+    backdrop-filter:blur(18px) saturate(1.6);
+    -webkit-backdrop-filter:blur(18px) saturate(1.6);
+    border:1px solid rgba(14,13,12,.08);
+    border-radius:999px;
+    box-shadow:0 6px 20px rgba(14,13,12,.08), 0 1px 0 rgba(255,255,255,.5) inset;
+    max-width:calc(100vw - 24px);
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;
+  }
+  .nav-logo{
+    font-family:'Fredoka','Linotte','Inter Tight',system-ui,sans-serif;
+    font-weight:700;font-size:16px;letter-spacing:-.01em;color:var(--ink);
+    text-decoration:none;white-space:nowrap;
+  }
+  .nav-items{display:flex;gap:6px;align-items:center;font-size:13px}
+  .nav-items a{
+    color:var(--ink);font-weight:500;
+    padding:7px 12px;border-radius:999px;
+    transition:background .2s var(--ease);white-space:nowrap;
+  }
+  .nav-items a:hover{background:rgba(14,13,12,.06)}
+  .nav-cta{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:7px 14px !important;background:var(--ink);color:#fff !important;
+    font-weight:600;border-radius:999px;
+    transition:transform .2s var(--ease), background .2s var(--ease);
+  }
+  .nav-cta:hover{background:#2a2a2a !important;transform:translateY(-1px)}
+  button.nav-cta{
+    appearance:none;border:none;cursor:pointer;
+    font:inherit;font-size:13px;font-weight:600;font-family:inherit;
+    line-height:1.2;letter-spacing:inherit;
+  }
+  .nav-items a.nav-ext{display:inline-flex;align-items:center;gap:5px}
+  .nav-items a.nav-ext svg{width:11px;height:11px;opacity:.55;transition:transform .2s var(--ease),opacity .2s var(--ease)}
+  .nav-items a.nav-ext:hover svg{transform:translate(1px,-1px);opacity:1}
+  .nav-menu-toggle{
+    display:none;align-items:center;justify-content:center;
+    width:38px;height:38px;
+    appearance:none;border:none;background:transparent;cursor:pointer;
+    padding:0;border-radius:50%;
+    color:var(--ink);
+    transition:background .2s var(--ease);
+  }
+  .nav-menu-toggle:hover{background:rgba(14,13,12,.06)}
+  .nav-menu-toggle .burger{
+    position:relative;width:18px;height:14px;
+    display:flex;flex-direction:column;justify-content:space-between;
+  }
+  .nav-menu-toggle .burger span{
+    display:block;width:100%;height:1.8px;
+    background:currentColor;border-radius:1px;
+    transition:transform .25s var(--ease), opacity .25s var(--ease);
+  }
+  .nav-menu-toggle[aria-expanded="true"] .burger span:nth-child(1){
+    transform:translateY(6px) rotate(45deg);
+  }
+  .nav-menu-toggle[aria-expanded="true"] .burger span:nth-child(2){
+    opacity:0;
+  }
+  .nav-menu-toggle[aria-expanded="true"] .burger span:nth-child(3){
+    transform:translateY(-6px) rotate(-45deg);
+  }
+  @media (max-width:720px){
+    /* Mobile nav: Rachel Wong centered, menu icon on the right */
+    .top-nav{
+      padding:6px 24px;gap:48px;
+      display:flex;align-items:center;
+    }
+    .nav-logo{
+      display:inline-flex;align-items:center;
+      height:38px;line-height:1;
+    }
+    .nav-menu-toggle{
+      display:inline-flex;
+      margin:0;
+    }
+    .top-nav .nav-items{
+      position:absolute;top:calc(100% + 8px);left:50%;
+      flex-direction:column;align-items:stretch;gap:2px;
+      background:rgba(255,255,255,.94);
+      backdrop-filter:blur(14px) saturate(1.5);-webkit-backdrop-filter:blur(14px) saturate(1.5);
+      border:1px solid rgba(14,13,12,.08);border-radius:14px;
+      box-shadow:0 12px 32px rgba(14,13,12,.12);
+      padding:6px;min-width:180px;
+      opacity:0;visibility:hidden;pointer-events:none;
+      transform:translateX(-50%) translateY(-4px);
+      transition:opacity .2s var(--ease), transform .2s var(--ease), visibility 0s linear .2s;
+    }
+    .top-nav .nav-items.is-open{
+      opacity:1;visibility:visible;pointer-events:auto;
+      transform:translateX(-50%) translateY(0);
+      transition:opacity .2s var(--ease), transform .2s var(--ease), visibility 0s;
+    }
+    .top-nav .nav-items a,
+    .top-nav .nav-items button.nav-cta{
+      display:flex;align-items:center;justify-content:space-between;gap:10px;
+      padding:10px 14px !important;border-radius:10px;width:100%;
+      font-size:14px;font-weight:500;text-align:left;white-space:nowrap;
+      background:transparent !important;color:var(--ink) !important;
+    }
+    .top-nav .nav-items button.nav-cta{
+      background:var(--ink) !important;color:#fff !important;font-weight:600;
+      margin-top:2px;justify-content:center;
+    }
+    .top-nav .nav-items a:hover{background:rgba(14,13,12,.06) !important}
+    .top-nav .nav-items button.nav-cta:hover{background:#2a2a2a !important;color:#fff !important}
+  }
+  .email-toast{
+    position:fixed;top:0;left:0;
+    pointer-events:none;z-index:9999;
+    padding:9px 16px;border-radius:999px;
+    background:#B1D3FA;color:#0e0d0c;
+    font-family:var(--f-display,'Stack Sans Headline','Inter Tight',system-ui,sans-serif);
+    font-size:13px;font-weight:500;
+    transform:translate(-50%, 8px) scale(.6);
+    opacity:0;
+    transition:opacity .2s ease, transform .35s cubic-bezier(.34,1.56,.64,1);
+    white-space:nowrap;
+    box-shadow:0 8px 22px rgba(14,13,12,.18);
+    display:inline-flex;align-items:center;gap:8px;
+    transform-origin:top center;
+  }
+  .email-toast.is-on{opacity:1;transform:translate(-50%, 8px) scale(1)}
+  .email-toast .dots{display:inline-flex;gap:3px}
+  .email-toast .dots span{
+    width:3px;height:3px;border-radius:50%;background:#0e0d0c;
+    animation:email-toast-dots 1.2s ease-in-out infinite both;
+  }
+  .email-toast .dots span:nth-child(2){animation-delay:.18s}
+  .email-toast .dots span:nth-child(3){animation-delay:.36s}
+  @keyframes email-toast-dots{
+    0%,80%,100%{opacity:.18;transform:translateY(0)}
+    40%{opacity:1;transform:translateY(-1.5px)}
+  }
+
+  /* ===== LHS scroll-spy nav ===== */
+  .page-nav{
+    position:fixed;left:32px;top:50%;transform:translateY(-50%);
+    z-index:40;
+    font-family:'Inter Tight','Inter',system-ui,sans-serif;font-size:12px;
+    max-width:200px;
+  }
+  .page-nav ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:6px}
+  .page-nav .grp > a{font-weight:600}
+  .page-nav .sub{
+    list-style:none;margin:6px 0 0 14px;padding:0;
+    display:flex;flex-direction:column;gap:4px;
+  }
+  .page-nav a{
+    display:inline-flex;align-items:center;
+    padding:4px 0;
+    color:var(--muted);text-decoration:none;line-height:1.3;
+    transition:color .25s var(--ease);
+  }
+  .page-nav a:hover{color:var(--ink)}
+  .page-nav a.is-active{color:var(--ink);font-weight:600}
+  .page-nav .sub a{font-size:11.5px;font-weight:400}
+  .page-nav .sub a.is-active{font-weight:600}
+  @media (max-width:1180px){.page-nav{display:none}}
+
+  /* ===== Hero ===== */
+  .p-hero{padding:120px 0 32px}
+  .p-hero .tagline{
+    font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);
+    margin:0 0 24px;
+  }
+  .p-hero h1{
+    font-family:var(--f-display);font-weight:500;
+    font-size:clamp(34px,6vw,48px);line-height:1.05;letter-spacing:-.025em;
+    margin:0 0 28px;text-wrap:balance;
+  }
+  .p-hero .lede{
+    font-size:14px;line-height:1.6;color:var(--ink-2);
+    max-width:60ch;margin:0;
+  }
+  .meta-strip{
+    display:grid;grid-template-columns:1fr 1fr 2fr;gap:40px;
+    padding:40px 0 20px;margin-top:56px;border-top:1px solid var(--line);
+  }
+  @media (max-width:800px){.meta-strip{grid-template-columns:1fr;gap:24px}}
+  .meta-strip .m-lbl{font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin-bottom:8px}
+  .meta-strip .m-val{font-size:15px;color:var(--ink);line-height:1.4}
+
+  /* ===== Sections ===== */
+  section{padding:48px 0}
+  .sec-label{
+    font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);
+    margin:0 0 14px;
+  }
+  .sec{
+    font-family:var(--f-display);font-weight:500;
+    font-size:clamp(20px,2.8vw,22px);line-height:1.1;letter-spacing:-.022em;
+    margin:0 0 20px;text-wrap:balance;
+  }
+  .two-col{
+    display:grid;grid-template-columns:1fr 1fr;gap:48px;
+    margin-top:24px;
+  }
+  @media (max-width:800px){.two-col{grid-template-columns:1fr;gap:24px}}
+  .two-col .col p{font-size:14px;line-height:1.65;color:var(--ink-2);margin:0 0 16px}
+  .two-col .col p:last-child{margin-bottom:0}
+  .two-col .col p b{font-weight:600;color:var(--ink)}
+  .two-col .col .m-lbl{
+    font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);
+    margin:0 0 10px;
+  }
+
+  /* Chapter (numbered long-form) — same pattern as air.html */
+  .chap{padding:24px 0}
+  .chap-head{margin-bottom:28px}
+  .chap h3{
+    font-family:'Poppins','Inter Tight',system-ui,sans-serif;
+    font-weight:500;font-size:22px;
+    line-height:1.2;letter-spacing:-.012em;
+    margin:0 0 6px;
+  }
+  .chap h3 .sub{
+    display:block;font-family:var(--f-sans);font-weight:400;
+    font-size:15px;letter-spacing:0;color:var(--muted);margin-top:6px;
+  }
+  .chap-body{max-width:none}
+  .chap-body p{font-size:14px;line-height:1.7;color:var(--ink-2);margin:0 0 16px}
+  .chap-body p:last-child{margin-bottom:0}
+  .chap-body p b{font-weight:600;color:var(--ink)}
+
+  /* Stage tiles for Process section */
+  .stages{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+    margin:32px 0 12px;
+  }
+  @media (max-width:900px){.stages{grid-template-columns:1fr;gap:18px}}
+  .stage-card{
+    padding:22px 22px 24px;border-radius:14px;background:#fff;
+    border:1px solid var(--line);
+  }
+  .stage-card .stg-no{
+    font-family:var(--f-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+    margin:0 0 8px;
+  }
+  .stage-card h4{
+    font-family:var(--f-display);font-weight:600;font-size:15px;letter-spacing:-.005em;
+    margin:0 0 10px;line-height:1.25;color:var(--ink);
+  }
+  .stage-card p{
+    font-size:13.5px;line-height:1.55;color:var(--ink-2);margin:0;
+  }
+
+  /* Figure (image) */
+  .figure{
+    margin:32px 0 12px;border-radius:14px;overflow:hidden;
+    background:#fff;border:1px solid var(--line);
+  }
+  .figure img{width:100%;height:auto;display:block}
+  .fig-caption{
+    font-family:'DM Sans',var(--f-sans);font-size:12px;line-height:1.55;color:var(--muted);
+    margin:14px 0 0;
+  }
+  .figure.flush{padding:0;background:transparent;border:none}
+
+  /* Hero shot — two phones from the Figma */
+  .hero-shot{
+    margin-top:32px;border-radius:14px;overflow:hidden;
+  }
+  .hero-shot img{width:100%;height:auto;display:block}
+
+  /* Pull quote */
+  .pull{padding:48px 0;text-align:left}
+  .pull q{
+    display:block;font-family:var(--f-display);font-weight:500;
+    font-size:clamp(22px,2.4vw,32px);line-height:1.3;letter-spacing:-.015em;
+    max-width:36ch;margin:0;color:var(--ink);quotes:"" "";
+  }
+  .pull q::before,.pull q::after{content:""}
+  .pull .attrib{font-family:var(--f-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:18px}
+
+  /* Next CTA */
+  .next-cta{padding:96px 0 80px;text-align:center;border-top:1px solid var(--line)}
+  .next-cta .eyebrow{font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin-bottom:16px}
+  .next-cta h2{
+    font-family:var(--f-display);font-weight:500;
+    font-size:clamp(32px,4vw,52px);line-height:1.1;letter-spacing:-.025em;
+    margin:0 auto 28px;max-width:24ch;text-wrap:balance;
+  }
+  .next-cta p{font-size:14px;color:var(--ink-2);line-height:1.6;max-width:54ch;margin:0 auto 32px}
+  .next-cta .cta{
+    display:inline-flex;align-items:center;gap:10px;
+    padding:14px 24px;border:1px solid var(--ink);border-radius:999px;
+    font-size:14px;font-weight:500;
+    transition:background .2s var(--ease),color .2s var(--ease);
+  }
+  .next-cta .cta:hover{background:var(--ink);color:var(--bg)}
+  .next-cta .cta .ar{width:14px;display:inline-block}
+  .foot{
+    padding:32px 0;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+    font-family:var(--f-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);
+  }
+
+  /* Reveal */
+  .reveal{opacity:0;transform:translateY(12px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.in{opacity:1;transform:none}
+  @media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+
+<nav class="top-nav" aria-label="Main navigation">
+  <a class="nav-logo" href="../index.html">Rachel Wong</a>
+  <button type="button" class="nav-menu-toggle" aria-expanded="false" aria-controls="navMenu" aria-label="Toggle menu">
+    <span class="burger" aria-hidden="true"><span></span><span></span><span></span></span>
+  </button>
+  <div class="nav-items" id="navMenu">
+    <a href="../work.html">Work</a>
+    <a class="nav-ext" href="https://www.linkedin.com/in/cheuk-yiu-rachel-wong/" target="_blank" rel="noopener noreferrer">LinkedIn<svg viewBox="0 0 14 14" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg></a>
+    <a class="nav-cta nav-resume" href="../resume.pdf" download="Rachel-Wong-Resume.pdf" aria-label="Download resume">Resume<svg viewBox="0 0 14 14" width="12" height="12" fill="none" aria-hidden="true" style="flex-shrink:0"><path d="M7 2v7.5M3.5 6.5L7 10l3.5-3.5M2.5 12h9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</nav>
+
+<!-- Email-copied feedback pill -->
+<div id="email-toast" class="email-toast" aria-hidden="true">
+  <span class="lbl">email copied</span>
+  <span class="dots"><span></span><span></span><span></span></span>
+</div>
+
+<aside class="page-nav" id="pageNav" aria-label="On-page navigation">
+  <ol>
+    <li><a href="#background" data-spy>Background</a></li>
+    <li class="grp">
+      <a href="#step-01" data-spy>Process</a>
+      <ol class="sub">
+        <li><a href="#step-01" data-spy>1 · Context</a></li>
+        <li><a href="#step-02" data-spy>2 · Branding</a></li>
+        <li><a href="#step-03" data-spy>3 · Account flows</a></li>
+        <li><a href="#step-04" data-spy>4 · Communication</a></li>
+      </ol>
+    </li>
+  </ol>
+</aside>
+
+<section class="p-hero">
+  <div class="wrap">
+    <p class="tagline reveal">Ant Bank @ Ant Financial · Sep 2019 — Dec 2020</p>
+    <h1 class="reveal">Libra Savings for Hong Kong users</h1>
+    <p class="lede reveal">
+      Ant Bank's first financial product. Libra Savings (存款寶) is a high yield
+      savings account with up to <b>2.5% annual interest rate</b>. The MVP version
+      has been launched in September 2020, partnering with AlipayHK (e-wallet by
+      Ant Group) to integrate banking services into consumer daily needs. Users
+      can open a savings account with the Ant Bank app, or with the mini app in
+      AlipayHK wallet.
+    </p>
+
+    <div class="meta-strip reveal">
+      <div><div class="m-lbl">Role</div><div class="m-val">Product designer</div></div>
+      <div><div class="m-lbl">Timeline</div><div class="m-val">Sep 2019 — Dec 2020</div></div>
+      <div><div class="m-lbl">Team</div><div class="m-val">Hangzhou design team, HK copywriters, legal &amp; compliance, engineering on both sides</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Background -->
+<section id="background">
+  <div class="wrap">
+    <p class="sec-label reveal">Background</p>
+    <h2 class="sec reveal">Ant Bank's first financial product, designed for Hong Kong</h2>
+    <div class="prose reveal" style="margin-top:24px">
+      <p style="font-size:14px;line-height:1.7;color:var(--ink-2);margin:0 0 16px">
+        I was the product designer at Ant Bank (HK) in 2019-2020. Every screen and
+        content that a user might see on Libra Savings was my responsibility. Not
+        only I needed to align design action items with the design team, but also
+        collaboration across our tech team, external copywriters as well as each
+        Hong Kong staff leads to a huge success of our first financial product.
+      </p>
+    </div>
+
+    <div class="hero-shot reveal" aria-label="Two iPhones showing the Libra Savings home screen and transfer-in screen">
+      <img src="../libra-slice-1.png" alt="Libra Savings hero: two tilted iPhone mockups showing the Hong Kong home screen with orange gradient, and the HKD 1,000 transfer-in screen." loading="lazy" />
+    </div>
+  </div>
+</section>
+
+<!-- Step 01 — Context -->
+<section id="step-01">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <h3>1. Localized user experience: from Macau to Hong Kong version
+          <span class="sub">Context</span>
+        </h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          Libra Saving was first launched in Macau in late 2018, with the MVP
+          version built by Hangzhou product design team. The Hong Kong version is
+          hence a perfect timing for anchoring both visual direction and user
+          journey that suits the preferences of Hong Kong users.
+        </p>
+        <p>
+          Feedback from Hong Kong colleagues is highly appreciated as they
+          represent a small sector of local users; so I tried to initiate regular
+          design updates (e.g. in the form of PDF file) as shown on the right,
+          then collect feedback face-to-face or via DingTalk.
+        </p>
+      </div>
+
+      <div class="figure reveal" aria-label="PDF design preview shared with Hong Kong colleagues + sticky-note feedback wall">
+        <img src="../libra-slice-2.png" alt="A4 PDF design preview spread shared with the Hong Kong team for feedback; below it, a colourful sticky-note wall capturing comments from Alex, Fiona, Nancy, Rosie, Kiba, Baofang, Simon and Lily on the early branding direction." loading="lazy" />
+      </div>
+      <p class="fig-caption">Fig. 01: PDF design preview circulated to HK colleagues, plus the sticky-note feedback wall used to gather face-to-face and DingTalk feedback.</p>
+    </article>
+  </div>
+</section>
+
+<!-- Step 02 — Branding -->
+<section id="step-02">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <h3>2. Ant Bank and Libra Savings branding
+          <span class="sub">Process · Exploring UI graphics</span>
+        </h3>
+      </header>
+
+      <div class="stages reveal">
+        <div class="stage-card">
+          <p class="stg-no">Stage 1 · Nov 2019</p>
+          <h4>Free exploration</h4>
+          <p>
+            I actually kickstarted exploring the branding visuals before the Libra
+            Savings project, with colorful human characters interacting with Ant
+            Bank and UI elements that echoes with "Ant Bank is for everybody"
+            (普惠金融).
+          </p>
+        </div>
+        <div class="stage-card">
+          <p class="stg-no">Stage 2 · Jan 2020</p>
+          <h4>Libra Savings hero graphics &amp; landing page design</h4>
+          <p>
+            Plants and daily objects are very relatable and universal to the
+            business goals of Libra Savings: an everyday financial product of
+            Hong Kong people. The plant illustrations also symbolize growth and
+            meanwhile conveys a homey vibe.
+          </p>
+        </div>
+        <div class="stage-card">
+          <p class="stg-no">Stage 3 · Mar 2020</p>
+          <h4>Review as a design system + as a team</h4>
+          <p>
+            Review Ant Bank account opening flow with sub-product user journey
+            as an end-to-end experience, Hong Kong and Hangzhou designers tried
+            to align the visual handlings to ensure scalability.
+          </p>
+        </div>
+      </div>
+
+      <div class="figure reveal" aria-label="Three stages of branding exploration: human characters, plant illustrations, design-system icons">
+        <img src="../libra-slice-3.png" alt="Three stages of illustration evolution: Stage 1 free exploration with cheerful human characters; Stage 2 hero graphics and landing-page illustrations using plants, piggy banks and everyday objects; Stage 3 design-system icons and mobile in-app flow illustrations." loading="lazy" />
+      </div>
+      <p class="fig-caption">Fig. 02: three stages of branding exploration, ending in a plant-and-daily-objects system reviewed jointly with the Hangzhou team.</p>
+    </article>
+  </div>
+</section>
+
+<!-- Step 03 — Account opening flows -->
+<section id="step-03">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <h3>3. User acquisition from the Alibaba ecosystem
+          <span class="sub">What's special about Ant Bank products · Account opening flows and user journey</span>
+        </h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          Besides creating a Libra Saving account with Ant Bank native app,
+          AlipayHK users can open an Ant Bank account with the mini-app in their
+          e-wallet. Ant Bank receives users' personal information from AlipayHK
+          for <b>quick identification and account opening</b>.
+        </p>
+        <p>
+          We had identified <b>3 use cases</b> and the steps are illustrated with
+          the user flow diagram below.
+        </p>
+      </div>
+
+      <div class="figure reveal" aria-label="User flow diagrams for AlipayHK mini-app entry point and Ant Bank app entry point">
+        <img src="../libra-slice-4.png" alt="Two user flow diagrams: Entry point 1 from AlipayHK mini-app (orange path) showing brand-new user, existing AlipayHK user with extra steps, and shared landing; Entry point 2 from Ant Bank app (blue path) with the equivalent registration flow." loading="lazy" />
+      </div>
+      <p class="fig-caption">Fig. 03: user flow diagrams for both entry points, mapping three use cases through a shared registration journey.</p>
+    </article>
+  </div>
+</section>
+
+<!-- Step 04 — Communication -->
+<section id="step-04">
+  <div class="wrap">
+    <article class="chap reveal">
+      <header class="chap-head">
+        <h3>4. Context is key
+          <span class="sub">Design challenge · Effective, friendly communication with local users</span>
+        </h3>
+      </header>
+      <div class="chap-body">
+        <p>
+          I was surprised to know the team didn't manage the Chinese existing
+          copy with CMS (Content Management System) before, and the
+          auto-translated English copy was simply terrible. Hong Kong designers
+          then collaborated with external UX copywriter to review every single
+          word for a better and localized user experience.
+        </p>
+        <p>
+          To communicate with developers about the foreseeable frontend updates,
+          I also worked on the English versions for all the screens with
+          specifications and side notes. Some of the handlings for Chinese
+          environment needed to be adjusted or aligned to <b>save dev cost</b>.
+        </p>
+      </div>
+
+      <div class="figure reveal" aria-label="Bilingual screen specifications and type scale demo">
+        <img src="../libra-slice-5.png" alt="Chinese and English layout specifications side by side for the same screen, plus the bilingual type scale demo aligning Display H1, H2, H3, CTA text, body text and captions across PingFang HK and SF Pro Text." loading="lazy" />
+      </div>
+      <p class="fig-caption">Fig. 04: bilingual layout specs and the type scale demo aligning hierarchy across Chinese and English.</p>
+
+      <div class="figure reveal" aria-label="Excel review table for back-and-forth alignment with copywriters and legal">
+        <img src="../libra-slice-6.png" alt="Excel review table tracking Chinese error messages, English translations, triggering scenarios, and review notes from designers, copywriters, and legal teams." loading="lazy" />
+      </div>
+      <p class="fig-caption">Fig. 05: Excel review table used for back-and-forth alignment with copywriters, legal and compliance.</p>
+    </article>
+  </div>
+</section>
+
+<!-- Pull quote / closing -->
+<section class="pull">
+  <div class="wrap">
+    <q class="reveal">Designing for Hong Kong users meant rebuilding the conversation, every word, every screen, in two languages.</q>
+    <p class="attrib reveal">Libra Savings · Ant Bank · 2019 — 2020</p>
+  </div>
+</section>
+
+<!-- Next CTA -->
+<section class="next-cta">
+  <div class="wrap">
+    <div class="eyebrow reveal">Next</div>
+    <h2 class="reveal">An agentic workflow at AIR</h2>
+    <p class="reveal">Scaling AIR's product design with an agentic workflow, turning the design repo into a practical space for testing and shipping with AI in the loop.</p>
+    <a class="cta reveal" href="air.html">
+      Read AIR
+      <svg class="ar" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a></div>
+</section>
+
+<script>
+  /* Reveal on scroll */
+  const io = new IntersectionObserver((es)=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:.1});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  /* LHS scroll-spy */
+  (function(){
+    const links = [...document.querySelectorAll('.page-nav a[data-spy]')];
+    if(!links.length) return;
+    const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+    const targets = [...map.keys()].map(id => document.getElementById(id)).filter(Boolean);
+    const setActive = (id)=> links.forEach(a => a.classList.toggle('is-active', a.getAttribute('href') === '#' + id));
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e => { if(e.isIntersecting) setActive(e.target.id); });
+    }, {rootMargin:'-40% 0px -55% 0px', threshold:0});
+    targets.forEach(t => obs.observe(t));
+  })();
+</script>
+
+<!-- Nav: mobile menu toggle + email copy-to-clipboard with toast feedback -->
+<script>
+  (function(){
+    const toggle = document.querySelector('.nav-menu-toggle');
+    const menu = document.getElementById('navMenu');
+    if(toggle && menu){
+      const setOpen = (open) => {
+        toggle.setAttribute('aria-expanded', String(open));
+        menu.classList.toggle('is-open', open);
+      };
+      toggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        setOpen(toggle.getAttribute('aria-expanded') !== 'true');
+      });
+      document.addEventListener('click', (e) => {
+        if(!toggle.contains(e.target) && !menu.contains(e.target)) setOpen(false);
+      });
+      menu.addEventListener('click', (e) => {
+        if(e.target.closest('a')) setOpen(false);
+      });
+      window.addEventListener('resize', () => { if(window.innerWidth > 720) setOpen(false); });
+    }
+
+    const toast = document.getElementById('email-toast');
+    const buttons = document.querySelectorAll('.nav-email');
+    if(!toast || !buttons.length) return;
+    let hideTimer = null;
+    async function copyText(text){
+      try { await navigator.clipboard.writeText(text); return true; }
+      catch(e){
+        const ta = document.createElement('textarea');
+        ta.value = text; ta.setAttribute('readonly','');
+        ta.style.cssText = 'position:fixed;top:-1000px;left:-1000px;opacity:0';
+        document.body.appendChild(ta); ta.select();
+        let ok = false;
+        try { ok = document.execCommand('copy'); } catch(_){}
+        document.body.removeChild(ta);
+        return ok;
+      }
+    }
+    buttons.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const email = btn.dataset.email || 'wongcheukyiu328@gmail.com';
+        await copyText(email);
+        const r = btn.getBoundingClientRect();
+        toast.style.left = (r.left + r.width/2) + 'px';
+        toast.style.top = r.bottom + 'px';
+        toast.classList.add('is-on');
+        clearTimeout(hideTimer);
+        hideTimer = setTimeout(() => toast.classList.remove('is-on'), 1800);
+      });
+    });
+  })();
+</script>
+</body>
+</html>
