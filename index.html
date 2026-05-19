@@ -861,10 +861,15 @@
   }
   /* On narrow screens, stack flat — sticky long scroll feels heavy on mobile */
   @media (max-width:720px){
-    .hero{min-height:0;align-items:flex-start;padding:88px 0 40px}
-    .hero.hero-scroll{height:auto;padding:88px 0 40px}
-    .hero.hero-scroll .hero-stage{position:static;height:auto;display:block}
-    .bio-scroll{font-size:clamp(24px,6.5vw,36px)}
+    .hero{min-height:0;align-items:flex-start;padding:96px 0 32px}
+    .hero.hero-scroll{height:auto;padding:96px 0 32px}
+    .hero.hero-scroll .hero-stage{position:static;height:auto;display:block;padding:0}
+    .hero.hero-scroll .hero-centered{
+      max-width:none;margin:0;padding:0;
+      align-items:flex-start;text-align:left;
+    }
+    .hero-eyes{margin:0 0 16px;justify-content:flex-start}
+    .bio-scroll{font-size:clamp(24px,6.5vw,36px);margin-top:0}
     .bio-scroll .hl{color:var(--ink)} /* no scroll progress on mobile */
   }
 
