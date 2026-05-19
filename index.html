@@ -861,7 +861,8 @@
   }
   /* On narrow screens, stack flat — sticky long scroll feels heavy on mobile */
   @media (max-width:720px){
-    .hero.hero-scroll{height:auto;padding:120px 0 60px}
+    .hero{min-height:0;align-items:flex-start;padding:88px 0 40px}
+    .hero.hero-scroll{height:auto;padding:88px 0 40px}
     .hero.hero-scroll .hero-stage{position:static;height:auto;display:block}
     .bio-scroll{font-size:clamp(24px,6.5vw,36px)}
     .bio-scroll .hl{color:var(--ink)} /* no scroll progress on mobile */
