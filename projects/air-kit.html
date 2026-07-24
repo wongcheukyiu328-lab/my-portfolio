@@ -521,6 +521,64 @@
     border-top:1px solid var(--line);background:#fff;
   }
   .design-preview:hover .design-preview__cta{color:#0577DA}
+
+  /* ===== Interactive live demo (clickable iframe) ===== */
+  .live-demo{
+    margin:36px 0 0;width:100%;
+    border-radius:14px;overflow:hidden;
+    background:var(--surface);border:1px solid var(--line);
+    box-shadow:0 10px 30px rgba(14,13,12,.06);
+  }
+  .live-demo__chrome{
+    display:flex;align-items:center;gap:8px;
+    padding:10px 14px;background:#ECE9E2;border-bottom:1px solid var(--line);
+    font-family:var(--f-mono);font-size:11.5px;color:#7a7671;letter-spacing:.01em;
+  }
+  .live-demo__chrome .dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .live-demo__chrome .dot:nth-child(1){background:#ff5b56}
+  .live-demo__chrome .dot:nth-child(2){background:#ffbd2e}
+  .live-demo__chrome .dot:nth-child(3){background:#27c93f}
+  .live-demo__url{margin-left:8px;flex:1;color:#2a2a2a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .live-demo__wip{
+    flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
+    padding:3px 9px;border-radius:999px;
+    background:#FEF3E2;border:1px solid #F4D9A8;
+    font-family:var(--f-sans);font-weight:600;font-size:10.5px;letter-spacing:.02em;
+    color:#9A6B12;text-transform:uppercase;
+  }
+  .live-demo__wip::before{content:"";width:6px;height:6px;border-radius:50%;background:#E8A33D}
+  .live-demo__open{
+    flex:0 0 auto;display:inline-flex;align-items:center;gap:5px;
+    font-family:var(--f-sans);font-weight:500;font-size:11.5px;color:#0577DA;text-decoration:none;
+  }
+  .live-demo__open svg{width:11px;height:11px}
+  .live-demo__frame{
+    position:relative;width:100%;height:640px;background:#F7F4EE;overflow:hidden;
+  }
+  /* Desktop-layout iframe rendered wide, then scaled down to fit the frame */
+  .live-demo__scaler{
+    position:absolute;top:0;left:0;z-index:2;
+    transform-origin:0 0;
+  }
+  .live-demo__scaler iframe{
+    display:block;border:0;background:#fff;
+    width:1440px;height:900px;
+  }
+  .live-demo__fallback{
+    position:absolute;inset:0;z-index:1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+    text-align:center;text-decoration:none;padding:24px;
+    background:linear-gradient(180deg,#EEF4F7 0%,#F7F4EE 100%);
+  }
+  .live-demo__fallback-title{font-family:var(--f-display);font-weight:600;font-size:20px;color:var(--ink)}
+  .live-demo__fallback-sub{font-family:var(--f-sans);font-size:13px;color:var(--muted)}
+  .live-demo__note{
+    padding:14px 16px 16px;border-top:1px solid var(--line);background:#fff;
+  }
+  .live-demo__note p{margin:0;font-family:var(--f-sans);font-size:13.5px;line-height:1.55;color:var(--muted)}
+  .live-demo__note strong{color:var(--ink);font-weight:600}
+  @media (max-width:640px){ .live-demo__frame{height:560px} .live-demo__url{display:none} }
+
   /* ===== Implementation examples ===== */
   .example .design-preview{margin:0 0 28px}
   .example{
@@ -683,6 +741,13 @@
       not need to rebuild identity infrastructure from scratch.
     </p>
 
+    <figure class="reveal" style="margin:32px 0 0;">
+      <img src="../air-kit-intro.png"
+           alt="AIR Kit is for business — 'Your everything kit': verified identity checks for onboarding, payments and loyalty programs, with modular features for user onboarding, whitelabel UI, verify credentials and a powerful embedded wallet. Alongside, two phone mockups: a Mocaverse age-verification screen and an OKP claim confirmation by OK Cashbag."
+           loading="lazy"
+           style="display:block;width:100%;height:auto;border-radius:32px;">
+    </figure>
+
     <div class="meta-strip reveal">
       <div><div class="m-lbl">Role</div><div class="m-val">Sole product designer</div></div>
       <div><div class="m-lbl">Timeline</div><div class="m-val">Aug 2025 — Now</div></div>
@@ -796,6 +861,31 @@
         <div class="m-tab-image" data-pane="transactions" role="tabpanel" hidden>
           <img src="../airkit-tab-transactions.png" alt="'Confirm your airdrop claim' modal by mocaverse.xyz: receiving +500 MOCA (≈ $2,000), zero network fee, with a Confirm button. Powered by AIR." loading="lazy">
         </div>
+      </div>
+    </div>
+
+    <!-- Interactive partner demo -->
+    <div class="live-demo reveal">
+      <div class="live-demo__chrome">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="live-demo__url">air-kit-demo.vercel.app</span>
+        <span class="live-demo__wip">Work in progress</span>
+        <a class="live-demo__open" href="https://air-kit-demo.vercel.app/#/get-started" target="_blank" rel="noopener noreferrer">
+          Open
+          <svg viewBox="0 0 14 14" fill="none"><path d="M3 11L11 3M11 3H5M11 3v6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <div class="live-demo__frame" data-demo-w="1440" data-demo-h="900">
+        <a class="live-demo__fallback" href="https://air-kit-demo.vercel.app/#/get-started" target="_blank" rel="noopener noreferrer" aria-hidden="true" tabindex="-1">
+          <span class="live-demo__fallback-title">AIR Kit demo</span>
+          <span class="live-demo__fallback-sub">Open the interactive prototype in a new tab →</span>
+        </a>
+        <div class="live-demo__scaler">
+          <iframe src="https://air-kit-demo.vercel.app/#/get-started" title="AIR Kit interactive demo — try whitelabel onboarding, reusable credentials, and embedded transactions" loading="lazy" referrerpolicy="no-referrer" allow="clipboard-write"></iframe>
+        </div>
+      </div>
+      <div class="live-demo__note">
+        <p><strong>Try it live.</strong> A demo site built for partners and audiences to explore AIR Kit's offerings — whitelabel onboarding, reusable credentials, and embedded transactions — and the concepts behind them. Click through the flows above. It's an early work in progress, and a configuration playground for partners to theme and set up their own modules is coming next.</p>
       </div>
     </div>
   </div>
@@ -1070,6 +1160,28 @@
       entries.forEach(e => { if(e.isIntersecting) setActive(e.target.id); });
     }, {rootMargin:'-40% 0px -55% 0px', threshold:0});
     targets.forEach(t => obs.observe(t));
+  })();
+</script>
+
+<!-- Scale desktop-layout demo iframes down to fit their frame -->
+<script>
+  (function(){
+    const frames = document.querySelectorAll('.live-demo__frame[data-demo-w]');
+    if(!frames.length) return;
+    const fit = () => {
+      frames.forEach(f => {
+        const vw = parseFloat(f.dataset.demoW) || 1440;
+        const vh = parseFloat(f.dataset.demoH) || 900;
+        const scaler = f.querySelector('.live-demo__scaler');
+        if(!scaler) return;
+        const scale = f.clientWidth / vw;
+        scaler.style.transform = 'scale(' + scale + ')';
+        f.style.height = (vh * scale) + 'px';
+      });
+    };
+    fit();
+    window.addEventListener('resize', fit);
+    window.addEventListener('load', fit);
   })();
 </script>
 
