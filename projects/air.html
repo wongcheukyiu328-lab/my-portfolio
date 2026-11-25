@@ -6,7 +6,7 @@
 <title>AIR | Rachel Wong</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Linotte:wght@700&family=Fredoka:wght@600;700&family=Poppins:wght@500;600;700&family=Stack+Sans+Headline:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=Fira+Code:wght@400;500;600&family=Inter:wght@400..700&family=Inter+Tight:wght@500;600;700&family=JetBrains+Mono:wght@400;500&family=Linotte:wght@700&family=Fredoka:wght@600;700&family=Poppins:wght@500;600;700&family=Stack+Sans+Headline:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
   :root{
@@ -26,7 +26,7 @@
   html,body{margin:0;padding:0}
   body{
     background:var(--bg);color:var(--ink);
-    font-family:var(--f-sans);font-weight:400;font-size:14px;line-height:1.55;
+    font-family:var(--f-sans);font-weight:460;font-size:14px;line-height:1.4286;letter-spacing:-0.09px;
     -webkit-font-smoothing:antialiased;
   }
 ::selection{background:#B1D3FA;color:#0e0d0c}
@@ -203,15 +203,19 @@
     font-size:clamp(34px,6vw,48px);line-height:1.05;letter-spacing:-.025em;
     margin:0 0 28px;text-wrap:balance;
   }
-  .p-hero .lede{
-    font-size:14px;line-height:1.6;color:var(--ink-2);
-    margin:0;
+  .p-hero .p-intro{
+    max-width:640px;margin-top:40px;
   }
+  .p-hero .p-intro p{
+    font-size:16px;line-height:22px;color:var(--ink-2);
+    margin:0 0 12px;
+  }
+  .p-hero .p-intro p:last-child{margin-bottom:0}
 
   /* Meta strip */
   .meta-strip{
     display:grid;grid-template-columns:1fr 1fr 2fr;gap:40px;
-    padding:40px 0 20px;margin-top:56px;border-top:1px solid var(--line);
+    padding:0 0 20px;margin-top:56px;
   }
   @media (max-width:800px){.meta-strip{grid-template-columns:1fr;gap:24px}}
   .meta-strip .m-lbl{font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin-bottom:8px}
@@ -279,7 +283,7 @@
   /* Prose column */
   .prose{max-width:64ch}
   .prose p{
-    font-size:14px;line-height:1.7;color:var(--ink-2);
+    font-size:14px;line-height:20px;color:var(--ink-2);
     margin:0 0 20px;
   }
   .prose p:last-child{margin-bottom:0}
@@ -290,7 +294,7 @@
     display:grid;grid-template-columns:1fr 1fr;gap:56px;
   }
   @media (max-width:800px){.two-col{grid-template-columns:1fr;gap:32px}}
-  .two-col .col p{font-size:14px;line-height:1.65;color:var(--ink-2);margin:0 0 16px}
+  .two-col .col p{font-size:14px;line-height:20px;color:var(--ink-2);margin:0 0 12px}
   .two-col .col p:last-child{margin-bottom:0}
   .two-col .col p b{font-weight:600;color:var(--ink)}
 
@@ -306,7 +310,7 @@
     margin:0;
   }
   .chap-body{max-width:none}
-  .chap-body p{font-size:14px;line-height:1.7;color:var(--ink-2);margin:0 0 16px}
+  .chap-body p{font-size:14px;line-height:20px;color:var(--ink-2);margin:0 0 12px}
   .chap-body p:last-child{margin-bottom:0}
   .chap-body p b{font-weight:600;color:var(--ink)}
 
@@ -346,17 +350,17 @@
     font-size:12px;line-height:1.5;color:var(--muted);
     letter-spacing:0;text-transform:none;padding-top:4px;
   }
-  .audience-list .row .body{font-size:14px;line-height:1.7;color:var(--ink-2);margin:0}
+  .audience-list .row .body{font-size:14px;line-height:20px;color:var(--ink-2);margin:0}
   .audience-list .row .body p{margin:0 0 12px}
   .audience-list .row .body p:last-child{margin-bottom:0}
   .audience-list .row .body b{font-weight:600;color:var(--ink)}
   .audience-list .row .body ol.findings{list-style:none;margin:0;padding:0;counter-reset:finding;display:flex;flex-direction:column;gap:14px}
-  .audience-list .row .body ol.findings li{font-size:14px;line-height:1.65;color:var(--ink-2);padding-left:34px;position:relative;counter-increment:finding}
+  .audience-list .row .body ol.findings li{font-size:14px;line-height:20px;color:var(--ink-2);padding-left:34px;position:relative;counter-increment:finding}
   .audience-list .row .body ol.findings li::before{
     content:counter(finding) ".";
     position:absolute;left:0;top:0;
     font-family:'DM Sans',var(--f-sans);
-    font-size:14px;line-height:1.65;color:var(--muted);
+    font-size:14px;line-height:20px;color:var(--muted);
   }
   .audience-list .row .body ol.findings li b{font-weight:600;color:var(--ink)}
   .audience-list .row .body a{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px}
@@ -380,7 +384,7 @@
     font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;
     text-transform:none;color:var(--muted);padding-top:4px;
   }
-  .reflection .body p{font-size:14px;line-height:1.7;color:var(--ink-2);margin:0 0 16px}
+  .reflection .body p{font-size:14px;line-height:20px;color:var(--ink-2);margin:0 0 12px}
   .reflection .body p:last-child{margin-bottom:0}
   .reflection .body p b{font-weight:600;color:var(--ink)}
   @media (max-width:800px){
@@ -441,7 +445,7 @@
   .video-pair .vcell .figure{margin:0}
   .video-pair .vcell .fig-sub{
     font-family:'DM Sans',var(--f-sans);
-    font-size:14px;line-height:1.6;letter-spacing:0;color:var(--ink-2);
+    font-size:14px;line-height:20px;letter-spacing:-0.09px;color:var(--ink-2);
     margin:10px 0 0;max-width:720px;
   }
   .video-pair .vcell .fig-sub b{color:var(--ink);font-weight:600;margin-right:4px}
@@ -456,7 +460,7 @@
   /* Figures sitting inside audience-list body need neutralised margin */
   .audience-list .row .body .figure{margin:32px 0 0}
   .audience-list .row .body .fig-caption{margin:14px 0 0}
-  .fig-caption{font-family:'DM Sans',var(--f-sans);font-size:12px;line-height:1.55;color:var(--muted);margin:14px 0 0}
+  .fig-caption{font-family:'DM Sans',var(--f-sans);font-size:12px;line-height:1.4;color:var(--muted);margin:14px 0 0}
   .fig-actions{display:flex;gap:10px;flex-wrap:wrap;margin:20px 0 0}
   .fig-btn{
     display:inline-flex;align-items:center;gap:8px;
@@ -766,7 +770,7 @@
 <!-- LHS scroll-spy section nav -->
 <aside class="page-nav" id="pageNav" aria-label="On-page navigation">
   <ol>
-    <li><a href="#background" data-spy>Background</a></li>
+    <li><a href="#background" data-spy>Impact</a></li>
     <li class="grp">
       <a href="#step-01" data-spy>Design process</a>
       <ol class="sub">
@@ -785,13 +789,7 @@
   <div class="wrap">
     <img class="p-hero-logo reveal" src="../assets/air-icon.svg" alt="AIR" width="56" height="56">
     <p class="tagline reveal">AIR @ Moca Network · Feb 2026 — Now</p>
-    <h1 class="reveal">Design system as shared infrastructure across design, code and agentic workflows</h1>
-    <p class="lede reveal">
-      I lead and expand AIR's design system as shared product infrastructure
-      across design, code and agentic workflows. Embedded with internal POD
-      teams, I support rapid prototyping and shipping while keeping product
-      quality consistent as speed increases.
-    </p>
+    <h1 class="reveal">AIR Design System as shared infrastructure for agentic workflows</h1>
 
     <div class="meta-strip reveal">
       <div><div class="m-lbl">Role</div><div class="m-val">Product designer</div></div>
@@ -799,37 +797,29 @@
       <div><div class="m-lbl">Team</div><div class="m-val">3 product managers, 9 engineers, members from business + marketing team</div></div>
     </div>
 
+    <div class="p-intro reveal">
+      <p>
+        In Feb 2026 our team switched to a pod model. Since then, the
+        build-to-ship cycle has shrunk to days, or a week at most.
+      </p>
+      <p>
+        I lead and expand the AIR Design System as shared product
+        infrastructure across these new workflows. It is my attempt to document
+        design decisions in a format both humans and agents can read, so others
+        can make the same calls and move faster.
+      </p>
+      <p>
+        A lot of it was made by hand, to make sure I stay thoughtful about the
+        small decisions.
+      </p>
+    </div>
+
   </div>
 </section>
 
-<!-- Overview: problem + bet -->
+<!-- Impact -->
 <section id="background">
   <div class="wrap">
-    <p class="sec-label reveal">Overview</p>
-    <h2 class="sec reveal">A system built as infrastructure, not documentation</h2>
-    <div class="two-col reveal">
-      <div class="col">
-        <p class="m-lbl" style="font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin:0 0 10px">The problem</p>
-        <p>
-          AIR now spans multiple product verticals and is touched by product,
-          engineering, marketing and business teams. Without a shared source of
-          truth, experience, design and implementation started to drift. The
-          challenge is to <b>stay consistent, align around shared product
-          principles, improve product quality and increase productivity</b> at
-          the same time.
-        </p>
-      </div>
-      <div class="col">
-        <p class="m-lbl" style="font-family:var(--f-display);font-weight:400;font-size:12px;letter-spacing:0;text-transform:none;color:var(--muted);margin:0 0 10px">The bet</p>
-        <p>
-          Build the system as <b>infrastructure</b>, not documentation. Codify
-          repeated decisions so teams can focus on product judgement, then pair
-          the system with agentic tools for critique, token sync, changelogs and
-          QA diffs. The goal is simple: make the right way to ship easier for
-          both people and agents.
-        </p>
-      </div>
-    </div>
     <div class="impact-cards reveal" aria-label="Project impact">
       <div class="impact-card impact-card--a">
         <p class="k">4+</p>
