@@ -396,6 +396,8 @@
     margin:40px 0 12px;border-radius:12px;overflow:hidden;
     background:#0e0d0c;aspect-ratio:16/9;position:relative;
   }
+  .figure.token-flow{aspect-ratio:auto;background:none;border-radius:0;margin:40px 0 12px}
+  .figure.token-flow img{display:block;width:100%;height:auto}
   .figure .lp-bar{position:absolute;top:0;left:0;right:0;height:32px;background:#1a1a1a;display:flex;align-items:center;gap:6px;padding:0 14px;z-index:2}
   .figure .lp-bar .b{width:10px;height:10px;border-radius:50%;background:#444}
   .figure .lp-bar .b:nth-child(1){background:#ff5b56}
@@ -867,55 +869,10 @@
         </p>
       </div>
 
-      <div class="figure editor reveal" aria-label="AIR token file being documented">
-        <div class="tab">
-          <span class="tri"></span>
-          <span class="fn">tokens.md</span>
-          <span class="who">AIR / foundations</span>
-          <span class="pip"></span>
-        </div>
-        <div class="code scroll">
-          <div class="scroll-track">
-          <div class="row"><span class="ln">1</span><span class="h"># AIR · Colour tokens</span></div>
-          <div class="row"><span class="ln">2</span><span class="c">&nbsp;</span></div>
-          <div class="row"><span class="ln">3</span><span class="g">&gt; Source of truth for every surface, icon, button, and link across the system.</span></div>
-          <div class="row"><span class="ln">4</span><span class="c">&nbsp;</span></div>
-          <div class="row"><span class="ln">5</span><span class="h">## text</span></div>
-          <div class="row"><span class="ln">6</span><span class="k">text-primary</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#002536"></span><span class="n">#002536</span></div>
-          <div class="row"><span class="ln">7</span><span class="k">text-secondary</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#798b95"></span><span class="n">#798b95</span></div>
-          <div class="row"><span class="ln">8</span><span class="k">text-disabled</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#a8b4bb"></span><span class="n">#a8b4bb</span></div>
-          <div class="row"><span class="ln">9</span><span class="k">text-on-colour</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#ffffff"></span><span class="n">#ffffff</span></div>
-          <div class="row"><span class="ln">10</span><span class="k">text-placeholder</span><span class="n">&nbsp;&nbsp;</span><span class="sw" style="background:#B8CAD4"></span><span class="n">#B8CAD4</span></div>
-          <div class="row"><span class="ln">11</span><span class="c">&nbsp;</span></div>
-          <div class="row"><span class="ln">12</span><span class="h">## icon</span></div>
-          <div class="row"><span class="ln">13</span><span class="k">icon-primary</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#002536"></span><span class="n">#002536</span></div>
-          <div class="row"><span class="ln">14</span><span class="k">icon-secondary</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#798b95"></span><span class="n">#798b95</span></div>
-          <div class="row"><span class="ln">15</span><span class="k">icon-disabled</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#a8b4bb"></span><span class="n">#a8b4bb</span></div>
-          <div class="row"><span class="ln">16</span><span class="k">icon-on-colour</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#ffffff"></span><span class="n">#ffffff</span></div>
-          <div class="row"><span class="ln">17</span><span class="c">&nbsp;</span></div>
-          <div class="row"><span class="ln">18</span><span class="h">## button</span></div>
-          <div class="row"><span class="ln">19</span><span class="k">button-primary</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#000000"></span><span class="n">#000000</span></div>
-          <div class="row"><span class="ln">20</span><span class="k">button-primary-hover</span><span class="n">&nbsp;&nbsp;</span><span class="sw" style="background:#464646"></span><span class="n">#464646</span></div>
-          <div class="row"><span class="ln">21</span><span class="k">button-secondary</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#41A7D7"></span><span class="n">#41A7D7</span></div>
-          <div class="row"><span class="ln">22</span><span class="k">button-secondary-hover</span><span class="n">&nbsp;&nbsp;</span><span class="sw" style="background:#9BD5EA"></span><span class="n">#9BD5EA</span></div>
-          <div class="row"><span class="ln">23</span><span class="k">button-disabled</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#d6e0e5"></span><span class="n">#d6e0e5</span></div>
-          <div class="row"><span class="ln">24</span><span class="c">&nbsp;</span></div>
-          <div class="row"><span class="ln">25</span><span class="h">## container</span></div>
-          <div class="row"><span class="ln">26</span><span class="k">container-primary</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#f7f7f7"></span><span class="n">#f7f7f7</span></div>
-          <div class="row"><span class="ln">27</span><span class="k">container-secondary</span><span class="n">&nbsp;</span><span class="sw" style="background:#ffffff"></span><span class="n">#ffffff</span></div>
-          <div class="row"><span class="ln">28</span><span class="k">container-inverse</span><span class="n">&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#000000"></span><span class="n">#000000</span></div>
-          <div class="row"><span class="ln">29</span><span class="c">&nbsp;</span></div>
-          <div class="row"><span class="ln">30</span><span class="h">## surface</span></div>
-          <div class="row"><span class="ln">31</span><span class="k">surface</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#FAFAFA"></span><span class="n">#FAFAFA</span></div>
-          <div class="row"><span class="ln">32</span><span class="k">surface-dim</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#E3E9EA"></span><span class="n">#E3E9EA</span></div>
-          <div class="row"><span class="ln">33</span><span class="c">&nbsp;</span></div>
-          <div class="row"><span class="ln">34</span><span class="h">## link</span></div>
-          <div class="row"><span class="ln">35</span><span class="k">link-default</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#002536"></span><span class="n">#002536</span></div>
-          <div class="row"><span class="ln">36</span><span class="k">link-hover</span><span class="n">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="sw" style="background:#464646"></span><span class="n">#464646</span><span class="caret"></span></div>
-          </div>
-        </div>
-      </div>
-      <p class="fig-caption">Fig. 01: the AIR token file, read line-by-line by the agents.</p>
+      <figure class="figure token-flow reveal" aria-label="Figma and Storybook aligned into token JSON files, streamlined into one AIR Design System">
+        <img src="../assets/air-token-flow.png" width="957" height="494" alt="Figma (design system maintained by design) and Storybook (maintained by engineering) feed into token files motion.json, radius.json, spacing.json, color.json and typography.json, which form the AIR Design System maintained collaboratively on GitHub.">
+      </figure>
+      <p class="fig-caption">Fig. 01: Figma and Storybook aligned into one set of token JSON files, streamlined into one AIR Design System.</p>
     </article>
   </div>
 </section>
